@@ -44,5 +44,4 @@ public class Bus {
     public void addViaje(Viaje viaje){
         listaViaje.add(viaje);
     }
-
 }
