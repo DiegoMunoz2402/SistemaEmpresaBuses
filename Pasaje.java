@@ -1,24 +1,27 @@
 package com.company;
 
+import java.security.SecureRandom;
+
 public class Pasaje {
     private long numero;
     private int asiento;
 
     private Viaje viaje;
-    private Pasajero pasajero; //Falta clase pasajero
+    private Pasajero pasajero;
     private Venta venta; //Falta clase venta
 
     public Pasaje(int asiento, long numero, Viaje viaje, Pasajero pasajero, Venta venta){
         this.asiento=asiento;
-        this.numero=numeroAleatorio;
+        this.numero=numeroAleatorio();
         this.viaje=viaje;
         this.pasajero=pasajero;
         this.venta=venta;
         this.viaje.addPasaje(this);
     }
-    public long numeroAleatorio{
-        long num=
-        return
+    public long numeroAleatorio(){
+        SecureRandom random=new SecureRandom();
+        long num=Math.abs(random.nextLong());
+        return num;
     }
     public long getNumero() {
         return numero;
