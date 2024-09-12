@@ -1,5 +1,4 @@
-package com.company;
-
+//Interfaz Completa IdPersona , Autor: Rodolfo Salas
 public interface IdPersona {
     String toString();
 

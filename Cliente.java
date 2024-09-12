@@ -1,6 +1,5 @@
-package com.company;
-
-public class Cliente extends Persona {
+//Clase Completa Cliente, Autor: Rodolfo Salas
+ public class Cliente extends Persona {
     //Atributos
     private String email;
 

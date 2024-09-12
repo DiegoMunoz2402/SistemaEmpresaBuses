@@ -1,5 +1,4 @@
-package com.company;
-
+//Clase Completo Persona, Autor: Rodolfo Salas
 public class Persona {
     //Atributos
 
