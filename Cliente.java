@@ -25,7 +25,7 @@
        ventas.add(venta);
     }
   
-     public List<Venta> getVentas(){
-        return ventas;
+     public Venta[] getVentas(){
+        return ventas.toArray(new Venta[0]);
     }
 }
