@@ -49,8 +49,8 @@ public class Venta {
 
     }
 
-    public List<Pasaje> getPasajes() {
-        return pasajes;
+     public List<Pasaje> getPasajes() {
+        return getPasajes().toArray(new Pasaje[0]);
     }
 
     public int getMonto() {
