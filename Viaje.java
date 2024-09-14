@@ -1,5 +1,3 @@
-import com.sun.tools.javac.code.Attribute;
-
 import java.time.LocalDate;
 import java.time.LocalTime;
 import java.util.ArrayList;
@@ -47,11 +45,17 @@ public class Viaje {
         String[][] asientos = new String[bus.getNroAsientos()][2];
         for (int i = 0; i < bus.getNroAsientos(); i++) {
             asientos[i][0] = String.valueOf(i + 1); // Número de asiento
+            boolean ocupado = false;
 
-            if (i < pasajeros.size()) {
-                asientos[i][1] = pasajeros.get(i).getNombre(); // Nombre del pasajero si está ocupado
-            } else {
-                asientos[i][1] = "Disponible"; // Asiento disponible si no hay pasajero
+            for (Pasaje pasaje : pasajes){
+                if(pasaje.getAsiento() == i + 1) {
+                    asientos[i][1] = String.valueOf(pasaje.getPasajero().getNomContacto());
+                    ocupado = true;
+                    break;
+                }
+            }
+            if(!ocupado){
+                asientos[i][1] = "Disponible";
             }
         }
         return asientos;
@@ -62,10 +66,10 @@ public class Viaje {
     }
 
     public String[][] getListaPasajeros() {
-        String[][] lista = new String[pasajeros.size()][2];
-        for (int i = 0; i < pasajeros.size(); i++) {
-            lista[i][0] = pasajeros.get(i).getNombre();
-            lista[i][1] = pasajeros.get(i).getAsiento();
+        String[][] lista = new String[pasajes.size()][2];
+        for (int i = 0; i < pasajes.size(); i++) {
+            lista[i][0] = String.valueOf(pasajes.get(i).getPasajero().getNomContacto());
+            lista[i][1] = String.valueOf(pasajes.get(i).getAsiento());
         }
         return lista;
     }
@@ -74,6 +78,6 @@ public class Viaje {
         return getNroAsientosDisponibles() > 0;}
 
     public int getNroAsientosDisponibles() {
-        return bus.getNumeroDeAsientos() - pasajes.size();
+        return bus.getNroAsientos() - pasajes.size();
     }
 }
