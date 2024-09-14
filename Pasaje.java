@@ -1,5 +1,3 @@
-package com.company;
-
 import java.security.SecureRandom;
 
 public class Pasaje {
