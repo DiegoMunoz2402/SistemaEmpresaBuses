@@ -1,8 +1,8 @@
-package com.company;
+import com.sun.tools.javac.code.Attribute;
 
 import java.time.LocalDate;
 import java.time.LocalTime;
-import java.util.List;
+import java.util.ArrayList;
 
 public class Viaje {
 
@@ -11,6 +11,7 @@ public class Viaje {
     private LocalTime hora;
     private int precio;
     private Bus bus;
+    private ArrayList<Pasaje> pasajes;
 
     //Constructor
     public Viaje(LocalDate fecha, LocalTime hora, int precio, Bus bus) {
@@ -18,6 +19,7 @@ public class Viaje {
         this.hora = hora;
         this.precio = precio;
         this.bus = bus;
+        this.pasajes = new ArrayList<>();
     }
 
     //Métodos
@@ -41,24 +43,37 @@ public class Viaje {
         return bus;
     }
 
-    public String[][] getAsientos(){
-        //CREO SE NECESITA LA CLASE PASAJE
+    public String[][] getAsientos() {
+        String[][] asientos = new String[bus.getNroAsientos()][2];
+        for (int i = 0; i < bus.getNroAsientos(); i++) {
+            asientos[i][0] = String.valueOf(i + 1); // Número de asiento
+
+            if (i < pasajeros.size()) {
+                asientos[i][1] = pasajeros.get(i).getNombre(); // Nombre del pasajero si está ocupado
+            } else {
+                asientos[i][1] = "Disponible"; // Asiento disponible si no hay pasajero
+            }
+        }
+        return asientos;
     }
 
     public void addPasaje(Pasaje pasaje){
-        //NECESITA CLASE PASAJE
+        pasajes.add(pasaje);
     }
 
-    public String[][] getListaPasajeros(){
-        //NECESITA CLASE PASAJERO Y PASAJE
+    public String[][] getListaPasajeros() {
+        String[][] lista = new String[pasajeros.size()][2];
+        for (int i = 0; i < pasajeros.size(); i++) {
+            lista[i][0] = pasajeros.get(i).getNombre();
+            lista[i][1] = pasajeros.get(i).getAsiento();
+        }
+        return lista;
     }
 
     public boolean existeDisponibilidad(){
-        //NECESITA LO ANTERIOR
-    }
+        return getNroAsientosDisponibles() > 0;}
 
-    public int getNroAsientosDisponibles(){
-        /*NECESITA LO ANTERIOR, PREGUNTAR DIFERENCIA ENTRE ESTE
-        MÉTODO Y EL DE ARRIBA*/
+    public int getNroAsientosDisponibles() {
+        return bus.getNumeroDeAsientos() - pasajes.size();
     }
 }
