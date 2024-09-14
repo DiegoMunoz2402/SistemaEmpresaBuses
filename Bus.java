@@ -1,4 +1,4 @@
-package com.company;
+import java.util.ArrayList;
 import java.util.List;
 
 public class Bus {
@@ -8,12 +8,13 @@ public class Bus {
     private String marca;
     private String modelo;
     private int nroAsientos;
-    private List<Viaje> listaViaje;
+    private ArrayList<Viaje> listaViaje;
 
     //Constructor
     public Bus(String patente, int nroAsientos) {
         this.patente = patente;
         this.nroAsientos = nroAsientos;
+        this.listaViaje = new ArrayList<>();
     }
 
     //Métodos
@@ -43,5 +44,6 @@ public class Bus {
 
     public void addViaje(Viaje viaje){
         listaViaje.add(viaje);
+        System.out.println("Se agrego el viaje correctamente");
     }
 }
