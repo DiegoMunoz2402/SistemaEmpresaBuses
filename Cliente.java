@@ -9,7 +9,7 @@
      public Cliente(IdPersona idPersona,Nombre nombre, String email) {
          super(idPersona, nombre); //constructor superclase Persona
          this.email = email;
-         this.ventas = new ArrayList<>()
+         this.ventas = new ArrayList<>();
      }
 
      //Metodos
