@@ -1,6 +1,5 @@
 
 import java.time.LocalDate;
-import java.util.List;
 import java.util.ArrayList;
 
 public class Venta {
@@ -9,19 +8,20 @@ public class Venta {
     private String idDocumento;
     private TipoDocumento tipo;
     private LocalDate fecha;
-
+    private Cliente cliente;
+    private ArrayList<Pasaje> pasajes;
 
     //Constructor
-    public Venta(String id, TipoDocumento tipo, LocalDate fec, Cliente cli) {
+    public Venta(String id, TipoDocumento tipo, LocalDate fec, Cliente cliente) {
 
         this.idDocumento = id;
         this.tipo = tipo;
         this.fecha = fec;
-        this.Cliente = cli;
+        this.cliente = cliente;
         this.pasajes = new ArrayList<>();
 
-        if ( cli != null;){ // asocia venta a Cliente
-            cli.addVenta(this);
+        if ( cliente != null){ // asocia venta a Cliente
+            cliente.addVenta(this);
         }
 
     }
@@ -39,20 +39,24 @@ public class Venta {
     }
 
     public Cliente getCliente() {
-        return Cliente;
+        return cliente;
     }
 
     public void createPasaje(int asiento, Viaje viaje, Pasajero pasajero) {
-        Pasaje nuevoPasaje = new Pasaje(asiento, viaje, pasajero);
+        Pasaje nuevoPasaje = new Pasaje(asiento, ' ', viaje, pasajero, this);
         pasajes.add(nuevoPasaje);
 
     }
 
-     public List<Pasaje> getPasajes() {
-        return getPasajes().toArray(new Pasaje[0]);
+     public Pasaje[] getPasajes() {
+        return pasajes.toArray(new Pasaje[0]);
     }
 
     public int getMonto() {
+        int monto=0;
+        for (Pasaje pasajes:pasajes){
+            monto+=pasajes.getViaje().getPrecio();
+        }
         return monto;
     }
 
