@@ -17,7 +17,7 @@ public class Pasaje {
         this.viaje.addPasaje(this);
         //Falta agregar a venta
     }
-    public long numeroAleatorio(){
+    private long numeroAleatorio(){
         SecureRandom random=new SecureRandom();
         long num=Math.abs(random.nextLong());
         return num;
