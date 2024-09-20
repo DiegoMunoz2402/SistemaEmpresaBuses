@@ -73,7 +73,6 @@ public class SistemaVentaPasajes  {
            for(int i=0;i<pasajeros.size();i++){
                if(pasajeros.get(i).getIdpersona().equals(idPasajero)){
                    pasajero = pasajeros.get(i);
-                   break;;
                }
            }
            if(pasajero==null){
@@ -103,9 +102,6 @@ public class SistemaVentaPasajes  {
             if(Objects.equals(cliente.getIdpersona(), id)){
                 return cliente;
             }
-
-
-
         }
         return null;
     }
