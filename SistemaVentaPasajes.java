@@ -108,12 +108,11 @@ public class SistemaVentaPasajes  {
                    venta = ventas.get(i);
 
                }
-              if(venta==null){
-                  System.out.println("no se encontro la venta");
-                  return false;
-              }
-
            }
+           if(venta==null){
+            System.out.println("no se encontro la venta");
+            return false;
+        }
            for(int i=0;i<viajes.size();i++){
                if (viajes.get(i).getFecha().equals(fecha) && viajes.get(i).getHora().equals(hora) && viajes.get(i).getBus().getPatente().equals(patBus)){
                    viaje = viajes.get(i);
@@ -124,6 +123,7 @@ public class SistemaVentaPasajes  {
                System.out.println("no se encontro el viaje ");
                return false;
            }
+
            if(asiento < 1||asiento > viaje.getBus().getNroAsientos()){
                System.out.println("asiento incorrecto");
                return false;
@@ -139,8 +139,8 @@ public class SistemaVentaPasajes  {
            }
 
            venta.createPasaje(asiento,viaje,pasajero);
-        System.out.println("Pasaje vendido :D");
-        return true;
+           System.out.println("Pasaje vendido :D");
+           return true;
 
 
     }
