@@ -79,11 +79,8 @@ public class SistemaVentaPasajes  {
                System.out.println("no se encontro el pasajero");
                return false;
            }
-          /*
-           long numero= 0;
-           Pasaje nuevoPasaje= new Pasaje(asiento,numero,viaje,pasajero,venta);
-           nuevoPasaje.numeroAleatorio();
-           */
+
+           venta.createPasaje(asiento,viaje,pasajero);
         System.out.println("Pasaje vendido :D");
         return true;
 
