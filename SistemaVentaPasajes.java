@@ -107,7 +107,14 @@ public class SistemaVentaPasajes  {
 
     private Bus findBus(String patente){}
 
-    private Viaje findViaje(String fecha, String hora, String patenteBus){}
+    private Viaje findViaje(String fecha, String hora, String patenteBus){
+        for(Viaje viajes : viajes){
+            if(viajes.getFecha().equals(fecha) && viajes.getHora().equals(hora) && viajes.getBus().getPatente().equals(patenteBus)){
+                return viajes;
+            }
+        }
+        return null;
+    }
 
     private Pasajero findPasajero(IdPersona idPersona){}
 }
