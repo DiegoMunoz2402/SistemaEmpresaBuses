@@ -55,7 +55,13 @@ public class SistemaVentaPasajes  {
 
     public int getMontoVenta(String idDocumento, TipoDocumento tipo){}
 
-    public int getNombrePasajero(IdPersona idPasajero){}
+    public String getNombrePasajero(IdPersona idPasajero){
+        Pasajero pasajero = findPasajero(idPasajero);
+        if (pasajero!=null){
+            return pasajero.getNombrecompleto().toString();
+        }
+        return null;
+    }
     //No aparece en el UML que tipo de dato es idPasajero, aunque por lógica se asume que es del tipo idPersona
     public boolean vendePasaje(String idDoc, LocalDate fecha, LocalTime hora, String patBus, int asiento, IdPersona idPasajero){
            Venta venta = null;
