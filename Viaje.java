@@ -75,7 +75,7 @@ public class Viaje {
                 lista[i][0] = String.valueOf(pasajero.getIdpersona());
                 lista[i][1] = String.valueOf(pasajero.getNombrecompleto());
                 lista[i][2] = String.valueOf(pasajero.getNomContacto());
-                lista[i][3] = pasajero.getTelefono();
+                lista[i][3] = pasajero.getFonoContacto();
             }else {
                 lista[i][0] = "Desconocido";
                 lista[i][1] = "Desconocido";
