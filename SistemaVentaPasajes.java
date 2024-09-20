@@ -107,7 +107,28 @@ public class SistemaVentaPasajes  {
 
     public String[][] listViajes(){}
 
-    public String[][] lisPasajeros(LocalDate fecha, LocalTime hora, String patBus){}
+    public String[][] lisPasajeros(LocalDate fecha, LocalTime hora, String patBus){
+        Bus bus = findBus(patBus);
+        String fechastr=fecha.toString();
+        String horastr=hora.toString();
+        if (bus!=null && !fechastr.isEmpty() && !horastr.isEmpty()){
+            Viaje viaje = findViaje(fechastr,horastr,patBus);
+            if (viaje!=null){
+                String[][] pasajeros = viaje.getListaPasajeros();
+
+                //iteracion con for para llenar matriz
+
+                return pasajeros;
+            }else{
+                System.out.println("Viaje no encontrado...");
+                return new String[0][0];
+            }
+        }else{
+            System.out.println("Bus no encontrado...");
+            return new String[0][0];
+        }
+        return new String[0][];
+    }
 
     private Cliente findCliente(IdPersona id){
         for(int i=0;i<clientes.size();i++){
