@@ -51,7 +51,28 @@ public class SistemaVentaPasajes  {
 
     public String[][] getHorariosDisponibles(LocalDate fechaViaje){}
 
-    public String[][] listAsientosDeViaje(LocalDate fecha, LocalTime hora, String patBus){}
+    public String[][] listAsientosDeViaje(LocalDate fecha, LocalTime hora, String patBus){
+        Bus bus = findBus(patBus);
+        if (bus!=null) {
+            Viaje viaje = findViaje(fecha.toString(), hora.toString(), patBus);
+            if (viaje!=null){
+                String[][] listAsientosViaje=new String[viaje.getAsientos().length][2];
+                for (int i = 0; i < listAsientosViaje.length; i++) {
+                    listAsientosViaje[i][0]=viaje.getAsientos()[i][0];
+                    listAsientosViaje[i][1]=viaje.getAsientos()[i][1];
+                    if (!listAsientosViaje[i][1].equals("Disponible")){
+                        listAsientosViaje[i][1]="Ocupado";
+                    }
+                }
+                return listAsientosViaje;
+            }else {
+                System.out.println("No existe un bus con esos datos..");
+            }
+        }else{
+            System.out.println("No existe un bus con esa patente..");
+        }
+        return new String[0][0];
+    }
 
     public int getMontoVenta(String idDocumento, TipoDocumento tipo){}
 
@@ -122,19 +143,18 @@ public class SistemaVentaPasajes  {
             if (viaje!=null){
                 String[][] pasajeros = viaje.getListaPasajeros();
                 String[][] listPasajeros = new String[pasajeros.length][5];
-                ArrayList<String> listString=new ArrayList<>();
-                ArrayList<IdPersona> idPersonas = new ArrayList<>();
-                for (int i = 0; i < pasajeros.length; i++) {
-                    listString.add(viaje.getListaPasajeros()[i][0]);
-                }
-//                for (String id:listString){
-//                    idPersonas.add(new IdPersona(id));
-//                }
                 //iteracion con for para llenar matriz
                 for (int i = 0; i < listPasajeros.length; i++) {
-                    //Pasajero pasajero = findPasajero()
-                    //listPasajeros[i][0]= no puedo buscar asientos sin tener el pasajero como objeto...
-                    listPasajeros[i][1]=pasajeros[i][0]; //Devuelve idPersona como String, asi que no puedo usar sus metodos
+                    String idPersonastr = pasajeros[i][0]; //Creo un String pasado como String de idPersona
+                    //Convierto el String pasado a Tipo IdPersona, con el metodo privado para ver si es rut o pasaporte
+                    IdPersona idPersona = convertToIdPersona(idPersonastr);
+                    //creo un pasajero con el idPersona encontrado anteriormente
+                    Pasajero pasajero = findPasajero(idPersona);
+                    //Creo un pasaje con el pasajero pasado anteriormente para poder buscar el asiento correspondiente
+                    Pasaje pasaje = findPasaje(pasajero);
+                    listPasajeros[i][0]=String.valueOf(pasaje.getAsiento());
+                    //Incorporo el idPersona encontrado anteriormente mediante un toString para agregarlo a la matriz de Strings
+                    listPasajeros[i][1]=idPersona.toString();
                     listPasajeros[i][2]=pasajeros[i][1];
                     listPasajeros[i][3]=pasajeros[i][2];
                     listPasajeros[i][4]=pasajeros[i][3];
@@ -183,6 +203,28 @@ public class SistemaVentaPasajes  {
         for (Pasajero pasajero:pasajeros){
             if (pasajero.getIdpersona().equals(idPersona)){
                 return pasajero;
+            }
+        }
+        return null;
+    }
+    private IdPersona convertToIdPersona(String input) {
+        // Verificamos si es un RUT (contiene guion "-")
+        if (input.contains("-")) {
+            return (IdPersona) Rut.of(input);
+        } else {
+            String[] partes = input.split(" ");
+            if (partes.length == 2) {
+                return (IdPersona) Pasaporte.of(partes[0], partes[1]); // Número del pasaporte y nacionalidad
+            } else {
+                System.out.println("Error: Pasaporte inválido. Se requiere número y país.");
+                return null; // Pasaporte inválido
+            }
+        }
+    }
+    private Pasaje findPasaje(Pasajero pasajero){
+        for (int i = 0; i < ventas.size(); i++) {
+            if (ventas.get(i).getPasajes()[i].getPasajero().equals(pasajero)){
+                return ventas.get(i).getPasajes()[i];
             }
         }
         return null;
