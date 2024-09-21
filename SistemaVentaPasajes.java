@@ -18,7 +18,10 @@ public class SistemaVentaPasajes  {
         }
 
         Cliente nuevoCliente= new Cliente(id,nom,email);
-        nuevoCliente.setTelefono(fono);
+        if(clientes.contains(nuevoCliente)){
+            System.out.println("Ya existe un cliente con los mismos datos");
+            return false;
+        }
         clientes.add(nuevoCliente);
         System.out.println("Cliente agregado :D");
         return true;
