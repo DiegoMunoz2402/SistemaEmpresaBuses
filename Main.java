@@ -33,4 +33,18 @@ public class Main {
             }
         }while(op!=8);
     }
+
+    private void createCliente(){}
+
+    private void createBus(){}
+
+    private void createViaje(){}
+
+    private void vendePasajes(){}
+
+    private void listPasajerosViaje(){}
+
+    private void listVentas(){}
+
+    private void listViajes(){}
 }
