@@ -34,20 +34,7 @@ public class Main {
                 case 1:
                     break;
                 case 2:
-                    System.out.println("...:::: Creación de un nuevo BUS ::::..");
-                    System.out.println();
-                    System.out.printf("%21s","Patente : ");
-                    String patente=sc.next();
-                    System.out.printf("%21s","Marca : ");
-                    String marca=sc.next();
-                    System.out.printf("%21s","Modelo : ");
-                    String modelo=sc.next();
-                    System.out.printf("%21s","Numero de asientos : ");
-                    int numAsientos= sc.nextInt();
-                    System.out.println();
-                    if (remoto.createBus(patente,marca,modelo,numAsientos)){
-                        System.out.println("...:::: Bus guardado exitosamente ::::..");
-                    }
+                    createBus();
                     break;
                 case 5:
                     listPasajerosViaje();
@@ -65,7 +52,20 @@ public class Main {
     private void createCliente(){}
 
     private void createBus(){
-
+        System.out.println("...:::: Creación de un nuevo BUS ::::..");
+        System.out.println();
+        System.out.printf("%21s","Patente : ");
+        String patente=sc.next();
+        System.out.printf("%21s","Marca : ");
+        String marca=sc.next();
+        System.out.printf("%21s","Modelo : ");
+        String modelo=sc.next();
+        System.out.printf("%21s","Numero de asientos : ");
+        int numAsientos= sc.nextInt();
+        System.out.println();
+        if (remoto.createBus(patente,marca,modelo,numAsientos)){
+            System.out.println("...:::: Bus guardado exitosamente ::::..");
+        }
     }
 
     private void createViaje(){}
