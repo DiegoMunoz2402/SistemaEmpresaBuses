@@ -11,9 +11,11 @@ public class Bus {
     private ArrayList<Viaje> listaViaje;
 
     //Constructor
-    public Bus(String patente, int nroAsientos) {
+    public Bus(String patente, String marca, String modelo, int nroAsientos) {
         this.patente = patente;
+        this.marca = marca;
         this.nroAsientos = nroAsientos;
+        this.modelo = modelo;
         this.listaViaje = new ArrayList<>();
     }
 

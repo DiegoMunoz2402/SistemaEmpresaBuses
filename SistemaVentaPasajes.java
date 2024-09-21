@@ -27,9 +27,24 @@ public class SistemaVentaPasajes  {
 
     public boolean createPasajero(IdPersona id, Nombre nom, String fono, Nombre nomContacto, String fonoContacto){}
 
-    public boolean createBus(String patente, String marca, String modelo, int nroAsientos){}
+    public boolean createBus(String patente, String marca, String modelo, int nroAsientos){
+        if (findBus(patente) == null){
+            Bus nuevoBus = new Bus(patente, marca, modelo, nroAsientos);
+            buses.add(nuevoBus);
+            return true;
+        }
+        return false;
+    }
 
-    public boolean createViaje(LocalDate fecha, LocalTime hora, int precio, String patBus){}
+    public boolean createViaje(LocalDate fecha, LocalTime hora, int precio, String patBus){
+        //Debo preguntar por los tipos de datos a la ayudante
+        if (findViaje(fecha, hora, patBus) == null){
+            Viaje nuevoViaje = new Viaje(fecha,hora,precio, patBus);
+            viajes.add(nuevoViaje);
+            return true;
+        }
+        return false;
+    }
 
     public boolean iniciaVenta(String idDoc, TipoDocumento tipo, LocalDate fechaVenta, IdPersona idCliente){}
 
@@ -89,7 +104,18 @@ public class SistemaVentaPasajes  {
 
     public String[][] listVentas(){}
 
-    public String[][] listViajes(){}
+    public String[][] listViajes(){
+        String[][] listaViajes = new String[viajes.size()][5];
+        for (int i = 0; i < viajes.size(); i++){
+            Viaje viaje = viajes.get(i);
+            listaViajes[i][0] = String.valueOf(viaje.getFecha());
+            listaViajes[i][1] = String.valueOf(viaje.getHora());
+            listaViajes[i][2] = String.valueOf(viaje.getPrecio());
+            listaViajes[i][3] = String.valueOf(viaje.getNroAsientosDisponibles());
+            listaViajes[i][4] = viaje.getBus().getPatente();
+        }
+        return listaViajes;
+    }
 
     public String[][] lisPasajeros(LocalDate fecha, LocalTime hora, String patBus){}
 
