@@ -67,6 +67,7 @@ public class Viaje {
     }
 
     public String[][] getListaPasajeros() {
+
         String[][] lista = new String[pasajes.size()][5];
 
         for (int i = 0; i < pasajes.size(); i++) {
