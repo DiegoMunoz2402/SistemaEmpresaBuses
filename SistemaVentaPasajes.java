@@ -46,8 +46,12 @@ public class SistemaVentaPasajes  {
     public boolean createBus(String patente, String marca, String modelo, int nroAsientos){
         if (findBus(patente) == null){
             Bus nuevoBus = new Bus(patente, marca, modelo, nroAsientos);
-            buses.add(nuevoBus);
-            return true;
+            if (!buses.contains(nuevoBus)) {
+                buses.add(nuevoBus);
+                return true;
+            }else {
+                System.out.println("No se ha podido crear el bus... Ya existe el mismo");
+            }
         }
         return false;
     }
@@ -75,9 +79,6 @@ public class SistemaVentaPasajes  {
                 for (int i = 0; i < listAsientosViaje.length; i++) {
                     listAsientosViaje[i][0]=viaje.getAsientos()[i][0];
                     listAsientosViaje[i][1]=viaje.getAsientos()[i][1];
-                    if (!listAsientosViaje[i][1].equals("Disponible")){
-                        listAsientosViaje[i][1]="Ocupado";
-                    }
                 }
                 return listAsientosViaje;
             }else {
