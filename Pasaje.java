@@ -8,7 +8,7 @@ public class Pasaje {
     private Pasajero pasajero;
     private Venta venta; //Falta clase venta
 
-    public Pasaje(int asiento,Viaje viaje, Pasajero pasajero, Venta venta){
+    public Pasaje(int asiento, Viaje viaje, Pasajero pasajero, Venta venta){
         this.asiento=asiento;
         this.numero=numeroAleatorio();
         this.viaje=viaje;
@@ -17,13 +17,13 @@ public class Pasaje {
         this.viaje.addPasaje(this);
         //Falta agregar a venta
     }
-    public long numeroAleatorio(){
+    private long numeroAleatorio(){
         SecureRandom random=new SecureRandom();
         long num=Math.abs(random.nextLong());
         return num;
     }
     public int getNumero() {
-         return (int)(numero & Integer.MAX_VALUE);
+        return (int)(numero & Integer.MAX_VALUE);
     }
 
     public int getAsiento() {

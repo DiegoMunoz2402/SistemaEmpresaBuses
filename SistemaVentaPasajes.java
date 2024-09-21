@@ -25,7 +25,23 @@ public class SistemaVentaPasajes  {
 
     }
 
-    public boolean createPasajero(IdPersona id, Nombre nom, String fono, Nombre nomContacto, String fonoContacto){}
+    public boolean createPasajero(IdPersona id, Nombre nom, String fono, Nombre nomContacto, String fonoContacto){
+        boolean encontrado=false;
+        for (Pasajero pasajero:pasajeros){
+            if (pasajero.getIdpersona().equals(id)){
+                encontrado = true;
+            }
+        }
+        if (!encontrado){
+            Pasajero pasajero = new Pasajero(id,nom,nomContacto,fonoContacto);
+            pasajero.setTelefono(fono);
+            if (!pasajeros.contains(pasajero)) {
+                pasajeros.add(pasajero);
+                return true;
+            }
+        }
+        return false;
+    }
 
     public boolean createBus(String patente, String marca, String modelo, int nroAsientos){
         if (findBus(patente) == null){
@@ -54,7 +70,13 @@ public class SistemaVentaPasajes  {
 
     public int getMontoVenta(String idDocumento, TipoDocumento tipo){}
 
-    public int getNombrePasajero(IdPersona idPasajero){}
+    public String getNombrePasajero(IdPersona idPasajero){
+        Pasajero pasajero = findPasajero(idPasajero);
+        if (pasajero!=null){
+            return pasajero.getNombrecompleto().toString();
+        }
+        return null;
+    }
     //No aparece en el UML que tipo de dato es idPasajero, aunque por lógica se asume que es del tipo idPersona
     public boolean vendePasaje(String idDoc, LocalDate fecha, LocalTime hora, String patBus, int asiento, IdPersona idPasajero){
            Venta venta = null;
@@ -117,7 +139,41 @@ public class SistemaVentaPasajes  {
         return listaViajes;
     }
 
-    public String[][] lisPasajeros(LocalDate fecha, LocalTime hora, String patBus){}
+    public String[][] listPasajeros(LocalDate fecha, LocalTime hora, String patBus){
+        Bus bus = findBus(patBus);
+        String fechastr=fecha.toString();
+        String horastr=hora.toString();
+        if (bus!=null && !fechastr.isEmpty() && !horastr.isEmpty()){
+            Viaje viaje = findViaje(fechastr,horastr,patBus);
+            if (viaje!=null){
+                String[][] pasajeros = viaje.getListaPasajeros();
+                String[][] listPasajeros = new String[pasajeros.length][5];
+                ArrayList<String> listString=new ArrayList<>();
+                ArrayList<IdPersona> idPersonas = new ArrayList<>();
+                for (int i = 0; i < pasajeros.length; i++) {
+                    listString.add(viaje.getListaPasajeros()[i][0]);
+                }
+//                for (String id:listString){
+//                    idPersonas.add(new IdPersona(id));
+//                }
+                //iteracion con for para llenar matriz
+                for (int i = 0; i < listPasajeros.length; i++) {
+                    //Pasajero pasajero = findPasajero()
+                    //listPasajeros[i][0]= no puedo buscar asientos sin tener el pasajero como objeto...
+                    listPasajeros[i][1]=pasajeros[i][0]; //Devuelve idPersona como String, asi que no puedo usar sus metodos
+                    listPasajeros[i][2]=pasajeros[i][1];
+                    listPasajeros[i][3]=pasajeros[i][2];
+                    listPasajeros[i][4]=pasajeros[i][3];
+                }
+                return pasajeros;
+            }else{
+                System.out.println("Viaje no encontrado...");
+            }
+        }else{
+            System.out.println("Bus no encontrado...");
+        }
+        return new String[0][0];
+    }
 
     private Cliente findCliente(IdPersona id){
         for(int i=0;i<clientes.size();i++){
@@ -131,7 +187,14 @@ public class SistemaVentaPasajes  {
 
     private Venta findVenta(String idDocumento, TipoDocumento tipoDocumento){}
 
-    private Bus findBus(String patente){}
+    private Bus findBus(String patente){
+        for (Bus bus:buses){
+            if (bus.getPatente().equals(patente)){
+                return bus;
+            }
+        }
+        return null;
+    }
 
     private Viaje findViaje(String fecha, String hora, String patenteBus){
         for(Viaje viajes : viajes){
@@ -142,5 +205,12 @@ public class SistemaVentaPasajes  {
         return null;
     }
 
-    private Pasajero findPasajero(IdPersona idPersona){}
+    private Pasajero findPasajero(IdPersona idPersona){
+        for (Pasajero pasajero:pasajeros){
+            if (pasajero.getIdpersona().equals(idPersona)){
+                return pasajero;
+            }
+        }
+        return null;
+    }
 }
