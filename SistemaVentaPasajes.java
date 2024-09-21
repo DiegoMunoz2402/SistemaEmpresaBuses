@@ -33,9 +33,48 @@ public class SistemaVentaPasajes  {
 
     public boolean iniciaVenta(String idDoc, TipoDocumento tipo, LocalDate fechaVenta, IdPersona idCliente){}
 
-    public String[][] getHorariosDisponibles(LocalDate fechaViaje){}
+    public String[][] getHorariosDisponibles(LocalDate fechaViaje){
+        ArrayList<String[]> ViajesDisponibles = new ArrayList<>();
+        for(int i=0; i<viajes.size(); i++){
+            Viaje viaje = viajes.get(i);
+            if(viaje.getFecha().equals(fechaViaje)){
+                String AsientosDisponibles=String.valueOf(viaje.getNroAsientosDisponibles());
+                String PatenteBus=viaje.getBus().getPatente();
+                String HoraDeSalida= String.valueOf(viaje.getHora());
+                String PrecioPasaje= String.valueOf(viaje.getPrecio());
+                ViajesDisponibles.add(new String[]{AsientosDisponibles, PatenteBus, HoraDeSalida, PrecioPasaje});
 
-    public String[][] listAsientosDeViaje(LocalDate fecha, LocalTime hora, String patBus){}
+            }
+        }
+        if(ViajesDisponibles.isEmpty()){
+            return new String[0][0];
+        }
+        return ViajesDisponibles.toArray(new String[ViajesDisponibles.size()][]);
+
+    }
+
+    public String[][] listAsientosDeViaje(LocalDate fecha, LocalTime hora, String patBus){
+        Bus bus = findBus(patBus);
+        if (bus!=null) {
+            Viaje viaje = findViaje(fecha.toString(), hora.toString(), patBus);
+            if (viaje!=null){
+                String[][] listAsientosViaje=new String[viaje.getAsientos().length][2];
+                for (int i = 0; i < listAsientosViaje.length; i++) {
+                    listAsientosViaje[i][0]=viaje.getAsientos()[i][0];
+                    listAsientosViaje[i][1]=viaje.getAsientos()[i][1];
+                    if (!listAsientosViaje[i][0].equals("Disponible")){
+                        listAsientosViaje[i][0]="Ocupado";
+                    }
+                }
+                return listAsientosViaje;
+            }else {
+                System.out.println("No existe un bus con esos datos..");
+            }
+        }else{
+            System.out.println("No existe un bus con esa patente..");
+        }
+        return new String[0][0];
+    }
 
     public int getMontoVenta(String idDocumento, TipoDocumento tipo){}
 
@@ -80,13 +119,9 @@ public class SistemaVentaPasajes  {
                System.out.println("no se encontro el pasajero");
                return false;
            }
-          /*
-           long numero= 0;
-           Pasaje nuevoPasaje= new Pasaje(asiento,numero,viaje,pasajero,venta);
-           nuevoPasaje.numeroAleatorio();
-           */
-        System.out.println("Pasaje vendido :D");
-        return true;
+           Pasaje nuevoPasaje= new Pasaje(asiento,viaje,pasajero,venta);
+           System.out.println("Pasaje vendido :D");
+           return true;
 
 
     }
