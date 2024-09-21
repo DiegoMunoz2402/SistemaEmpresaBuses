@@ -121,13 +121,20 @@ public class SistemaVentaPasajes  {
             Viaje viaje = findViaje(fechastr,horastr,patBus);
             if (viaje!=null){
                 String[][] pasajeros = viaje.getListaPasajeros();
-
                 String[][] listPasajeros = new String[pasajeros.length][5];
+                ArrayList<String> listString=new ArrayList<>();
+                ArrayList<IdPersona> idPersonas = new ArrayList<>();
+                for (int i = 0; i < pasajeros.length; i++) {
+                    listString.add(viaje.getListaPasajeros()[i][0]);
+                }
+//                for (String id:listString){
+//                    idPersonas.add(new IdPersona(id));
+//                }
                 //iteracion con for para llenar matriz
                 for (int i = 0; i < listPasajeros.length; i++) {
-                    Pasaporte persona = pasajeros[i][0];
-                    //listPasajeros[i][0]=
-                    listPasajeros[i][1]=pasajeros[i][0]
+                    //Pasajero pasajero = findPasajero()
+                    //listPasajeros[i][0]= no puedo buscar asientos sin tener el pasajero como objeto...
+                    listPasajeros[i][1]=pasajeros[i][0]; //Devuelve idPersona como String, asi que no puedo usar sus metodos
                     listPasajeros[i][2]=pasajeros[i][1];
                     listPasajeros[i][3]=pasajeros[i][2];
                     listPasajeros[i][4]=pasajeros[i][3];
