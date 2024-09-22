@@ -66,7 +66,20 @@ public class SistemaVentaPasajes  {
         return false;
     }
 
-    public boolean iniciaVenta(String idDoc, TipoDocumento tipo, LocalDate fechaVenta, IdPersona idCliente){}
+    public boolean iniciaVenta(String idDoc, TipoDocumento tipo, LocalDate fechaVenta, IdPersona idCliente) {
+
+        Venta venta = findVenta(idDoc, tipo);
+        if (venta != null){
+            return false;	}
+
+        Cliente cliente = findCliente(idCliente);
+        if (cliente == null) {
+            return false;	}
+
+        Venta newVenta = new Venta(idDoc, tipo, fechaVenta, cliente);
+        ventas.add(newVenta);
+        return true;
+    }
 
     public String[][] getHorariosDisponibles(LocalDate fechaViaje){
         ArrayList<String[]> ViajesDisponibles = new ArrayList<>();
@@ -111,7 +124,14 @@ public class SistemaVentaPasajes  {
         return new String[0][0];
     }
 
-    public int getMontoVenta(String idDocumento, TipoDocumento tipo){}
+     public int getMontoVenta(String idDocumento, TipoDocumento tipo){
+
+        Venta venta = findVenta(idDocumento, tipo);
+        if (venta!= null){
+            return venta.getMonto();
+        }
+        return 0;
+    }
 
     public String getNombrePasajero(IdPersona idPasajero){
         Pasajero pasajero = findPasajero(idPasajero);
@@ -168,7 +188,20 @@ public class SistemaVentaPasajes  {
 
     }
 
-    public String[][] listVentas(){}
+     public String[][] listVentas(){
+        String[][] listaVentas = new String[ventas.size()][6];
+        for(int i = 0; i < ventas.size(); i++) {
+            Venta venta = ventas.get(i);
+            listaVentas[i][0] = String.valueOf(venta.getIdDocumento());
+            listaVentas[i][1] = String.valueOf(venta.getTipo());
+            listaVentas[i][2] = String.valueOf(venta.getFecha());
+            listaVentas[i][3] = String.valueOf(venta.getCliente());
+            listaVentas[i][4] = String.valueOf(venta.getPasajes());
+            listaVentas[i][5] = String.valueOf(venta.getMonto());
+        }
+        return listaVentas;
+
+    }
 
     public String[][] listViajes(){
         String[][] listaViajes = new String[viajes.size()][5];
@@ -223,7 +256,14 @@ public class SistemaVentaPasajes  {
         return null;
     }
 
-    private Venta findVenta(String idDocumento, TipoDocumento tipoDocumento){}
+    private Venta findVenta(String idDocumento, TipoDocumento tipoDocumento){
+        for(Venta venta: ventas){
+            if(venta.getIdDocumento().equals(idDocumento) && venta.getTipo().equals(tipoDocumento)){
+                return venta;
+            } }
+        return null;
+
+    }
 
     private Bus findBus(String patente){
         for (Bus bus:buses){
