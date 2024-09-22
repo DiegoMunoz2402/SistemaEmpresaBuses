@@ -170,7 +170,18 @@ public class SistemaVentaPasajes  {
 
     public String[][] listVentas(){}
 
-    public String[][] listViajes(){}
+    public String[][] listViajes(){
+        String[][] listaViajes = new String[viajes.size()][5];
+        for (int i = 0; i < viajes.size(); i++){
+            Viaje viaje = viajes.get(i);
+            listaViajes[i][0] = String.valueOf(viaje.getFecha());
+            listaViajes[i][1] = String.valueOf(viaje.getHora());
+            listaViajes[i][2] = String.valueOf(viaje.getPrecio());
+            listaViajes[i][3] = String.valueOf(viaje.getNroAsientosDisponibles());
+            listaViajes[i][4] = viaje.getBus().getPatente();
+        }
+        return listaViajes;
+    }
 
     public String[][] listPasajeros(LocalDate fecha, LocalTime hora, String patBus){
         Bus bus = findBus(patBus);
