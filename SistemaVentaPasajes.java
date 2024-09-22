@@ -18,10 +18,7 @@ public class SistemaVentaPasajes  {
         }
 
         Cliente nuevoCliente= new Cliente(id,nom,email);
-        if(clientes.contains(nuevoCliente)){
-            System.out.println("Ya existe un cliente con los mismos datos");
-            return false;
-        }
+        nuevoCliente.setTelefono(fono);
         clientes.add(nuevoCliente);
         System.out.println("Cliente agregado :D");
         return true;
@@ -49,8 +46,12 @@ public class SistemaVentaPasajes  {
     public boolean createBus(String patente, String marca, String modelo, int nroAsientos){
         if (findBus(patente) == null){
             Bus nuevoBus = new Bus(patente, marca, modelo, nroAsientos);
-            buses.add(nuevoBus);
-            return true;
+            if (!buses.contains(nuevoBus)) {
+                buses.add(nuevoBus);
+                return true;
+            }else {
+                System.out.println("No se ha podido crear el bus... Ya existe el mismo");
+            }
         }
         return false;
     }
@@ -67,47 +68,9 @@ public class SistemaVentaPasajes  {
 
     public boolean iniciaVenta(String idDoc, TipoDocumento tipo, LocalDate fechaVenta, IdPersona idCliente){}
 
-    public String[][] getHorariosDisponibles(LocalDate fechaViaje){
-        ArrayList<String[]> ViajesDisponibles = new ArrayList<>();
-        for(int i=0; i<viajes.size(); i++){
-            Viaje viaje = viajes.get(i);
-            if(viaje.getFecha().equals(fechaViaje)){
-                String AsientosDisponibles=String.valueOf(viaje.getNroAsientosDisponibles());
-                String PatenteBus=viaje.getBus().getPatente();
-                String HoraDeSalida= String.valueOf(viaje.getHora());
-                String PrecioPasaje= String.valueOf(viaje.getPrecio());
-                ViajesDisponibles.add(new String[]{AsientosDisponibles, PatenteBus, HoraDeSalida, PrecioPasaje});
+    public String[][] getHorariosDisponibles(LocalDate fechaViaje){}
 
-            }
-        }
-        if(ViajesDisponibles.isEmpty()){
-            return new String[0][0];
-        }
-        return ViajesDisponibles.toArray(new String[ViajesDisponibles.size()][]);
-    }
-
-    public String[][] listAsientosDeViaje(LocalDate fecha, LocalTime hora, String patBus){
-        Bus bus = findBus(patBus);
-        if (bus!=null) {
-            Viaje viaje = findViaje(fecha.toString(), hora.toString(), patBus);
-            if (viaje!=null){
-                String[][] listAsientosViaje=new String[viaje.getAsientos().length][2];
-                for (int i = 0; i < listAsientosViaje.length; i++) {
-                    listAsientosViaje[i][0]=viaje.getAsientos()[i][0];
-                    listAsientosViaje[i][1]=viaje.getAsientos()[i][1];
-                    if (!listAsientosViaje[i][0].equals("Disponible")){
-                        listAsientosViaje[i][0]="Ocupado";
-                    }
-                }
-                return listAsientosViaje;
-            }else {
-                System.out.println("No existe un bus con esos datos..");
-            }
-        }else{
-            System.out.println("No existe un bus con esa patente..");
-        }
-        return new String[0][0];
-    }
+    public String[][] listAsientosDeViaje(LocalDate fecha, LocalTime hora, String patBus){}
 
     public int getMontoVenta(String idDocumento, TipoDocumento tipo){}
 
@@ -128,11 +91,12 @@ public class SistemaVentaPasajes  {
                    venta = ventas.get(i);
 
                }
+              if(venta==null){
+                  System.out.println("no se encontro la venta");
+                  return false;
+              }
+
            }
-           if(venta==null){
-            System.out.println("no se encontro la venta");
-            return false;
-        }
            for(int i=0;i<viajes.size();i++){
                if (viajes.get(i).getFecha().equals(fecha) && viajes.get(i).getHora().equals(hora) && viajes.get(i).getBus().getPatente().equals(patBus)){
                    viaje = viajes.get(i);
@@ -143,7 +107,6 @@ public class SistemaVentaPasajes  {
                System.out.println("no se encontro el viaje ");
                return false;
            }
-
            if(asiento < 1||asiento > viaje.getBus().getNroAsientos()){
                System.out.println("asiento incorrecto");
                return false;
@@ -159,26 +122,15 @@ public class SistemaVentaPasajes  {
            }
 
            venta.createPasaje(asiento,viaje,pasajero);
-           System.out.println("Pasaje vendido :D");
-           return true;
+        System.out.println("Pasaje vendido :D");
+        return true;
 
 
     }
 
     public String[][] listVentas(){}
 
-    public String[][] listViajes(){
-        String[][] listaViajes = new String[viajes.size()][5];
-        for (int i = 0; i < viajes.size(); i++){
-            Viaje viaje = viajes.get(i);
-            listaViajes[i][0] = String.valueOf(viaje.getFecha());
-            listaViajes[i][1] = String.valueOf(viaje.getHora());
-            listaViajes[i][2] = String.valueOf(viaje.getPrecio());
-            listaViajes[i][3] = String.valueOf(viaje.getNroAsientosDisponibles());
-            listaViajes[i][4] = viaje.getBus().getPatente();
-        }
-        return listaViajes;
-    }
+    public String[][] listViajes(){}
 
     public String[][] listPasajeros(LocalDate fecha, LocalTime hora, String patBus){
         Bus bus = findBus(patBus);
@@ -189,19 +141,10 @@ public class SistemaVentaPasajes  {
             if (viaje!=null){
                 String[][] pasajeros = viaje.getListaPasajeros();
                 String[][] listPasajeros = new String[pasajeros.length][5];
-                ArrayList<String> listString=new ArrayList<>();
-                ArrayList<IdPersona> idPersonas = new ArrayList<>();
-                for (int i = 0; i < pasajeros.length; i++) {
-                    listString.add(viaje.getListaPasajeros()[i][0]);
-                }
-//                for (String id:listString){
-//                    idPersonas.add(new IdPersona(id));
-//                }
                 //iteracion con for para llenar matriz
                 for (int i = 0; i < listPasajeros.length; i++) {
-                    //Pasajero pasajero = findPasajero()
-                    //listPasajeros[i][0]= no puedo buscar asientos sin tener el pasajero como objeto...
-                    listPasajeros[i][1]=pasajeros[i][0]; //Devuelve idPersona como String, asi que no puedo usar sus metodos
+                    listPasajeros[i][0]=pasajeros[i][4];
+                    listPasajeros[i][1]=pasajeros[i][0];
                     listPasajeros[i][2]=pasajeros[i][1];
                     listPasajeros[i][3]=pasajeros[i][2];
                     listPasajeros[i][4]=pasajeros[i][3];
