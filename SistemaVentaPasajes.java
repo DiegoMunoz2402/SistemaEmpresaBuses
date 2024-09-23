@@ -1,6 +1,7 @@
 import java.time.LocalDate;
 import java.time.LocalTime;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Objects;
 
 public class SistemaVentaPasajes  {
@@ -110,13 +111,10 @@ public class SistemaVentaPasajes  {
                 for (int i = 0; i < listAsientosViaje.length; i++) {
                     listAsientosViaje[i][0]=viaje.getAsientos()[i][0];
                     listAsientosViaje[i][1]=viaje.getAsientos()[i][1];
-                    if (!listAsientosViaje[i][0].equals("Disponible")){
-                        listAsientosViaje[i][0]="Ocupado";
-                    }
                 }
                 return listAsientosViaje;
             }else {
-                System.out.println("No existe un bus con esos datos..");
+                System.out.println("No existe un viaje con esos datos..");
             }
         }else{
             System.out.println("No existe un bus con esa patente..");
@@ -148,14 +146,12 @@ public class SistemaVentaPasajes  {
            for(int i=0;i<ventas.size();i++){
                if(ventas.get(i).getIdDocumento().equals(idDoc)){
                    venta = ventas.get(i);
-
                }
-              if(venta==null){
-                  System.out.println("no se encontro la venta");
-                  return false;
-              }
-
            }
+            if(venta==null){
+                System.out.println("no se encontro la venta");
+                return false;
+            }
            for(int i=0;i<viajes.size();i++){
                if (viajes.get(i).getFecha().equals(fecha) && viajes.get(i).getHora().equals(hora) && viajes.get(i).getBus().getPatente().equals(patBus)){
                    viaje = viajes.get(i);
@@ -173,7 +169,7 @@ public class SistemaVentaPasajes  {
            for(int i=0;i<pasajeros.size();i++){
                if(pasajeros.get(i).getIdpersona().equals(idPasajero)){
                    pasajero = pasajeros.get(i);
-                   break;;
+                   break;
                }
            }
            if(pasajero==null){
@@ -196,7 +192,7 @@ public class SistemaVentaPasajes  {
             listaVentas[i][1] = String.valueOf(venta.getTipo());
             listaVentas[i][2] = String.valueOf(venta.getFecha());
             listaVentas[i][3] = String.valueOf(venta.getCliente());
-            listaVentas[i][4] = String.valueOf(venta.getPasajes());
+            listaVentas[i][4] = String.valueOf(venta.getPasajes().length);
             listaVentas[i][5] = String.valueOf(venta.getMonto());
         }
         return listaVentas;
