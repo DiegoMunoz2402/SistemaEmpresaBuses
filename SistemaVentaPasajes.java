@@ -14,14 +14,12 @@ public class SistemaVentaPasajes  {
 
     public boolean createCliente(IdPersona id, Nombre nom, String fono, String email){
         if(findCliente(id)!=null){
-            System.out.println("Ya existe la ID: "+ id);
             return false;
         }
 
         Cliente nuevoCliente= new Cliente(id,nom,email);
         nuevoCliente.setTelefono(fono);
         clientes.add(nuevoCliente);
-        System.out.println("Cliente agregado :D");
         return true;
 
     }
@@ -50,8 +48,6 @@ public class SistemaVentaPasajes  {
             if (!buses.contains(nuevoBus)) {
                 buses.add(nuevoBus);
                 return true;
-            }else {
-                System.out.println("No se ha podido crear el bus... Ya existe el mismo");
             }
         }
         return false;
@@ -117,11 +113,7 @@ public class SistemaVentaPasajes  {
                     listAsientosViaje[i][1]=viaje.getAsientos()[i][1];
                 }
                 return listAsientosViaje;
-            }else {
-                System.out.println("No existe un viaje con esos datos..");
             }
-        }else{
-            System.out.println("No existe un bus con esa patente..");
         }
         return new String[0][0];
     }
@@ -163,11 +155,9 @@ public class SistemaVentaPasajes  {
                }
            }
            if(viaje==null){
-               System.out.println("no se encontro el viaje ");
                return false;
            }
            if(asiento < 1||asiento > viaje.getBus().getNroAsientos()){
-               System.out.println("asiento incorrecto");
                return false;
            }
            for(int i=0;i<pasajeros.size();i++){
@@ -177,12 +167,10 @@ public class SistemaVentaPasajes  {
                }
            }
            if(pasajero==null){
-               System.out.println("no se encontro el pasajero");
                return false;
            }
 
            venta.createPasaje(asiento,viaje,pasajero);
-        System.out.println("Pasaje vendido :D");
         return true;
 
 
@@ -234,11 +222,7 @@ public class SistemaVentaPasajes  {
                     listPasajeros[i][4]=pasajeros[i][3];
                 }
                 return pasajeros;
-            }else{
-                System.out.println("Viaje no encontrado...");
             }
-        }else{
-            System.out.println("Bus no encontrado...");
         }
         return new String[0][0];
     }
