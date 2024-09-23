@@ -1,7 +1,7 @@
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-public class Rut {
+public class Rut implements IdPersona {
 
     private final int numero;
     private final char dv;
