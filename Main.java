@@ -132,7 +132,26 @@ public class Main {
 
     }
 
-    private void listVentas(){}
+     private void listVentas() {
+        String[][] listaVentas = remoto.listVentas();
+        if (listaVentas.length == 0) {
+            System.out.println("No existen ventas registradas en el sistema.");
+        } else {
+            System.out.println("...:::: Listado de ventas :::::...");
+            System.out.println("*-----------------*-----------------*-----------------*-----------------*-----------------*");
+            System.out.println("| ID DOCUMENT     | TIPO DOCU      | FECHA          | ID PERSONA       | CANT BOLETOS | TOTAL VENTA |");
+            System.out.println("*-----------------*-----------------*-----------------*-----------------*-----------------*");
+            for (String[] datos : listaVentas) {
+                System.out.printf("| %-15s | %-15s | %-15s | %-15s | %-12s | %-12s |\n",
+                        datos[0],
+                        datos[1],
+                        datos[2],
+                        datos[3],
+                        datos[4],
+                        String.format("$%,d", Integer.parseInt(datos[5])));}
+            System.out.println("*-----------------*-----------------*-----------------*-----------------*-----------------*");
+        }
+    }
 
     private void listViajes(){
 
