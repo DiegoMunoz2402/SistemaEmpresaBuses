@@ -6,11 +6,11 @@ import java.util.Objects;
 
 public class SistemaVentaPasajes  {
 
-    private ArrayList<Cliente> clientes;
-    private ArrayList<Pasajero> pasajeros;
-    private ArrayList<Venta> ventas;
-    private ArrayList<Viaje> viajes;
-    private ArrayList<Bus> buses;
+    private ArrayList<Cliente> clientes = new ArrayList<>();
+    private ArrayList<Pasajero> pasajeros = new ArrayList<>();
+    private ArrayList<Venta> ventas = new ArrayList<>();
+    private ArrayList<Viaje> viajes = new ArrayList<>();
+    private ArrayList<Bus> buses = new ArrayList<>();
 
     public boolean createCliente(IdPersona id, Nombre nom, String fono, String email){
         if(findCliente(id)!=null){

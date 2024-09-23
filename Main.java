@@ -5,7 +5,7 @@ import java.util.Scanner;
 
 public class Main {
     private Scanner sc=new Scanner(System.in);
-    private SistemaVentaPasajes remoto;
+    private SistemaVentaPasajes remoto = new SistemaVentaPasajes();
     public static void main(String[] args) {
 	    Main main = new Main();
         main.menu();
@@ -38,6 +38,9 @@ public class Main {
                     break;
                 case 5:
                     listPasajerosViaje();
+                    break;
+                case 7:
+                    listViajes();
                     break;
                 case 8:
                     System.out.println("Saliendo...");
@@ -89,5 +92,23 @@ public class Main {
 
     private void listVentas(){}
 
-    private void listViajes(){}
+    private void listViajes(){
+        System.out.printf("%35s\n","...:::Listado de viajes:::...");
+        System.out.println("*--------------*--------------*--------------*--------------*--------------*");
+        System.out.printf("| %12s | %12s | %12s | %12s | %12s |\n", "FECHA", "HORA", "PRECIO", "DISPONIBLES", "PATENTE");
+        System.out.println("*--------------*--------------*--------------*--------------*--------------*");
+
+        String[][] datosViajes = remoto.listViajes();
+
+        for (String[] datos: datosViajes){
+            String fecha = datos[0];
+            String hora = datos[1];
+            String precio = datos[2];
+            String disponibles = datos[3];
+            String patente = datos[4];
+
+            System.out.printf("| %12s | %12s | %12s | %12s | %12s |\n", fecha, hora, precio, disponibles, patente);
+        }
+        System.out.println("*--------------*--------------*--------------*--------------*--------------*");
+    }
 }
