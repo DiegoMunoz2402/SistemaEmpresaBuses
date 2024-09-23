@@ -93,6 +93,7 @@ public class Main {
     private void listVentas(){}
 
     private void listViajes(){
+
         System.out.printf("%35s\n","...:::Listado de viajes:::...");
         System.out.println("*--------------*--------------*--------------*--------------*--------------*");
         System.out.printf("| %12s | %12s | %12s | %12s | %12s |\n", "FECHA", "HORA", "PRECIO", "DISPONIBLES", "PATENTE");

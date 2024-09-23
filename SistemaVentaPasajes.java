@@ -62,6 +62,7 @@ public class SistemaVentaPasajes  {
 
         if (findViaje(String.valueOf(fecha), String.valueOf(hora), patBus) == null){
             Viaje nuevoViaje = new Viaje(fecha, hora, precio, bus);
+
             if (!viajes.contains(nuevoViaje)) {
                 viajes.add(nuevoViaje);
                 return true;
