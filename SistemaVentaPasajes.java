@@ -192,7 +192,7 @@ public class SistemaVentaPasajes  {
             listaVentas[i][1] = String.valueOf(venta.getTipo());
             listaVentas[i][2] = String.valueOf(venta.getFecha());
             listaVentas[i][3] = String.valueOf(venta.getCliente());
-            listaVentas[i][4] = String.valueOf(venta.getPasajes());
+            listaVentas[i][4] = String.valueOf(venta.getPasajes().length);
             listaVentas[i][5] = String.valueOf(venta.getMonto());
         }
         return listaVentas;
