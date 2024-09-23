@@ -58,11 +58,14 @@ public class SistemaVentaPasajes  {
     }
 
     public boolean createViaje(LocalDate fecha, LocalTime hora, int precio, String patBus){
-        //Debo preguntar por los tipos de datos a la ayudante
-        if (findViaje(fecha, hora, patBus) == null){
-            Viaje nuevoViaje = new Viaje(fecha,hora,precio, patBus);
-            viajes.add(nuevoViaje);
-            return true;
+        Bus bus = findBus(patBus);
+
+        if (findViaje(String.valueOf(fecha), String.valueOf(hora), patBus) == null){
+            Viaje nuevoViaje = new Viaje(fecha, hora, precio, bus);
+            if (!viajes.contains(nuevoViaje)) {
+                viajes.add(nuevoViaje);
+                return true;
+            }
         }
         return false;
     }
