@@ -145,7 +145,6 @@ public class SistemaVentaPasajes  {
                }
            }
             if(venta==null){
-                System.out.println("no se encontro la venta");
                 return false;
             }
            for(int i=0;i<viajes.size();i++){
