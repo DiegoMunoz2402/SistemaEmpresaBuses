@@ -224,7 +224,6 @@ public class SistemaVentaPasajes  {
     }
 
     public String[][] listPasajeros(LocalDate fecha, LocalTime hora, String patBus){
-
         Bus bus = findBus(patBus);
 
         if (bus!=null){
