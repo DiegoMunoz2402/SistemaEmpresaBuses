@@ -58,17 +58,24 @@ public class SistemaVentaPasajes  {
     }
 
     public boolean createViaje(LocalDate fecha, LocalTime hora, int precio, String patBus){
+        //Busco el bus y lo guardo en la varible bus, además es un tipo Bus
         Bus bus = findBus(patBus);
 
-        if (findViaje(String.valueOf(fecha), String.valueOf(hora), patBus) == null){
-            Viaje nuevoViaje = new Viaje(fecha, hora, precio, bus);
+        //Cambio el formato de la fecha y hora para usarlo en findViaje
 
-            if (!viajes.contains(nuevoViaje)) {
-                viajes.add(nuevoViaje);
-                return true;
-            }
+
+        /*Si findViaje es distinto de nullo, osea hay datos y existe retorna false
+        porque no puede crear algo que ya existe */
+        if (bus == null || findViaje(fecha, hora, patBus) != null) {
+            return false;
+
+        }else{
+            //Creo un nuevo viaje
+            Viaje nuevoViaje = new Viaje(fecha, hora, precio, bus);
+            //Añado el nuevo viaje
+            viajes.add(nuevoViaje);
+            return true;
         }
-        return false;
     }
 
     public boolean iniciaVenta(String idDoc, TipoDocumento tipo, LocalDate fechaVenta, IdPersona idCliente) {
@@ -109,7 +116,7 @@ public class SistemaVentaPasajes  {
     public String[][] listAsientosDeViaje(LocalDate fecha, LocalTime hora, String patBus){
         Bus bus = findBus(patBus);
         if (bus!=null) {
-            Viaje viaje = findViaje(fecha.toString(), hora.toString(), patBus);
+            Viaje viaje = findViaje(fecha, hora, patBus);
             if (viaje!=null){
                 String[][] listAsientosViaje=new String[viaje.getAsientos().length][2];
                 for (int i = 0; i < listAsientosViaje.length; i++) {
@@ -218,10 +225,9 @@ public class SistemaVentaPasajes  {
 
     public String[][] listPasajeros(LocalDate fecha, LocalTime hora, String patBus){
         Bus bus = findBus(patBus);
-        String fechastr=fecha.toString();
-        String horastr=hora.toString();
-        if (bus!=null && !fechastr.isEmpty() && !horastr.isEmpty()){
-            Viaje viaje = findViaje(fechastr,horastr,patBus);
+
+        if (bus!=null){
+            Viaje viaje = findViaje(fecha,hora,patBus);
             if (viaje!=null){
                 String[][] pasajeros = viaje.getListaPasajeros();
                 String[][] listPasajeros = new String[pasajeros.length][5];
@@ -274,10 +280,12 @@ public class SistemaVentaPasajes  {
         return null;
     }
 
-    private Viaje findViaje(String fecha, String hora, String patenteBus){
-        for(Viaje viajes : viajes){
-            if(viajes.getFecha().equals(fecha) && viajes.getHora().equals(hora) && viajes.getBus().getPatente().equals(patenteBus)){
-                return viajes;
+    private Viaje findViaje(LocalDate fecha, LocalTime hora, String patenteBus){
+        /*Busco en la lista de viajes y si tiene misma feha, hora y patente
+        retorna el viaje, sino returna null ya que no existe */
+        for(Viaje viaje : viajes){
+            if(viaje.getFecha().equals(fecha) && viaje.getHora().equals(hora) && viaje.getBus().getPatente().equals(patenteBus)){
+                return viaje;
             }
         }
         return null;

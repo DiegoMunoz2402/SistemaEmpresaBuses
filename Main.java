@@ -12,7 +12,6 @@ public class Main {
     }
 
     private void menu(){
-        remoto = new SistemaVentaPasajes();
         int op;
         do {
             System.out.println("======================");
@@ -35,6 +34,9 @@ public class Main {
                     break;
                 case 2:
                     createBus();
+                    break;
+                case 3:
+                    createViaje();
                     break;
                 case 5:
                     listPasajerosViaje();
@@ -71,7 +73,29 @@ public class Main {
         }
     }
 
-    private void createViaje(){}
+    private void createViaje(){
+
+        DateTimeFormatter tipoFecha = DateTimeFormatter.ofPattern("dd/MM/yyyy");
+
+
+        System.out.println("...:::: Creación de un nuevo Viaje ::::....");
+        System.out.println();
+        System.out.printf("%21s\n", "Fecha[dd/mm/yyyy] : ");
+        LocalDate fecha = LocalDate.parse(sc.next(),tipoFecha);
+        System.out.printf("%21s\n", "Hora[hh:mm] : ");
+        LocalTime hora = LocalTime.parse(sc.next());
+        System.out.printf("%21s\n", "Precio : ");
+        int precio = Integer.parseInt(sc.next());
+        System.out.printf("%21s\n", "Patente Bus : ");
+        String patenteBus = sc.next();
+        System.out.println();
+
+        if (remoto.createViaje(fecha,hora,precio,patenteBus)){
+            System.out.println("...:::: Viaje guardado existosamente ::::....");
+        }else{
+            System.out.println("...::::     Error al crear viaje     ::::....");
+        }
+    }
 
     private void vendePasajes(){}
 
