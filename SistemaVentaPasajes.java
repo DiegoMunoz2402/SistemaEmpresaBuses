@@ -11,7 +11,8 @@ public class SistemaVentaPasajes  {
     private ArrayList<Venta> ventas = new ArrayList<>();
     private ArrayList<Viaje> viajes = new ArrayList<>();
     private ArrayList<Bus> buses = new ArrayList<>();
-
+    
+         // metodo createCliente: Rodolfo Salas
     public boolean createCliente(IdPersona id, Nombre nom, String fono, String email){
         if(findCliente(id)!=null){
             return false;
@@ -81,7 +82,7 @@ public class SistemaVentaPasajes  {
         ventas.add(newVenta);
         return true;
     }
-
+       //metodo getHorariosDisponibles: Rodolfo Salas
     public String[][] getHorariosDisponibles(LocalDate fechaViaje){
         ArrayList<String[]> ViajesDisponibles = new ArrayList<>();
         for(int i=0; i<viajes.size(); i++){
@@ -134,7 +135,7 @@ public class SistemaVentaPasajes  {
         }
         return null;
     }
-    //No aparece en el UML que tipo de dato es idPasajero, aunque por lógica se asume que es del tipo idPersona
+      // metodo vendePasaje: Rodolfo Salas
     public boolean vendePasaje(String idDoc, LocalDate fecha, LocalTime hora, String patBus, int asiento, IdPersona idPasajero){
            Venta venta = null;
            Viaje viaje = null;
@@ -225,7 +226,7 @@ public class SistemaVentaPasajes  {
         }
         return new String[0][0];
     }
-
+       //metodo findCliente: Rodolfo Salas
     private Cliente findCliente(IdPersona id){
         for(int i=0;i<clientes.size();i++){
             Cliente cliente= clientes.get(i);
@@ -256,7 +257,7 @@ public class SistemaVentaPasajes  {
         }
         return null;
     }
-
+    
     private Viaje findViaje(String fecha, String hora, String patenteBus){
         for(Viaje viajes : viajes){
             if(viajes.getFecha().equals(fecha) && viajes.getHora().equals(hora) && viajes.getBus().getPatente().equals(patenteBus)){
