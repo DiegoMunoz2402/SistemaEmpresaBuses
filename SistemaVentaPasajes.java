@@ -1,26 +1,25 @@
 import java.time.LocalDate;
 import java.time.LocalTime;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Objects;
 
 public class SistemaVentaPasajes  {
 
-    private ArrayList<Cliente> clientes;
-    private ArrayList<Pasajero> pasajeros;
-    private ArrayList<Venta> ventas;
-    private ArrayList<Viaje> viajes;
-    private ArrayList<Bus> buses;
+    private ArrayList<Cliente> clientes = new ArrayList<>();
+    private ArrayList<Pasajero> pasajeros = new ArrayList<>();
+    private ArrayList<Venta> ventas = new ArrayList<>();
+    private ArrayList<Viaje> viajes = new ArrayList<>();
+    private ArrayList<Bus> buses = new ArrayList<>();
 
     public boolean createCliente(IdPersona id, Nombre nom, String fono, String email){
         if(findCliente(id)!=null){
-            System.out.println("Ya existe la ID: "+ id);
             return false;
         }
 
         Cliente nuevoCliente= new Cliente(id,nom,email);
         nuevoCliente.setTelefono(fono);
         clientes.add(nuevoCliente);
-        System.out.println("Cliente agregado :D");
         return true;
 
     }
@@ -49,26 +48,59 @@ public class SistemaVentaPasajes  {
             if (!buses.contains(nuevoBus)) {
                 buses.add(nuevoBus);
                 return true;
-            }else {
-                System.out.println("No se ha podido crear el bus... Ya existe el mismo");
             }
         }
         return false;
     }
 
     public boolean createViaje(LocalDate fecha, LocalTime hora, int precio, String patBus){
-        //Debo preguntar por los tipos de datos a la ayudante
-        if (findViaje(fecha, hora, patBus) == null){
-            Viaje nuevoViaje = new Viaje(fecha,hora,precio, patBus);
-            viajes.add(nuevoViaje);
-            return true;
+        Bus bus = findBus(patBus);
+
+        if (findViaje(String.valueOf(fecha), String.valueOf(hora), patBus) == null){
+            Viaje nuevoViaje = new Viaje(fecha, hora, precio, bus);
+
+            if (!viajes.contains(nuevoViaje)) {
+                viajes.add(nuevoViaje);
+                return true;
+            }
         }
         return false;
     }
 
-    public boolean iniciaVenta(String idDoc, TipoDocumento tipo, LocalDate fechaVenta, IdPersona idCliente){}
+    public boolean iniciaVenta(String idDoc, TipoDocumento tipo, LocalDate fechaVenta, IdPersona idCliente) {
 
-    public String[][] getHorariosDisponibles(LocalDate fechaViaje){}
+        Venta venta = findVenta(idDoc, tipo);
+        if (venta != null){
+            return false;	}
+
+        Cliente cliente = findCliente(idCliente);
+        if (cliente == null) {
+            return false;	}
+
+        Venta newVenta = new Venta(idDoc, tipo, fechaVenta, cliente);
+        ventas.add(newVenta);
+        return true;
+    }
+
+    public String[][] getHorariosDisponibles(LocalDate fechaViaje){
+        ArrayList<String[]> ViajesDisponibles = new ArrayList<>();
+        for(int i=0; i<viajes.size(); i++){
+            Viaje viaje = viajes.get(i);
+            if(viaje.getFecha().equals(fechaViaje)){
+                String AsientosDisponibles=String.valueOf(viaje.getNroAsientosDisponibles());
+                String PatenteBus=viaje.getBus().getPatente();
+                String HoraDeSalida= String.valueOf(viaje.getHora());
+                String PrecioPasaje= String.valueOf(viaje.getPrecio());
+                ViajesDisponibles.add(new String[]{AsientosDisponibles, PatenteBus, HoraDeSalida, PrecioPasaje});
+
+            }
+        }
+        if(ViajesDisponibles.isEmpty()){
+            return new String[0][0];
+        }
+        return ViajesDisponibles.toArray(new String[ViajesDisponibles.size()][]);
+
+    }
 
     public String[][] listAsientosDeViaje(LocalDate fecha, LocalTime hora, String patBus){
         Bus bus = findBus(patBus);
@@ -81,16 +113,19 @@ public class SistemaVentaPasajes  {
                     listAsientosViaje[i][1]=viaje.getAsientos()[i][1];
                 }
                 return listAsientosViaje;
-            }else {
-                System.out.println("No existe un bus con esos datos..");
             }
-        }else{
-            System.out.println("No existe un bus con esa patente..");
         }
         return new String[0][0];
     }
 
-    public int getMontoVenta(String idDocumento, TipoDocumento tipo){}
+     public int getMontoVenta(String idDocumento, TipoDocumento tipo){
+
+        Venta venta = findVenta(idDocumento, tipo);
+        if (venta!= null){
+            return venta.getMonto();
+        }
+        return 0;
+    }
 
     public String getNombrePasajero(IdPersona idPasajero){
         Pasajero pasajero = findPasajero(idPasajero);
@@ -107,13 +142,11 @@ public class SistemaVentaPasajes  {
            for(int i=0;i<ventas.size();i++){
                if(ventas.get(i).getIdDocumento().equals(idDoc)){
                    venta = ventas.get(i);
-
                }
            }
-           if(venta==null){
-            System.out.println("no se encontro la venta");
-            return false;
-        }
+            if(venta==null){
+                return false;
+            }
            for(int i=0;i<viajes.size();i++){
                if (viajes.get(i).getFecha().equals(fecha) && viajes.get(i).getHora().equals(hora) && viajes.get(i).getBus().getPatente().equals(patBus)){
                    viaje = viajes.get(i);
@@ -121,32 +154,41 @@ public class SistemaVentaPasajes  {
                }
            }
            if(viaje==null){
-               System.out.println("no se encontro el viaje ");
                return false;
            }
-
            if(asiento < 1||asiento > viaje.getBus().getNroAsientos()){
-               System.out.println("asiento incorrecto");
                return false;
            }
            for(int i=0;i<pasajeros.size();i++){
                if(pasajeros.get(i).getIdpersona().equals(idPasajero)){
                    pasajero = pasajeros.get(i);
+                   break;
                }
            }
            if(pasajero==null){
-               System.out.println("no se encontro el pasajero");
                return false;
            }
 
            venta.createPasaje(asiento,viaje,pasajero);
-           System.out.println("Pasaje vendido :D");
-           return true;
+        return true;
 
 
     }
 
-    public String[][] listVentas(){}
+     public String[][] listVentas(){
+        String[][] listaVentas = new String[ventas.size()][6];
+        for(int i = 0; i < ventas.size(); i++) {
+            Venta venta = ventas.get(i);
+            listaVentas[i][0] = String.valueOf(venta.getIdDocumento());
+            listaVentas[i][1] = String.valueOf(venta.getTipo());
+            listaVentas[i][2] = String.valueOf(venta.getFecha());
+            listaVentas[i][3] = String.valueOf(venta.getCliente());
+            listaVentas[i][4] = String.valueOf(venta.getPasajes().length);
+            listaVentas[i][5] = String.valueOf(venta.getMonto());
+        }
+        return listaVentas;
+
+    }
 
     public String[][] listViajes(){
         String[][] listaViajes = new String[viajes.size()][5];
@@ -179,11 +221,7 @@ public class SistemaVentaPasajes  {
                     listPasajeros[i][4]=pasajeros[i][3];
                 }
                 return pasajeros;
-            }else{
-                System.out.println("Viaje no encontrado...");
             }
-        }else{
-            System.out.println("Bus no encontrado...");
         }
         return new String[0][0];
     }
@@ -194,11 +232,21 @@ public class SistemaVentaPasajes  {
             if(Objects.equals(cliente.getIdpersona(), id)){
                 return cliente;
             }
+
+
+
         }
         return null;
     }
 
-    private Venta findVenta(String idDocumento, TipoDocumento tipoDocumento){}
+    private Venta findVenta(String idDocumento, TipoDocumento tipoDocumento){
+        for(Venta venta: ventas){
+            if(venta.getIdDocumento().equals(idDocumento) && venta.getTipo().equals(tipoDocumento)){
+                return venta;
+            } }
+        return null;
+
+    }
 
     private Bus findBus(String patente){
         for (Bus bus:buses){

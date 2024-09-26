@@ -5,7 +5,7 @@ import java.util.Scanner;
 
 public class Main {
     private Scanner sc=new Scanner(System.in);
-    private SistemaVentaPasajes remoto;
+    private SistemaVentaPasajes remoto = new SistemaVentaPasajes();
     public static void main(String[] args) {
 	    Main main = new Main();
         main.menu();
@@ -31,13 +31,16 @@ public class Main {
             System.out.print("..:: Ingrese número de opcion: ");
             op = sc.nextInt();
             switch (op){
-                case 1:
+                case 1:createCliente();
                     break;
                 case 2:
                     createBus();
                     break;
                 case 5:
                     listPasajerosViaje();
+                    break;
+                case 7:
+                    listViajes();
                     break;
                 case 8:
                     System.out.println("Saliendo...");
@@ -49,7 +52,49 @@ public class Main {
         }while(op!=8);
     }
 
-    private void createCliente(){}
+    private void createCliente(){
+        sc.useDelimiter("[ \\t\\r\\n]+");
+
+        System.out.println(":::: Crear un nuevo Cliente ::::");
+        System.out.println("Rut[1] o Pasaporte[2] : ");
+        int tipo = sc.nextInt();
+        sc.nextLine();
+        IdPersona identificador= null;
+        if(tipo==1){
+            System.out.println("R.U.T : ");
+            String rut= sc.next();
+            identificador= (IdPersona) Rut.of(rut);
+        } else if (tipo==2) {
+            System.out.println("NUMERO DE PASAPORTE : ");
+            String numero= sc.next();
+            System.out.println("NACIONALIDAD : ");
+            String nacionalidad= sc.next();
+            identificador= Pasaporte.of(numero,nacionalidad);
+        }
+        System.out.println("Sr.[1] o Sra. [2] : ");
+        int opcion = sc.nextInt();
+        sc.nextLine();
+        Tratamiento tratamiento;
+        if(opcion==1){
+            tratamiento= Tratamiento.SR;
+        }else{
+            tratamiento= Tratamiento.SRA;
+        }
+        System.out.println("Nombres : ");
+        String nombres = sc.nextLine();
+        System.out.println("Apellido Paterno : ");
+        String apellidoPaterno = sc.next();
+        System.out.println("Apellido Materno : ");
+        String apellidoMaterno = sc.next();
+        System.out.println("Telefono movil : ");
+        String telefono = sc.next();
+        System.out.println("Email : ");
+        String email = sc.next();
+        Nombre nombrecompleto= new Nombre(nombres,apellidoPaterno,apellidoPaterno,tratamiento);
+        SistemaVentaPasajes sistema= new SistemaVentaPasajes();
+        sistema.createCliente(identificador,nombrecompleto,telefono,email);
+
+    }
 
     private void createBus(){
         System.out.println("...:::: Creación de un nuevo BUS ::::..");
@@ -97,7 +142,45 @@ public class Main {
         }
     }
 
-    private void listVentas(){}
+     private void listVentas() {
+        String[][] listaVentas = remoto.listVentas();
+        if (listaVentas.length == 0) {
+            System.out.println("No existen ventas registradas en el sistema.");
+        } else {
+            System.out.println("...:::: Listado de ventas :::::...");
+            System.out.println("*-----------------*-----------------*-----------------*-----------------*-----------------*");
+            System.out.println("| ID DOCUMENT     | TIPO DOCU      | FECHA          | ID PERSONA       | CANT BOLETOS | TOTAL VENTA |");
+            System.out.println("*-----------------*-----------------*-----------------*-----------------*-----------------*");
+            for (String[] datos : listaVentas) {
+                System.out.printf("| %-15s | %-15s | %-15s | %-15s | %-12s | %-12s |\n",
+                        datos[0],
+                        datos[1],
+                        datos[2],
+                        datos[3],
+                        datos[4],
+                        String.format("$%,d", Integer.parseInt(datos[5])));}
+            System.out.println("*-----------------*-----------------*-----------------*-----------------*-----------------*");
+        }
+    }
 
-    private void listViajes(){}
+    private void listViajes(){
+
+        System.out.printf("%35s\n","...:::Listado de viajes:::...");
+        System.out.println("*--------------*--------------*--------------*--------------*--------------*");
+        System.out.printf("| %12s | %12s | %12s | %12s | %12s |\n", "FECHA", "HORA", "PRECIO", "DISPONIBLES", "PATENTE");
+        System.out.println("*--------------*--------------*--------------*--------------*--------------*");
+
+        String[][] datosViajes = remoto.listViajes();
+
+        for (String[] datos: datosViajes){
+            String fecha = datos[0];
+            String hora = datos[1];
+            String precio = datos[2];
+            String disponibles = datos[3];
+            String patente = datos[4];
+
+            System.out.printf("| %12s | %12s | %12s | %12s | %12s |\n", fecha, hora, precio, disponibles, patente);
+        }
+        System.out.println("*--------------*--------------*--------------*--------------*--------------*");
+    }
 }
