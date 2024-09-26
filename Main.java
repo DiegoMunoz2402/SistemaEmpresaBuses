@@ -5,7 +5,7 @@ import java.util.Scanner;
 
 public class Main {
     private Scanner sc=new Scanner(System.in);
-    private SistemaVentaPasajes remoto = new SistemaVentaPasajes();
+    private SistemaVentaPasajes remoto;
     public static void main(String[] args) {
 	    Main main = new Main();
         main.menu();
