@@ -1,3 +1,4 @@
+//Clase pasaje: Diego Muñoz
 import java.security.SecureRandom;
 
 public class Pasaje {
