@@ -12,6 +12,7 @@ public class SistemaVentaPasajes  {
     private ArrayList<Viaje> viajes = new ArrayList<>();
     private ArrayList<Bus> buses = new ArrayList<>();
 
+         // metodo createCliente: Rodolfo Salas
     public boolean createCliente(IdPersona id, Nombre nom, String fono, String email){
         if(findCliente(id)!=null){
             System.out.println("Ya existe la ID: "+ id);
@@ -25,7 +26,7 @@ public class SistemaVentaPasajes  {
         return true;
 
     }
-
+    //Metodo createPasajero: Diego Muñoz
     public boolean createPasajero(IdPersona id, Nombre nom, String fono, Nombre nomContacto, String fonoContacto){
         boolean encontrado=false;
         for (Pasajero pasajero:pasajeros){
@@ -50,15 +51,12 @@ public class SistemaVentaPasajes  {
             if (!buses.contains(nuevoBus)) {
                 buses.add(nuevoBus);
                 return true;
-            }else {
-                System.out.println("No se ha podido crear el bus... Ya existe el mismo");
             }
         }
         return false;
     }
 
     public boolean createViaje(LocalDate fecha, LocalTime hora, int precio, String patBus){
-        //Busco el bus y lo guardo en la varible bus, además es un tipo Bus
         Bus bus = findBus(patBus);
 
         //Cambio el formato de la fecha y hora para usarlo en findViaje
@@ -92,7 +90,7 @@ public class SistemaVentaPasajes  {
         ventas.add(newVenta);
         return true;
     }
-
+       //metodo getHorariosDisponibles: Rodolfo Salas
     public String[][] getHorariosDisponibles(LocalDate fechaViaje){
         ArrayList<String[]> ViajesDisponibles = new ArrayList<>();
         for(int i=0; i<viajes.size(); i++){
@@ -112,7 +110,7 @@ public class SistemaVentaPasajes  {
         return ViajesDisponibles.toArray(new String[ViajesDisponibles.size()][]);
 
     }
-
+    //Metodo listAsientosDeViaje: Diego Muñoz
     public String[][] listAsientosDeViaje(LocalDate fecha, LocalTime hora, String patBus){
         Bus bus = findBus(patBus);
         if (bus!=null) {
@@ -124,11 +122,7 @@ public class SistemaVentaPasajes  {
                     listAsientosViaje[i][1]=viaje.getAsientos()[i][1];
                 }
                 return listAsientosViaje;
-            }else {
-                System.out.println("No existe un viaje con esos datos..");
             }
-        }else{
-            System.out.println("No existe un bus con esa patente..");
         }
         return new String[0][0];
     }
@@ -141,7 +135,7 @@ public class SistemaVentaPasajes  {
         }
         return 0;
     }
-
+    //Metodo getNombrePasajero: Diego Muñoz
     public String getNombrePasajero(IdPersona idPasajero){
         Pasajero pasajero = findPasajero(idPasajero);
         if (pasajero!=null){
@@ -149,7 +143,7 @@ public class SistemaVentaPasajes  {
         }
         return null;
     }
-    //No aparece en el UML que tipo de dato es idPasajero, aunque por lógica se asume que es del tipo idPersona
+      // metodo vendePasaje: Rodolfo Salas
     public boolean vendePasaje(String idDoc, LocalDate fecha, LocalTime hora, String patBus, int asiento, IdPersona idPasajero){
            Venta venta = null;
            Viaje viaje = null;
@@ -160,7 +154,6 @@ public class SistemaVentaPasajes  {
                }
            }
             if(venta==null){
-                System.out.println("no se encontro la venta");
                 return false;
             }
            for(int i=0;i<viajes.size();i++){
@@ -170,11 +163,9 @@ public class SistemaVentaPasajes  {
                }
            }
            if(viaje==null){
-               System.out.println("no se encontro el viaje ");
                return false;
            }
            if(asiento < 1||asiento > viaje.getBus().getNroAsientos()){
-               System.out.println("asiento incorrecto");
                return false;
            }
            for(int i=0;i<pasajeros.size();i++){
@@ -184,12 +175,10 @@ public class SistemaVentaPasajes  {
                }
            }
            if(pasajero==null){
-               System.out.println("no se encontro el pasajero");
                return false;
            }
 
            venta.createPasaje(asiento,viaje,pasajero);
-        System.out.println("Pasaje vendido :D");
         return true;
 
 
@@ -222,13 +211,14 @@ public class SistemaVentaPasajes  {
         }
         return listaViajes;
     }
-
+    //Metodo listPasajeros: Diego Muñoz
     public String[][] listPasajeros(LocalDate fecha, LocalTime hora, String patBus){
 
         Bus bus = findBus(patBus);
-
-        if (bus!=null){
-            Viaje viaje = findViaje(fecha,hora,patBus);
+        String fechastr=fecha.toString();
+        String horastr=hora.toString();
+        if (bus!=null && !fechastr.isEmpty() && !horastr.isEmpty()){
+            Viaje viaje = findViaje(fechastr,horastr,patBus);
             if (viaje!=null){
                 String[][] pasajeros = viaje.getListaPasajeros();
                 String[][] listPasajeros = new String[pasajeros.length][5];
@@ -241,15 +231,11 @@ public class SistemaVentaPasajes  {
                     listPasajeros[i][4]=pasajeros[i][3];
                 }
                 return pasajeros;
-            }else{
-                System.out.println("Viaje no encontrado...");
             }
-        }else{
-            System.out.println("Bus no encontrado...");
         }
         return new String[0][0];
     }
-
+       //metodo findCliente: Rodolfo Salas
     private Cliente findCliente(IdPersona id){
         for(int i=0;i<clientes.size();i++){
             Cliente cliente= clientes.get(i);
@@ -271,7 +257,7 @@ public class SistemaVentaPasajes  {
         return null;
 
     }
-
+    //Metodo findBus: Diego Muñoz
     private Bus findBus(String patente){
         for (Bus bus:buses){
             if (bus.getPatente().equals(patente)){
@@ -291,7 +277,7 @@ public class SistemaVentaPasajes  {
         }
         return null;
     }
-
+    //Metodo findPasajero: Diego Muñoz
     private Pasajero findPasajero(IdPersona idPersona){
         for (Pasajero pasajero:pasajeros){
             if (pasajero.getIdpersona().equals(idPersona)){

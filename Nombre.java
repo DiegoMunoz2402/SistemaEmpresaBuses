@@ -1,3 +1,4 @@
+//Clase Nombre: Diego Muñoz
 public class Nombre {
     private String nombres;
     private Tratamiento tratamiento;
