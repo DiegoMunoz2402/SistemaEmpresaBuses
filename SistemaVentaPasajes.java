@@ -59,9 +59,6 @@ public class SistemaVentaPasajes  {
     public boolean createViaje(LocalDate fecha, LocalTime hora, int precio, String patBus){
         Bus bus = findBus(patBus);
 
-        //Cambio el formato de la fecha y hora para usarlo en findViaje
-
-
         /*Si findViaje es distinto de nullo, osea hay datos y existe retorna false
         porque no puede crear algo que ya existe */
         if (bus == null || findViaje(fecha, hora, patBus) != null) {
