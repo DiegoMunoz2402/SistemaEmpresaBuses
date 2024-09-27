@@ -24,7 +24,7 @@ public class SistemaVentaPasajes  {
         return true;
 
     }
-
+    //Metodo createPasajero: Diego Muñoz
     public boolean createPasajero(IdPersona id, Nombre nom, String fono, Nombre nomContacto, String fonoContacto){
         boolean encontrado=false;
         for (Pasajero pasajero:pasajeros){
@@ -42,7 +42,7 @@ public class SistemaVentaPasajes  {
         }
         return false;
     }
-
+    
     public boolean createBus(String patente, String marca, String modelo, int nroAsientos){
         if (findBus(patente) == null){
             Bus nuevoBus = new Bus(patente, marca, modelo, nroAsientos);
@@ -102,7 +102,7 @@ public class SistemaVentaPasajes  {
         return ViajesDisponibles.toArray(new String[ViajesDisponibles.size()][]);
 
     }
-
+    //Metodo listAsientosDeViaje: Diego Muñoz
     public String[][] listAsientosDeViaje(LocalDate fecha, LocalTime hora, String patBus){
         Bus bus = findBus(patBus);
         if (bus!=null) {
@@ -127,7 +127,7 @@ public class SistemaVentaPasajes  {
         }
         return 0;
     }
-
+    //Metodo getNombrePasajero: Diego Muñoz
     public String getNombrePasajero(IdPersona idPasajero){
         Pasajero pasajero = findPasajero(idPasajero);
         if (pasajero!=null){
@@ -203,7 +203,7 @@ public class SistemaVentaPasajes  {
         }
         return listaViajes;
     }
-
+    //Metodo listPasajeros: Diego Muñoz
     public String[][] listPasajeros(LocalDate fecha, LocalTime hora, String patBus){
         Bus bus = findBus(patBus);
         String fechastr=fecha.toString();
@@ -248,7 +248,7 @@ public class SistemaVentaPasajes  {
         return null;
 
     }
-
+    //Metodo findBus: Diego Muñoz
     private Bus findBus(String patente){
         for (Bus bus:buses){
             if (bus.getPatente().equals(patente)){
@@ -266,7 +266,7 @@ public class SistemaVentaPasajes  {
         }
         return null;
     }
-
+    //Metodo findPasajero: Diego Muñoz
     private Pasajero findPasajero(IdPersona idPersona){
         for (Pasajero pasajero:pasajeros){
             if (pasajero.getIdpersona().equals(idPersona)){
