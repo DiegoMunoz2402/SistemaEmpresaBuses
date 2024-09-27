@@ -103,6 +103,7 @@ public class Main {
         Nombre nombrecompleto= new Nombre(nombres,apellidoPaterno,apellidoPaterno,tratamiento);
         SistemaVentaPasajes sistema= new SistemaVentaPasajes();
         sistema.createCliente(identificador,nombrecompleto,telefono,email);
+	System.out.println("...::::Cliente guardado exitosamente::::....");
 
     }
 
