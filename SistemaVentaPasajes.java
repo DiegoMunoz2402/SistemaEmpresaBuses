@@ -44,7 +44,7 @@ public class SistemaVentaPasajes  {
         }
         return false;
     }
-
+    //Método createBus : Sirel Henríquez
     public boolean createBus(String patente, String marca, String modelo, int nroAsientos){
         if (findBus(patente) == null){
             Bus nuevoBus = new Bus(patente, marca, modelo, nroAsientos);
@@ -55,7 +55,7 @@ public class SistemaVentaPasajes  {
         }
         return false;
     }
-
+    //Método createViaje: Sirel Henríquez
     public boolean createViaje(LocalDate fecha, LocalTime hora, int precio, String patBus){
         Bus bus = findBus(patBus);
 
@@ -198,7 +198,7 @@ public class SistemaVentaPasajes  {
         return listaVentas;
 
     }
-
+    //Método listViajes : Sirel Henríquez
     public String[][] listViajes(){
         String[][] listaViajes = new String[viajes.size()][5];
         for (int i = 0; i < viajes.size(); i++){
@@ -215,10 +215,8 @@ public class SistemaVentaPasajes  {
     public String[][] listPasajeros(LocalDate fecha, LocalTime hora, String patBus){
 
         Bus bus = findBus(patBus);
-        String fechastr=fecha.toString();
-        String horastr=hora.toString();
-        if (bus!=null && !fechastr.isEmpty() && !horastr.isEmpty()){
-            Viaje viaje = findViaje(fechastr,horastr,patBus);
+        if (bus!=null){
+            Viaje viaje = findViaje(fecha,hora,patBus);
             if (viaje!=null){
                 String[][] pasajeros = viaje.getListaPasajeros();
                 String[][] listPasajeros = new String[pasajeros.length][5];
@@ -266,7 +264,7 @@ public class SistemaVentaPasajes  {
         }
         return null;
     }
-
+    //Método findViaje : Sirel Henríquez
     private Viaje findViaje(LocalDate fecha, LocalTime hora, String patenteBus){
         /*Busco en la lista de viajes y si tiene misma feha, hora y patente
         retorna el viaje, sino returna null ya que no existe */

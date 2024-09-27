@@ -124,7 +124,7 @@ public class Main {
 	    System.out.println("...:::: No se pudo crear el bus, existe otro con la misma patente o los datos son invalidos... ::::..");
 	}
     }
-
+    //Método createViaje : Sirel Henríquez
     private void createViaje(){
 
         DateTimeFormatter tipoFecha = DateTimeFormatter.ofPattern("dd/MM/yyyy");
@@ -428,7 +428,7 @@ public class Main {
             System.out.println("*-----------------*-----------------*-----------------*-----------------*-----------------*");
         }
     }
-
+    //Método listViajes : Sirel Henríquez
     private void listViajes(){
 
         System.out.printf("%35s\n","...:::Listado de viajes:::...");
