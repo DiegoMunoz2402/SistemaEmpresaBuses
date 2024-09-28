@@ -48,6 +48,7 @@ public class Main {
                     break;
                 case 6:
                     listVentas();
+                    break;
                 case 7:
                     listViajes();
                     break;
