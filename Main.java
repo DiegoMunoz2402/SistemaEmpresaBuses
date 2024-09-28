@@ -48,6 +48,7 @@ public class Main {
                     break;
                 case 6:
                     listVentas();
+                    break;
                 case 7:
                     listViajes();
                     break;
@@ -118,7 +119,9 @@ public class Main {
         System.out.println();
         if (remoto.createBus(patente,marca,modelo,numAsientos)){
             System.out.println("...:::: Bus guardado exitosamente ::::..");
-        }
+        }else{
+	    System.out.println("...:::: No se pudo crear el bus, existe otro con la misma patente o los datos son invalidos... ::::..");	
+	    }
     }
 
     private void createViaje(){
@@ -195,7 +198,7 @@ public class Main {
             }
 
         }
-                    // falta un posible else // o colocar break, o return // revisar que sucede si se cumple el nosepudo
+                  
         boolean venta = remoto.iniciaVenta(idDoc, tipo, fechaVenta,idCliente);
 
         if (!venta){System.out.println(" ...:::: No se pudo iniciar la venta ::::...");
@@ -215,17 +218,8 @@ public class Main {
 
         if (viajesDisponibles.length == 0) {
             System.out.println("No hay viajes disponibles con suficientes asientos en la fecha indicada.");
-            return;             //verificar que pasa con este return
+            return;           
         }
-
-        for (String[] viaje : viajesDisponibles) {
-            System.out.println("Asientos Disponibles: " + viaje[0] + ", Patente del Bus: " + viaje[1] +
-                    ", Hora de Salida: " + viaje[2] + ", Precio: " + viaje[3]);
-        }
-
-
-                //186 muestra asientos disponibles y se vuelve a repetir, dejar el ma wonito
-
 
         System.out.println(String.format("%-5s | %-10s | %-10s | %-10s | %-10s", "ID", "BUS", "SALIDA", "VALOR", "ASIENTOS"));
 
@@ -245,7 +239,7 @@ public class Main {
         int viajeSeleccionado = scanner.nextInt();
         if (viajeSeleccionado < 0 || viajeSeleccionado >= viajesDisponibles.length) {
             System.out.println("Selección inválida.");
-            return;  //verificar que pasa con este return
+            return;
         }
 
 
@@ -272,8 +266,8 @@ public class Main {
             return;
         }
 
-            for (int i = 0; i < cantidadPasajes; i++) {             //si es falso se crea un nuevo id persona
-                int asiento = Integer.parseInt(asientosArray[i].trim());        // lo mismo con pasaporte // con if
+            for (int i = 0; i < cantidadPasajes; i++) {           
+                int asiento = Integer.parseInt(asientosArray[i].trim());        
                 System.out.println("Datos del pasajero " + (i + 1));
                 System.out.print("Rut[1] o Pasaporte[2]: ");
                 int tipoIdentificadorPasajero = scanner.nextInt();
@@ -393,7 +387,21 @@ public class Main {
         System.out.printf("%35s ","Patente bus : ");
         String patenteBus = sc.next();
         String[][] listaPasajeros = remoto.listPasajeros(fecha,hora,patenteBus);
-
+        if (listaPasajeros.length == 0) {
+            System.out.println("No existe un bus con la patente indicada...");
+        }else {
+            System.out.println("*-----------*---------------------*------------------------------------*-------------------------------*--------------------*");
+            System.out.printf("|%10s |%20s |%-35s |%-30s |%-20s|%n", "Asiento", "Rut/Pass", "Pasajero", "Contacto", "Telefono contacto");
+            System.out.println("|-----------+---------------------+------------------------------------+-------------------------------+--------------------|");
+            for (int i = 0; i < listaPasajeros.length - 1; i++) {
+                System.out.printf("|%10s |%20s |%-35s |%-30s |%-20s|%n", listaPasajeros[i][0], listaPasajeros[i][1], listaPasajeros[i][2], listaPasajeros[i][3], listaPasajeros[i][4]);
+                System.out.println("|-----------+---------------------+------------------------------------+-------------------------------+--------------------|");
+            }
+            for (int i = listaPasajeros.length - 1; i < listaPasajeros.length; i++) {
+                System.out.printf("|%10s |%20s |%-35s |%-30s |%-20s|%n", listaPasajeros[i][0], listaPasajeros[i][1], listaPasajeros[i][2], listaPasajeros[i][3], listaPasajeros[i][4]);
+                System.out.println("*-----------*---------------------*------------------------------------*-------------------------------*--------------------*");
+            }
+        }
     }
 
     private void listVentas() {
@@ -402,9 +410,9 @@ public class Main {
             System.out.println("No existen ventas registradas en el sistema.");
         } else {
             System.out.println("...:::: Listado de ventas :::::...");
-            System.out.println("*-----------------*-----------------*-----------------*-----------------*-----------------*");
+            System.out.println("-------------------------------------------------------------------------------------");
             System.out.println("| ID DOCUMENT     | TIPO DOCU      | FECHA          | ID PERSONA       | CANT BOLETOS | TOTAL VENTA |");
-            System.out.println("*-----------------*-----------------*-----------------*-----------------*-----------------*");
+            System.out.println("-------------------------------------------------------------------------------------");
             for (String[] datos : listaVentas) {
                 System.out.printf("| %-15s | %-15s | %-15s | %-15s | %-12s | %-12s |\n",
                         datos[0],
@@ -413,16 +421,16 @@ public class Main {
                         datos[3],
                         datos[4],
                         String.format("$%,d", Integer.parseInt(datos[5])));}
-            System.out.println("*-----------------*-----------------*-----------------*-----------------*-----------------*");
+            System.out.println("-------------------------------------------------------------------------------------");
         }
     }
 
     private void listViajes(){
 
         System.out.printf("%35s\n","...:::Listado de viajes:::...");
-        System.out.println("*--------------*--------------*--------------*--------------*--------------*");
+        System.out.println("----------------------------------------------------------------------");
         System.out.printf("| %12s | %12s | %12s | %12s | %12s |\n", "FECHA", "HORA", "PRECIO", "DISPONIBLES", "PATENTE");
-        System.out.println("*--------------*--------------*--------------*--------------*--------------*");
+        System.out.println("----------------------------------------------------------------------");
 
         String[][] datosViajes = remoto.listViajes();
 
@@ -435,7 +443,7 @@ public class Main {
 
             System.out.printf("| %12s | %12s | %12s | %12s | %12s |\n", fecha, hora, precio, disponibles, patente);
         }
-        System.out.println("*--------------*--------------*--------------*--------------*--------------*");
+        System.out.println("----------------------------------------------------------------------");
     }
 
     private IdPersona convertToIdPersona(String input) {
@@ -451,4 +459,3 @@ public class Main {
         return null;
     }
 }
-
