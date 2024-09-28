@@ -119,7 +119,9 @@ public class Main {
         System.out.println();
         if (remoto.createBus(patente,marca,modelo,numAsientos)){
             System.out.println("...:::: Bus guardado exitosamente ::::..");
-        }
+        }else{
+	    System.out.println("...:::: No se pudo crear el bus, existe otro con la misma patente o los datos son invalidos... ::::..");	
+	    }
     }
 
     private void createViaje(){
@@ -385,7 +387,21 @@ public class Main {
         System.out.printf("%35s ","Patente bus : ");
         String patenteBus = sc.next();
         String[][] listaPasajeros = remoto.listPasajeros(fecha,hora,patenteBus);
-
+        if (listaPasajeros.length == 0) {
+            System.out.println("No existe un bus con la patente indicada...");
+        }else {
+            System.out.println("*-----------*---------------------*------------------------------------*-------------------------------*--------------------*");
+            System.out.printf("|%10s |%20s |%-35s |%-30s |%-20s|%n", "Asiento", "Rut/Pass", "Pasajero", "Contacto", "Telefono contacto");
+            System.out.println("|-----------+---------------------+------------------------------------+-------------------------------+--------------------|");
+            for (int i = 0; i < listaPasajeros.length - 1; i++) {
+                System.out.printf("|%10s |%20s |%-35s |%-30s |%-20s|%n", listaPasajeros[i][0], listaPasajeros[i][1], listaPasajeros[i][2], listaPasajeros[i][3], listaPasajeros[i][4]);
+                System.out.println("|-----------+---------------------+------------------------------------+-------------------------------+--------------------|");
+            }
+            for (int i = listaPasajeros.length - 1; i < listaPasajeros.length; i++) {
+                System.out.printf("|%10s |%20s |%-35s |%-30s |%-20s|%n", listaPasajeros[i][0], listaPasajeros[i][1], listaPasajeros[i][2], listaPasajeros[i][3], listaPasajeros[i][4]);
+                System.out.println("*-----------*---------------------*------------------------------------*-------------------------------*--------------------*");
+            }
+        }
     }
 
     private void listVentas() {
