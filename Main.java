@@ -195,7 +195,7 @@ public class Main {
             }
 
         }
-                    // falta un posible else // o colocar break, o return // revisar que sucede si se cumple el nosepudo
+                  
         boolean venta = remoto.iniciaVenta(idDoc, tipo, fechaVenta,idCliente);
 
         if (!venta){System.out.println(" ...:::: No se pudo iniciar la venta ::::...");
@@ -215,17 +215,8 @@ public class Main {
 
         if (viajesDisponibles.length == 0) {
             System.out.println("No hay viajes disponibles con suficientes asientos en la fecha indicada.");
-            return;             //verificar que pasa con este return
+            return;           
         }
-
-        for (String[] viaje : viajesDisponibles) {
-            System.out.println("Asientos Disponibles: " + viaje[0] + ", Patente del Bus: " + viaje[1] +
-                    ", Hora de Salida: " + viaje[2] + ", Precio: " + viaje[3]);
-        }
-
-
-                //186 muestra asientos disponibles y se vuelve a repetir, dejar el ma wonito
-
 
         System.out.println(String.format("%-5s | %-10s | %-10s | %-10s | %-10s", "ID", "BUS", "SALIDA", "VALOR", "ASIENTOS"));
 
@@ -245,7 +236,7 @@ public class Main {
         int viajeSeleccionado = scanner.nextInt();
         if (viajeSeleccionado < 0 || viajeSeleccionado >= viajesDisponibles.length) {
             System.out.println("Selección inválida.");
-            return;  //verificar que pasa con este return
+            return;
         }
 
 
@@ -272,8 +263,8 @@ public class Main {
             return;
         }
 
-            for (int i = 0; i < cantidadPasajes; i++) {             //si es falso se crea un nuevo id persona
-                int asiento = Integer.parseInt(asientosArray[i].trim());        // lo mismo con pasaporte // con if
+            for (int i = 0; i < cantidadPasajes; i++) {           
+                int asiento = Integer.parseInt(asientosArray[i].trim());        
                 System.out.println("Datos del pasajero " + (i + 1));
                 System.out.print("Rut[1] o Pasaporte[2]: ");
                 int tipoIdentificadorPasajero = scanner.nextInt();
