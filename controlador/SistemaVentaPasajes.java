@@ -1,5 +1,6 @@
 package controlador;
 
+import excepciones.SistemaVentaPasajesException;
 import modelo.*;
 import utilidades.IdPersona;
 import utilidades.Nombre;
@@ -7,6 +8,7 @@ import utilidades.Nombre;
 import java.time.LocalDate;
 import java.time.LocalTime;
 import java.util.ArrayList;
+import java.util.Optional;
 
 public class SistemaVentaPasajes  {
 
@@ -31,22 +33,32 @@ public class SistemaVentaPasajes  {
 
     }
     //Metodo createPasajero: Diego Muñoz
-    public boolean createPasajero(IdPersona id, Nombre nom, String fono, Nombre nomContacto, String fonoContacto){
-        boolean encontrado=false;
-        for (Pasajero pasajero:pasajeros){
-            if (pasajero.getIdpersona().equals(id)){
-                encontrado = true;
-            }
+//    public boolean createPasajero(IdPersona id, Nombre nom, String fono, Nombre nomContacto, String fonoContacto){
+//        boolean encontrado=false;
+//        for (Pasajero pasajero:pasajeros){
+//            if (pasajero.getIdpersona().equals(id)){
+//                encontrado = true;
+//            }
+//        }
+//        if (!encontrado){
+//            Pasajero pasajero = new Pasajero(id,nom,nomContacto,fonoContacto);
+//            pasajero.setTelefono(fono);
+//            if (!pasajeros.contains(pasajero)) {
+//                pasajeros.add(pasajero);
+//                return true;
+//            }
+//        }
+//        return false;
+//    }
+    public void createPasajero(IdPersona id, Nombre nom, String fono, Nombre nomContacto, String fonoContacto){
+        Optional<Pasajero> pasajero = findPasajero(id);
+        if (pasajero.isEmpty()){
+            Pasajero pasajeroNew = new Pasajero(id,nom,nomContacto,fonoContacto);
+            pasajeroNew.setTelefono(fono);
+            pasajeros.add(pasajeroNew);
+        }else {
+            throw new SistemaVentaPasajesException("Ya existe un pasajero con el id dado");
         }
-        if (!encontrado){
-            Pasajero pasajero = new Pasajero(id,nom,nomContacto,fonoContacto);
-            pasajero.setTelefono(fono);
-            if (!pasajeros.contains(pasajero)) {
-                pasajeros.add(pasajero);
-                return true;
-            }
-        }
-        return false;
     }
     //Método createBus : Sirel Henríquez
     public boolean createBus(String patente, String marca, String modelo, int nroAsientos){
@@ -113,14 +125,14 @@ public class SistemaVentaPasajes  {
     }
     //Metodo listAsientosDeViaje: Diego Muñoz
     public String[][] listAsientosDeViaje(LocalDate fecha, LocalTime hora, String patBus){
-        Bus bus = findBus(patBus);
-        if (bus!=null) {
-            Viaje viaje = findViaje(fecha, hora, patBus);
-            if (viaje!=null){
-                String[][] listAsientosViaje=new String[viaje.getAsientos().length][2];
+        Optional<Bus> bus = findBus(patBus);
+        if (bus.isPresent()) {
+            Optional<Viaje> viaje = findViaje(fecha, hora, patBus);
+            if (viaje.isPresent()){
+                String[][] listAsientosViaje=new String[viaje.get().getAsientos().length][2];
                 for (int i = 0; i < listAsientosViaje.length; i++) {
-                    listAsientosViaje[i][0]=viaje.getAsientos()[i][0];
-                    listAsientosViaje[i][1]=viaje.getAsientos()[i][1];
+                    listAsientosViaje[i][0]=viaje.get().getAsientos()[i][0];
+                    listAsientosViaje[i][1]=viaje.get().getAsientos()[i][1];
                 }
                 return listAsientosViaje;
             }
@@ -137,12 +149,12 @@ public class SistemaVentaPasajes  {
         return 0;
     }
     //Metodo getNombrePasajero: Diego Muñoz
-    public String getNombrePasajero(IdPersona idPasajero){
-        Pasajero pasajero = findPasajero(idPasajero);
-        if (pasajero!=null){
-            return pasajero.getNombrecompleto().toString();
+    public Optional<String> getNombrePasajero(IdPersona idPasajero){
+        Optional<Pasajero> pasajero = findPasajero(idPasajero);
+        if (pasajero.isPresent()){
+            return Optional.of(pasajero.get().getNombrecompleto().toString());
         }
-        return null;
+        return Optional.empty();
     }
       // metodo vendePasaje: Rodolfo Salas
     public boolean vendePasaje(String idDoc, LocalDate fecha, LocalTime hora, String patBus, int asiento, IdPersona idPasajero){
@@ -215,11 +227,11 @@ public class SistemaVentaPasajes  {
     //Metodo listPasajeros: Diego Muñoz
     public String[][] listPasajeros(LocalDate fecha, LocalTime hora, String patBus){
 
-        Bus bus = findBus(patBus);
-        if (bus!=null){
-            Viaje viaje = findViaje(fecha,hora,patBus);
-            if (viaje!=null){
-                String[][] pasajeros = viaje.getListaPasajeros();
+        Optional<Bus> bus = findBus(patBus);
+        if (bus.isPresent()){
+            Optional<Viaje> viaje = findViaje(fecha,hora,patBus);
+            if (viaje.isPresent()){
+                String[][] pasajeros = viaje.get().getListaPasajeros();
                 String[][] listPasajeros = new String[pasajeros.length][5];
                 //iteracion con for para llenar matriz
                 for (int i = 0; i < listPasajeros.length; i++) {
@@ -231,6 +243,8 @@ public class SistemaVentaPasajes  {
                 }
                 return pasajeros;
             }
+        }else {
+            throw new SistemaVentaPasajesException("No existe viaje con la fecha, hora y patente de bus indicados");
         }
         return new String[0][0];
     }
@@ -273,13 +287,13 @@ public class SistemaVentaPasajes  {
         return null;
     }
     //Metodo findPasajero: Diego Muñoz
-    private Pasajero findPasajero(IdPersona idPersona){
+    private Optional<Pasajero> findPasajero(IdPersona idPersona){
         for (Pasajero pasajero:pasajeros){
             if (pasajero.getIdpersona().equals(idPersona)){
-                return pasajero;
+                return Optional.of(pasajero);
             }
         }
-        return null;
+        return Optional.empty();
     }
 }
 
