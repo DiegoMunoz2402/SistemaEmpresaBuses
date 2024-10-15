@@ -231,15 +231,11 @@ public class SistemaVentaPasajes  {
         return new String[0][0];
     }
        //metodo findCliente: Rodolfo Salas
-    private Cliente findCliente(IdPersona id){
-        for(int i=0;i<clientes.size();i++){
-            Cliente cliente= clientes.get(i);
-            if(Objects.equals(cliente.getIdpersona(), id)){
+   private Cliente findCliente(IdPersona id){
+        for (Cliente cliente:clientes){
+            if (cliente.getIdpersona().equals(id)){
                 return cliente;
             }
-
-
-
         }
         return null;
     }
@@ -282,3 +278,4 @@ public class SistemaVentaPasajes  {
         return null;
     }
 }
+

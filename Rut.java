@@ -40,31 +40,31 @@ public class Rut implements IdPersona {
     }
 
     private static boolean isDvValid(String rut) {
-       
+
         String[] partes = rut.split("-");
         if (partes.length != 2) {
-            return false; 
+            return false;
         }
 
         String numeroStr = partes[0];
         char dv = partes[1].charAt(0);
-        
+
         if (!numeroStr.matches("\\d+")) {
-            return false; 
+            return false;
         }
 
         int numero = Integer.parseInt(numeroStr);
         int suma = 0;
         int factor = 2;
-        
+
         for (int i = numero; i > 0; i /= 10) {
             suma += (i % 10) * factor;
-            factor = (factor == 7) ? 2 : factor + 1; 
+            factor = (factor == 7) ? 2 : factor + 1;
         }
 
         int resto = 11 - (suma % 11);
         String calculo;
-        
+
         if (resto == 11) {
             calculo = "0";
         } else if (resto == 10) {

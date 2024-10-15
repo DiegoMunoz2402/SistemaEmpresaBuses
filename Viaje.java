@@ -1,5 +1,3 @@
-//Sirel Henríquez
-
 import java.time.LocalDate;
 import java.time.LocalTime;
 import java.util.ArrayList;
@@ -68,7 +66,7 @@ public class Viaje {
         pasajes.add(pasaje);
     }
 
-    public String[][] getListaPasajeros() {
+   public String[][] getListaPasajeros() {
 
         String[][] lista = new String[pasajes.size()][5];
 
