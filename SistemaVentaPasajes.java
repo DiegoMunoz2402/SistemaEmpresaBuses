@@ -11,20 +11,22 @@ public class SistemaVentaPasajes  {
     private ArrayList<Venta> ventas = new ArrayList<>();
     private ArrayList<Viaje> viajes = new ArrayList<>();
     private ArrayList<Bus> buses = new ArrayList<>();
-    
+
          // metodo createCliente: Rodolfo Salas
     public boolean createCliente(IdPersona id, Nombre nom, String fono, String email){
         if(findCliente(id)!=null){
+            System.out.println("Ya existe la ID: "+ id);
             return false;
         }
 
         Cliente nuevoCliente= new Cliente(id,nom,email);
         nuevoCliente.setTelefono(fono);
         clientes.add(nuevoCliente);
+        System.out.println("Cliente agregado :D");
         return true;
 
     }
-
+    //Metodo createPasajero: Diego Muñoz
     public boolean createPasajero(IdPersona id, Nombre nom, String fono, Nombre nomContacto, String fonoContacto){
         boolean encontrado=false;
         for (Pasajero pasajero:pasajeros){
@@ -42,7 +44,7 @@ public class SistemaVentaPasajes  {
         }
         return false;
     }
-
+    //Método createBus : Sirel Henríquez
     public boolean createBus(String patente, String marca, String modelo, int nroAsientos){
         if (findBus(patente) == null){
             Bus nuevoBus = new Bus(patente, marca, modelo, nroAsientos);
@@ -53,19 +55,22 @@ public class SistemaVentaPasajes  {
         }
         return false;
     }
-
+    //Método createViaje: Sirel Henríquez
     public boolean createViaje(LocalDate fecha, LocalTime hora, int precio, String patBus){
         Bus bus = findBus(patBus);
 
-        if (findViaje(String.valueOf(fecha), String.valueOf(hora), patBus) == null){
-            Viaje nuevoViaje = new Viaje(fecha, hora, precio, bus);
+        /*Si findViaje es distinto de nullo, osea hay datos y existe retorna false
+        porque no puede crear algo que ya existe */
+        if (bus == null || findViaje(fecha, hora, patBus) != null) {
+            return false;
 
-            if (!viajes.contains(nuevoViaje)) {
-                viajes.add(nuevoViaje);
-                return true;
-            }
+        }else{
+            //Creo un nuevo viaje
+            Viaje nuevoViaje = new Viaje(fecha, hora, precio, bus);
+            //Añado el nuevo viaje
+            viajes.add(nuevoViaje);
+            return true;
         }
-        return false;
     }
 
     public boolean iniciaVenta(String idDoc, TipoDocumento tipo, LocalDate fechaVenta, IdPersona idCliente) {
@@ -102,11 +107,11 @@ public class SistemaVentaPasajes  {
         return ViajesDisponibles.toArray(new String[ViajesDisponibles.size()][]);
 
     }
-
+    //Metodo listAsientosDeViaje: Diego Muñoz
     public String[][] listAsientosDeViaje(LocalDate fecha, LocalTime hora, String patBus){
         Bus bus = findBus(patBus);
         if (bus!=null) {
-            Viaje viaje = findViaje(fecha.toString(), hora.toString(), patBus);
+            Viaje viaje = findViaje(fecha, hora, patBus);
             if (viaje!=null){
                 String[][] listAsientosViaje=new String[viaje.getAsientos().length][2];
                 for (int i = 0; i < listAsientosViaje.length; i++) {
@@ -127,7 +132,7 @@ public class SistemaVentaPasajes  {
         }
         return 0;
     }
-
+    //Metodo getNombrePasajero: Diego Muñoz
     public String getNombrePasajero(IdPersona idPasajero){
         Pasajero pasajero = findPasajero(idPasajero);
         if (pasajero!=null){
@@ -190,7 +195,7 @@ public class SistemaVentaPasajes  {
         return listaVentas;
 
     }
-
+    //Método listViajes : Sirel Henríquez
     public String[][] listViajes(){
         String[][] listaViajes = new String[viajes.size()][5];
         for (int i = 0; i < viajes.size(); i++){
@@ -203,13 +208,12 @@ public class SistemaVentaPasajes  {
         }
         return listaViajes;
     }
-
+    //Metodo listPasajeros: Diego Muñoz
     public String[][] listPasajeros(LocalDate fecha, LocalTime hora, String patBus){
+
         Bus bus = findBus(patBus);
-        String fechastr=fecha.toString();
-        String horastr=hora.toString();
-        if (bus!=null && !fechastr.isEmpty() && !horastr.isEmpty()){
-            Viaje viaje = findViaje(fechastr,horastr,patBus);
+        if (bus!=null){
+            Viaje viaje = findViaje(fecha,hora,patBus);
             if (viaje!=null){
                 String[][] pasajeros = viaje.getListaPasajeros();
                 String[][] listPasajeros = new String[pasajeros.length][5];
@@ -227,15 +231,11 @@ public class SistemaVentaPasajes  {
         return new String[0][0];
     }
        //metodo findCliente: Rodolfo Salas
-    private Cliente findCliente(IdPersona id){
-        for(int i=0;i<clientes.size();i++){
-            Cliente cliente= clientes.get(i);
-            if(Objects.equals(cliente.getIdpersona(), id)){
+   private Cliente findCliente(IdPersona id){
+        for (Cliente cliente:clientes){
+            if (cliente.getIdpersona().equals(id)){
                 return cliente;
             }
-
-
-
         }
         return null;
     }
@@ -248,7 +248,7 @@ public class SistemaVentaPasajes  {
         return null;
 
     }
-
+    //Metodo findBus: Diego Muñoz
     private Bus findBus(String patente){
         for (Bus bus:buses){
             if (bus.getPatente().equals(patente)){
@@ -257,16 +257,18 @@ public class SistemaVentaPasajes  {
         }
         return null;
     }
-    
-    private Viaje findViaje(String fecha, String hora, String patenteBus){
-        for(Viaje viajes : viajes){
-            if(viajes.getFecha().equals(fecha) && viajes.getHora().equals(hora) && viajes.getBus().getPatente().equals(patenteBus)){
-                return viajes;
+    //Método findViaje : Sirel Henríquez
+    private Viaje findViaje(LocalDate fecha, LocalTime hora, String patenteBus){
+        /*Busco en la lista de viajes y si tiene misma feha, hora y patente
+        retorna el viaje, sino returna null ya que no existe */
+        for(Viaje viaje : viajes){
+            if(viaje.getFecha().equals(fecha) && viaje.getHora().equals(hora) && viaje.getBus().getPatente().equals(patenteBus)){
+                return viaje;
             }
         }
         return null;
     }
-
+    //Metodo findPasajero: Diego Muñoz
     private Pasajero findPasajero(IdPersona idPersona){
         for (Pasajero pasajero:pasajeros){
             if (pasajero.getIdpersona().equals(idPersona)){
@@ -276,3 +278,4 @@ public class SistemaVentaPasajes  {
         return null;
     }
 }
+
