@@ -32,24 +32,7 @@ public class SistemaVentaPasajes  {
         return true;
 
     }
-    //Metodo createPasajero: Diego Muñoz
-//    public boolean createPasajero(IdPersona id, Nombre nom, String fono, Nombre nomContacto, String fonoContacto){
-//        boolean encontrado=false;
-//        for (Pasajero pasajero:pasajeros){
-//            if (pasajero.getIdpersona().equals(id)){
-//                encontrado = true;
-//            }
-//        }
-//        if (!encontrado){
-//            Pasajero pasajero = new Pasajero(id,nom,nomContacto,fonoContacto);
-//            pasajero.setTelefono(fono);
-//            if (!pasajeros.contains(pasajero)) {
-//                pasajeros.add(pasajero);
-//                return true;
-//            }
-//        }
-//        return false;
-//    }
+
     public void createPasajero(IdPersona id, Nombre nom, String fono, Nombre nomContacto, String fonoContacto){
         Optional<Pasajero> pasajero = findPasajero(id);
         if (pasajero.isEmpty()){
