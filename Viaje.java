@@ -49,12 +49,13 @@ public class Viaje {
 
             for (Pasaje pasaje : pasajes){
                 if(pasaje.getAsiento() == i + 1) {
-                    asientos[i][1] = String.valueOf(pasaje.getPasajero().getNomContacto());
                     ocupado = true;
                     break;
                 }
             }
-            if(!ocupado){
+            if(ocupado){
+                asientos[i][1] = "Ocupado";
+            } else {
                 asientos[i][1] = "Disponible";
             }
         }
