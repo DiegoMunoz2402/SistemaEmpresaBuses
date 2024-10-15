@@ -1,4 +1,5 @@
-//Clase Nombre: Diego Muñoz
+package utilidades;
+
 public class Nombre {
     private String nombres;
     private Tratamiento tratamiento;

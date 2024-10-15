@@ -1,3 +1,4 @@
+package utilidades;
 
 public class Pasaporte implements IdPersona {
 
@@ -39,7 +40,7 @@ public class Pasaporte implements IdPersona {
 
     }
 
-     //metodo equals() de la interfaz IdPersona
+     //metodo equals() de la interfaz utilidades.IdPersona
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
@@ -47,7 +48,7 @@ public class Pasaporte implements IdPersona {
         return numero.equals(pasaporte.numero) && nacionalidad.equals(pasaporte.nacionalidad);
 
     }
-    //metodo toString() de la interfaz IdPersona
+    //metodo toString() de la interfaz utilidades.IdPersona
     public String toString() {
         return " " + numero + " " + nacionalidad;
     }

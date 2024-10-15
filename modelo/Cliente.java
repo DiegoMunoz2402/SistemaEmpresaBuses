@@ -1,4 +1,7 @@
-//Clase Completa Cliente, Autor: Rodolfo Salas
+package modelo;//Clase Completa modelo.Cliente, Autor: Rodolfo Salas
+ import utilidades.IdPersona;
+ import utilidades.Nombre;
+
  import java.util.List;
  import java.util.ArrayList;
  public class Cliente extends Persona {
@@ -6,8 +9,8 @@
     private String email;
     private List<Venta> ventas;
     //Constructor
-     public Cliente(IdPersona idPersona,Nombre nombre, String email) {
-         super(idPersona, nombre); //constructor superclase Persona
+     public Cliente(IdPersona idPersona, Nombre nombre, String email) {
+         super(idPersona, nombre); //constructor superclase modelo.Persona
          this.email = email;
          this.ventas = new ArrayList<>();
      }
