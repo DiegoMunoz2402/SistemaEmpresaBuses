@@ -42,7 +42,7 @@ public class ControladorEmpresas {
 
     public void createTerminal(String nombre, Direccion direccion){
         if (findTerminalPorComuna(direccion.getComuna()).isEmpty()){
-            if (findTerminal(nombre).isEmpty(nombre)){
+            if (findTerminal(nombre).isEmpty()){
                 terminales.add(new Terminal(nombre,direccion));
             }else {
                 throw new SistemaVentaPasajesException("Ya existe un terminar con el nombre dado");
