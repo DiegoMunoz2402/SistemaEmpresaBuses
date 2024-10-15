@@ -1,3 +1,8 @@
+package modelo;
+
+import utilidades.IdPersona;
+import utilidades.Nombre;
+
 import java.util.ArrayList;
 
 public class Auxiliar extends Tripulante{

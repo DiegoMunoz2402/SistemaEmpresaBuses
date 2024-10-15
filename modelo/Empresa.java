@@ -1,3 +1,9 @@
+package modelo;
+
+import utilidades.IdPersona;
+import utilidades.Nombre;
+import utilidades.Rut;
+
 import java.util.ArrayList;
 
 public class Empresa {
@@ -93,18 +99,18 @@ public class Empresa {
         return ventas.toArray(new Venta[0]);
     }
 
-//    public Venta[] getVentas(){
-//        ArrayList<Viaje[]> viajesPorBus = new ArrayList<>();
+//    public modelo.Venta[] getVentas(){
+//        ArrayList<modelo.Viaje[]> viajesPorBus = new ArrayList<>();
 //        for (int i = 0; i < buses.size(); i++) {
-//            Viaje[] viajes=buses.get(i).getViajes();
+//            modelo.Viaje[] viajes=buses.get(i).getViajes();
 //            viajesPorBus.add(viajes);
 //        }
-//        ArrayList<Venta[]> ventasTotales = new ArrayList<>();
+//        ArrayList<modelo.Venta[]> ventasTotales = new ArrayList<>();
 //        for (int i = 0; i < viajesPorBus.size(); i++) {
-//            Viaje[] viaje = viajesPorBus.get(i);
+//            modelo.Viaje[] viaje = viajesPorBus.get(i);
 //            ventasTotales.add(viaje[i].getVentas());
 //        }
-//        return ventasTotales.toArray(new Venta[0]);
+//        return ventasTotales.toArray(new modelo.Venta[0]);
 //    }
 
     private Conductor findConductor(IdPersona idPersona){

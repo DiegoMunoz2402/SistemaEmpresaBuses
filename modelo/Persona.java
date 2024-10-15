@@ -1,8 +1,13 @@
-//Clase Completo Persona, Autor: Rodolfo Salas
+package modelo;
+
+import utilidades.IdPersona;
+import utilidades.Nombre;
+
+//Clase Completo modelo.Persona, Autor: Rodolfo Salas
 public class Persona {
     //Atributos
 
-    private IdPersona Idpersona;  //interfaz IdPersona
+    private IdPersona Idpersona;  //interfaz utilidades.IdPersona
     private Nombre Nombrecompleto;
     private String telefono;
 

@@ -1,3 +1,5 @@
+package modelo;
+
 import java.security.SecureRandom;
 
 public class Pasaje {

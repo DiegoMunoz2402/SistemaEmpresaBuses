@@ -1,3 +1,4 @@
+package modelo;
 
 import java.time.LocalDate;
 import java.util.ArrayList;
@@ -20,7 +21,7 @@ public class Venta {
         this.cliente = cliente;
         this.pasajes = new ArrayList<>();
 
-        if ( cliente != null){ // asocia venta a Cliente
+        if ( cliente != null){ // asocia venta a modelo.Cliente
             cliente.addVenta(this);
         }
 

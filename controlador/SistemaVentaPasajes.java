@@ -1,8 +1,12 @@
+package controlador;
+
+import modelo.*;
+import utilidades.IdPersona;
+import utilidades.Nombre;
+
 import java.time.LocalDate;
 import java.time.LocalTime;
 import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Objects;
 
 public class SistemaVentaPasajes  {
 
@@ -22,7 +26,7 @@ public class SistemaVentaPasajes  {
         Cliente nuevoCliente= new Cliente(id,nom,email);
         nuevoCliente.setTelefono(fono);
         clientes.add(nuevoCliente);
-        System.out.println("Cliente agregado :D");
+        System.out.println("modelo.Cliente agregado :D");
         return true;
 
     }

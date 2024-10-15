@@ -1,8 +1,13 @@
+package controlador;
+
 import excepciones.SistemaVentaPasajesException;
+import modelo.*;
+import utilidades.IdPersona;
+import utilidades.Nombre;
+import utilidades.Rut;
 
 import java.time.LocalDate;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.Optional;
 
 public class ControladorEmpresas {
@@ -74,6 +79,7 @@ public class ControladorEmpresas {
         }
     }
 
+    //Metodo sin resvoler, preguntar a la profe mañana
     public String [][] listLlegadasSalidaTerminal(String nombre, LocalDate fecha){
         Optional<Terminal> terminal = findTerminal(nombre);
         if (terminal.isPresent()) {
