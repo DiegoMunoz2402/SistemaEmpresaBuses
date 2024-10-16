@@ -7,7 +7,11 @@ import utilidades.Nombre;
 import utilidades.Rut;
 
 import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.time.LocalTime;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
+import java.util.Locale;
 import java.util.Optional;
 
 public class ControladorEmpresas {
@@ -56,9 +60,7 @@ public class ControladorEmpresas {
     public void hireConductorForEmpresa(Rut rutEmpresa, IdPersona idPersona, Nombre nombre, Direccion direccion){
         if (findEmpresa(rutEmpresa).isPresent()){
             Optional<Empresa> empresa = findEmpresa(rutEmpresa);
-            if (empresa.get().addConductor(idPersona,nombre,direccion)){
-
-            }else {
+            if (!empresa.get().addConductor(idPersona,nombre,direccion)){
                 throw new SistemaVentaPasajesException("Ya está contratado conductor con el id indicado en la empresa señalada");
             }
         }else {
@@ -69,9 +71,7 @@ public class ControladorEmpresas {
     public void hireAuxiliarForEmpresa(Rut rutEmpresa, IdPersona idPersona, Nombre nombre, Direccion direccion){
         if (findEmpresa(rutEmpresa).isPresent()){
             Optional<Empresa> empresa = findEmpresa(rutEmpresa);
-            if (empresa.get().addAuxiliar(idPersona, nombre, direccion)){
-
-            }else {
+            if (!empresa.get().addAuxiliar(idPersona, nombre, direccion)){
                 throw new SistemaVentaPasajesException("Ya está contratado auxiliar con el id indicado en la empresa señalada");
             }
         }else {
@@ -83,28 +83,55 @@ public class ControladorEmpresas {
     public String [][] listLlegadasSalidaTerminal(String nombre, LocalDate fecha){
         Optional<Terminal> terminal = findTerminal(nombre);
         if (terminal.isPresent()) {
-            ArrayList<Viaje> viajesPorFecha = new ArrayList<>();
             Viaje[] llegadas = terminal.get().getLlegadas();
+            ArrayList<Viaje> llegadasFecha = new ArrayList<>();
             Viaje[] salidas = terminal.get().getSalidas();
+            ArrayList<Viaje> salidasFecha = new ArrayList<>();
             String[][] listLlegadasSalidaTerminal;
             for (int i = 0; i < llegadas.length; i++) {
-                viajesPorFecha.add(llegadas[i]);
+                if (llegadas[i].getFecha().equals(fecha)){
+                    llegadasFecha.add(llegadas[i]);
+                }
             }
-            for (int i = 0; i < salidas.length; i++) {
-                viajesPorFecha.add(salidas[i]);
+            for (int j = 0; j < salidas.length; j++) {
+                if (salidas[j].getFecha().equals(fecha)){
+                    salidasFecha.add(salidas[j]);
+                }
             }
-            if (!viajesPorFecha.isEmpty()) {
-                Viaje[] viajesArr = viajesPorFecha.toArray(new Viaje[0]);
-                listLlegadasSalidaTerminal = new String[viajesArr.length][5];
-                for (int i = 0; i < listLlegadasSalidaTerminal.length; i++) {
-                    if (llegadas[i].getFecha().equals(fecha)) {
-
+            if (!salidasFecha.isEmpty() || !llegadasFecha.isEmpty()) {
+                listLlegadasSalidaTerminal = new String[salidasFecha.size() + llegadasFecha.size()][5];
+                if (!llegadasFecha.isEmpty()) {
+                    for (int i = 0; i < llegadasFecha.size(); i++) {
+                        listLlegadasSalidaTerminal[i][0] = "Llegada";
+                        LocalDateTime dateTime = llegadasFecha.get(i).getFechaHoraTermino();
+                        LocalTime time = dateTime.toLocalTime();
+                        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("HH:mm");
+                        listLlegadasSalidaTerminal[i][1] = time.format(formatter);
+                        listLlegadasSalidaTerminal[i][2] = String.valueOf(llegadasFecha.get(i).getBus().getPatente());
+                        listLlegadasSalidaTerminal[i][3] = llegadasFecha.get(i).getBus().getEmpresa().getNombre();
+                        listLlegadasSalidaTerminal[i][4] = String.valueOf(llegadasFecha.get(i).getListaPasajeros().length);
                     }
                 }
+                if (!salidasFecha.isEmpty()) {
+                    int j = 0;
+                    for (int i = llegadasFecha.size(); i < salidasFecha.size(); i++) {
+                        listLlegadasSalidaTerminal[i][0] = "Salida";
+                        LocalDateTime dateTime = salidasFecha.get(j).getFechaHoraTermino();
+                        LocalTime time = dateTime.toLocalTime();
+                        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("HH:mm");
+                        LocalTime timeLlegada = time.minusMinutes(salidasFecha.get(j).getDuracion());
+                        listLlegadasSalidaTerminal[i][1] = timeLlegada.format(formatter);
+                        listLlegadasSalidaTerminal[i][2] = String.valueOf(salidasFecha.get(j).getBus().getPatente());
+                        listLlegadasSalidaTerminal[i][3] = salidasFecha.get(i).getBus().getEmpresa().getNombre();
+                        listLlegadasSalidaTerminal[i][4] = String.valueOf(llegadasFecha.get(i).getListaPasajeros().length);
+                    }
+                }
+                return listLlegadasSalidaTerminal;
             }
         }else {
             throw new SistemaVentaPasajesException("No existe terminal con el nombre indicado");
         }
+        return new String[0][0];
     }
 
     protected Optional<Empresa> findEmpresa(Rut rut){
