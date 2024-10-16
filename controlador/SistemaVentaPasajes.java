@@ -107,20 +107,19 @@ public class SistemaVentaPasajes  {
 
     }
     //Metodo listAsientosDeViaje: Diego Muñoz
-    public String[][] listAsientosDeViaje(LocalDate fecha, LocalTime hora, String patBus){
+    public String[] listAsientosDeViaje(LocalDate fecha, LocalTime hora, String patBus){
         Optional<Bus> bus = findBus(patBus);
         if (bus.isPresent()) {
             Optional<Viaje> viaje = findViaje(fecha, hora, patBus);
             if (viaje.isPresent()){
-                String[][] listAsientosViaje=new String[viaje.get().getAsientos().length][2];
+                String[] listAsientosViaje=new String[viaje.get().getAsientos().length];
                 for (int i = 0; i < listAsientosViaje.length; i++) {
-                    listAsientosViaje[i][0]=viaje.get().getAsientos()[i][0];
-                    listAsientosViaje[i][1]=viaje.get().getAsientos()[i][1];
+                    listAsientosViaje[i]=viaje.get().getAsientos()[i];
                 }
                 return listAsientosViaje;
             }
         }
-        return new String[0][0];
+        return new String[0];
     }
 
      public int getMontoVenta(String idDocumento, TipoDocumento tipo){
