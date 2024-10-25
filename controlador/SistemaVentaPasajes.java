@@ -32,7 +32,7 @@ public class SistemaVentaPasajes  {
         return true;
 
     }
-
+    //Metodo createPasajero: Diego Muñoz
     public void createPasajero(IdPersona id, Nombre nom, String fono, Nombre nomContacto, String fonoContacto){
         Optional<Pasajero> pasajero = findPasajero(id);
         if (pasajero.isEmpty()){
@@ -54,21 +54,43 @@ public class SistemaVentaPasajes  {
         }
         return false;
     }
-    //Método createViaje: Sirel Henríquez
-    public boolean createViaje(LocalDate fecha, LocalTime hora, int precio, String patBus){
-        Bus bus = findBus(patBus);
-
-        /*Si findViaje es distinto de nullo, osea hay datos y existe retorna false
-        porque no puede crear algo que ya existe */
-        if (bus == null || findViaje(fecha, hora, patBus) != null) {
-            return false;
-
-        }else{
-            //Creo un nuevo viaje
-            Viaje nuevoViaje = new Viaje(fecha, hora, precio, bus);
-            //Añado el nuevo viaje
-            viajes.add(nuevoViaje);
-            return true;
+    //Método createViaje: Diego Muñoz
+    public boolean createViaje(LocalDate fecha, LocalTime hora, int precio, int duracion, String patBus, IdPersona[] idTripulantes, String[] nomComunas){
+        Optional<Viaje> viaje = findViaje(fecha,hora,patBus);
+        if (viaje.isEmpty()){
+            Optional<Bus> bus = ControladorEmpresas.getInstance().findBus(patBus);
+            if (bus.isPresent()){
+                Optional<Auxiliar> auxiliar = ControladorEmpresas.getInstance().findAuxliar(idTripulantes[0],bus.get().getEmpresa().getRut());
+                if (auxiliar.isPresent()){
+                    Optional<Conductor> conductor = ControladorEmpresas.getInstance().findConductor(idTripulantes[1],bus.get().getEmpresa().getRut());
+                    if (conductor.isPresent()){
+                        Optional<Terminal> salida = ControladorEmpresas.getInstance().findTerminalPorComuna(nomComunas[0]);
+                        if (salida.isPresent()){
+                            Optional<Terminal> llegada = ControladorEmpresas.getInstance().findTerminalPorComuna(nomComunas[1]);
+                            if (llegada.isPresent()){
+                                Viaje viajeValido = new Viaje(fecha,hora,precio,duracion,bus.get(),auxiliar.get(),conductor.get(),salida.get(),llegada.get());
+                                if (idTripulantes.length>2){
+                                    Optional<Conductor> conductor2 = ControladorEmpresas.getInstance().findConductor(idTripulantes[2],bus.get().getEmpresa().getRut());
+                                    viajeValido.addConductor(conductor2.get());
+                                }
+                                viajes.add(viajeValido);
+                            }else {
+                                throw new SistemaVentaPasajesException("No existe terminal de llegada en la comuna indicada");
+                            }
+                        }else {
+                            throw new SistemaVentaPasajesException("No existe terminal de salida en la comuna indicada");
+                        }
+                    }else {
+                        throw new SistemaVentaPasajesException("No existe conductor con el id indicado en la empresa con el rut indicado");
+                    }
+                }else {
+                    throw new SistemaVentaPasajesException("No existe auxiliar con el id indicado en la empresa con el rut indicado");
+                }
+            }else {
+                throw new SistemaVentaPasajesException("No existe bus con la patente indicada");
+            }
+        }else {
+            throw new SistemaVentaPasajesException("Ya existe viaje con fecha, hora y patente de bus indicados");
         }
     }
 
@@ -108,7 +130,7 @@ public class SistemaVentaPasajes  {
     }
     //Metodo listAsientosDeViaje: Diego Muñoz
     public String[] listAsientosDeViaje(LocalDate fecha, LocalTime hora, String patBus){
-        Optional<Bus> bus = findBus(patBus);
+        Optional<Bus> bus = ControladorEmpresas.getInstance().findBus(patBus);
         if (bus.isPresent()) {
             Optional<Viaje> viaje = findViaje(fecha, hora, patBus);
             if (viaje.isPresent()){
@@ -193,7 +215,7 @@ public class SistemaVentaPasajes  {
         return listaVentas;
 
     }
-    //Método listViajes : Sirel Henríquez
+    //Método listViajes : Diego Muñoz
     public String[][] listViajes(){
         String[][] listaViajes = new String[viajes.size()][5];
         for (int i = 0; i < viajes.size(); i++){
@@ -209,7 +231,7 @@ public class SistemaVentaPasajes  {
     //Metodo listPasajeros: Diego Muñoz
     public String[][] listPasajeros(LocalDate fecha, LocalTime hora, String patBus){
 
-        Optional<Bus> bus = findBus(patBus);
+        Optional<Bus> bus = ControladorEmpresas.getInstance().findBus(patBus);
         if (bus.isPresent()){
             Optional<Viaje> viaje = findViaje(fecha,hora,patBus);
             if (viaje.isPresent()){
@@ -248,25 +270,17 @@ public class SistemaVentaPasajes  {
         return null;
 
     }
-    //Metodo findBus: Diego Muñoz
-    private Bus findBus(String patente){
-        for (Bus bus:buses){
-            if (bus.getPatente().equals(patente)){
-                return bus;
-            }
-        }
-        return null;
-    }
-    //Método findViaje : Sirel Henríquez
-    private Viaje findViaje(LocalDate fecha, LocalTime hora, String patenteBus){
+
+    //Método findViaje : Diego Muñoz
+    private Optional<Viaje> findViaje(LocalDate fecha, LocalTime hora, String patenteBus){
         /*Busco en la lista de viajes y si tiene misma feha, hora y patente
         retorna el viaje, sino returna null ya que no existe */
         for(Viaje viaje : viajes){
             if(viaje.getFecha().equals(fecha) && viaje.getHora().equals(hora) && viaje.getBus().getPatente().equals(patenteBus)){
-                return viaje;
+                return Optional.of(viaje);
             }
         }
-        return null;
+        return Optional.empty();
     }
     //Metodo findPasajero: Diego Muñoz
     private Optional<Pasajero> findPasajero(IdPersona idPersona){

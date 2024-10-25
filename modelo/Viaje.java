@@ -1,6 +1,7 @@
 package modelo;
 
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.util.ArrayList;
 
@@ -10,15 +11,32 @@ public class Viaje {
     private LocalDate fecha;
     private LocalTime hora;
     private int precio;
+    private int duracion;
+
+    private Terminal llegada;
+    private Terminal salida;
+    private ArrayList<Conductor> conductors;
+    private Auxiliar auxiliar;
+
     private Bus bus;
     private ArrayList<Pasaje> pasajes;
 
     //Constructor
-    public Viaje(LocalDate fecha, LocalTime hora, int precio, Bus bus) {
+    public Viaje(LocalDate fecha, LocalTime hora, int precio, int duracion, Bus bus, Auxiliar auxiliar, Conductor conductor, Terminal salida, Terminal llegada) {
         this.fecha = fecha;
         this.hora = hora;
         this.precio = precio;
         this.bus = bus;
+        this.duracion = duracion;
+        this.auxiliar = auxiliar;
+        this.llegada = llegada;
+        this.salida = salida;
+        conductors = new ArrayList<>();
+        conductors.add(conductor);
+        auxiliar.addViaje(this);
+        conductor.addViaje(this);
+        salida.addSalida(this);
+        llegada.addLlegada(this);
         this.pasajes = new ArrayList<>();
     }
 
@@ -39,34 +57,47 @@ public class Viaje {
         this.precio = precio;
     }
 
+    public void setDuracion(int duracion){
+        this.duracion=duracion;
+    }
+
+    public LocalDateTime getFechaHoraTermino(){
+        LocalDateTime fechaInicio = LocalDateTime.of(fecha,hora);
+        return fechaInicio.plusMinutes(duracion);
+    }
+
+
+
     public Bus getBus() {
         return bus;
     }
 
-    public String[][] getAsientos() {
-        String[][] asientos = new String[bus.getNroAsientos()][2];
+    public String[] getAsientos() {
+        String[] asientos = new String[bus.getNroAsientos()];
         for (int i = 0; i < bus.getNroAsientos(); i++) {
-            asientos[i][0] = String.valueOf(i + 1); // Número de asiento
+            asientos[i] = String.valueOf(i + 1); // Número de asiento
             boolean ocupado = false;
 
             for (Pasaje pasaje : pasajes){
-                if(pasaje.getAsiento() == i + 1) {
+                if (pasaje.getAsiento() == i + 1) {
                     ocupado = true;
                     break;
                 }
             }
             if(ocupado){
-                asientos[i][1] = "Ocupado";
-            } else {
-                asientos[i][1] = "Disponible";
+                asientos[i] = "*";
             }
         }
         return asientos;
     }
 
     public void addPasaje(Pasaje pasaje){
-        pasajes.add(pasaje);
+        if (pasaje!=null && !pasajes.contains(pasaje)) {
+            pasajes.add(pasaje);
+        }
     }
+
+
 
    public String[][] getListaPasajeros() {
 
@@ -75,28 +106,58 @@ public class Viaje {
         for (int i = 0; i < pasajes.size(); i++) {
             Pasajero pasajero = pasajes.get(i).getPasajero();
             String asiento = String.valueOf(pasajes.get(i).getAsiento());
-
-            if(pasajero != null) {
-                lista[i][0] = String.valueOf(pasajero.getIdpersona());
-                lista[i][1] = String.valueOf(pasajero.getNombrecompleto());
-                lista[i][2] = String.valueOf(pasajero.getNomContacto());
-                lista[i][3] = pasajero.getFonoContacto();
-                lista[i][4] = asiento;
-            }else {
-                lista[i][0] = "Desconocido";
-                lista[i][1] = "Desconocido";
-                lista[i][2] = "Desconocido";
-                lista[i][3] = "Desconocido";
-                lista[i][4] = "No adjunto";
-            }
+            lista[i][0] = String.valueOf(pasajero.getIdpersona());
+            lista[i][1] = String.valueOf(pasajero.getNombrecompleto());
+            lista[i][2] = String.valueOf(pasajero.getNomContacto());
+            lista[i][3] = pasajero.getFonoContacto();
+            lista[i][4] = asiento;
         }
         return lista;
     }
 
-    public boolean existeDisponibilidad(){
-        return getNroAsientosDisponibles() > 0;}
+    public boolean existeDisponibilidad(int nroAsiento){
+        return getNroAsientosDisponibles() >= nroAsiento;
+    }
 
     public int getNroAsientosDisponibles() {
         return bus.getNroAsientos() - pasajes.size();
     }
+
+   public Venta[] getVentas(){
+        ArrayList<Venta> ventasTotales = new ArrayList<>();
+        if (!pasajes.isEmpty()) {
+            for (Pasaje pasaje : pasajes) {
+                if (!ventasTotales.contains(pasaje.getVenta())) {
+                    ventasTotales.add(pasaje.getVenta());
+                }
+            }
+            return ventasTotales.toArray(new Venta[0]);
+        }else {
+            return new Venta[0];
+        }
+   }
+
+   public void addConductor(Conductor conductor){
+        if (conductor!=null && !conductors.contains(conductor) && conductors.size()<2){
+            conductors.add(conductor);
+            conductor.addViaje(this);
+        }
+   }
+
+   public Tripulante[] getTripulantes(){
+        Tripulante[] tripulantes = new Tripulante[1+conductors.size()];
+        tripulantes[0]=auxiliar;
+       for (int i = 1; i < conductors.size(); i++) {
+           tripulantes[i]=conductors.get(i);
+       }
+       return tripulantes;
+   }
+
+   public Terminal getTerminalLlegada(){
+        return llegada;
+   }
+
+   public Terminal getTerminalSalida(){
+        return salida;
+   }
 }

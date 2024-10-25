@@ -11,7 +11,6 @@ import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
-import java.util.Locale;
 import java.util.Optional;
 
 public class ControladorEmpresas {
@@ -34,6 +33,7 @@ public class ControladorEmpresas {
         empresas = new ArrayList<>();
     }
 
+    //Metodo createEmpresa: Diego Muñoz
     public void createEmpresa(Rut rut, String nombre, String url){
         if (findEmpresa(rut).isEmpty()){
             Empresa empresa = new Empresa(rut,nombre);
@@ -44,6 +44,7 @@ public class ControladorEmpresas {
         }
     }
 
+    //Metodo createTerminal: Diego Muñoz
     public void createTerminal(String nombre, Direccion direccion){
         if (findTerminalPorComuna(direccion.getComuna()).isEmpty()){
             if (findTerminal(nombre).isEmpty()){
@@ -56,7 +57,7 @@ public class ControladorEmpresas {
         }
     }
 
-    //Consultar mañana a la profesora
+    //Metodo hireConductorForEmpresa: Diego Muñoz
     public void hireConductorForEmpresa(Rut rutEmpresa, IdPersona idPersona, Nombre nombre, Direccion direccion){
         if (findEmpresa(rutEmpresa).isPresent()){
             Optional<Empresa> empresa = findEmpresa(rutEmpresa);
@@ -68,6 +69,7 @@ public class ControladorEmpresas {
         }
     }
 
+    //Metodo hireAuxiliarForEmpresa: Diego Muñoz
     public void hireAuxiliarForEmpresa(Rut rutEmpresa, IdPersona idPersona, Nombre nombre, Direccion direccion){
         if (findEmpresa(rutEmpresa).isPresent()){
             Optional<Empresa> empresa = findEmpresa(rutEmpresa);
@@ -79,7 +81,7 @@ public class ControladorEmpresas {
         }
     }
 
-    //Metodo sin resvoler, preguntar a la profe mañana
+    //Metodo listLlegadaSalidaTerminal: Diego Muñoz
     public String [][] listLlegadasSalidaTerminal(String nombre, LocalDate fecha){
         Optional<Terminal> terminal = findTerminal(nombre);
         if (terminal.isPresent()) {
@@ -116,14 +118,15 @@ public class ControladorEmpresas {
                     int j = 0;
                     for (int i = llegadasFecha.size(); i < salidasFecha.size(); i++) {
                         listLlegadasSalidaTerminal[i][0] = "Salida";
-                        LocalDateTime dateTime = salidasFecha.get(j).getFechaHoraTermino();
-                        LocalTime time = dateTime.toLocalTime();
-                        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("HH:mm");
-                        LocalTime timeLlegada = time.minusMinutes(salidasFecha.get(j).getDuracion());
-                        listLlegadasSalidaTerminal[i][1] = timeLlegada.format(formatter);
+//                        LocalDateTime dateTime = salidasFecha.get(j).getFechaHoraTermino();
+//                        LocalTime time = dateTime.toLocalTime();
+//                        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("HH:mm");
+//                        LocalTime timeLlegada = LocalTime.of(salidasFecha.get(j).getFechaHoraTermino().getHour(),salidasFecha.get(j).getFechaHoraTermino().getMinute());
+                        listLlegadasSalidaTerminal[i][1] = String.valueOf(salidasFecha.get(j).getHora());
                         listLlegadasSalidaTerminal[i][2] = String.valueOf(salidasFecha.get(j).getBus().getPatente());
                         listLlegadasSalidaTerminal[i][3] = salidasFecha.get(i).getBus().getEmpresa().getNombre();
                         listLlegadasSalidaTerminal[i][4] = String.valueOf(llegadasFecha.get(i).getListaPasajeros().length);
+                        j++;
                     }
                 }
                 return listLlegadasSalidaTerminal;
@@ -133,7 +136,7 @@ public class ControladorEmpresas {
         }
         return new String[0][0];
     }
-
+    //Metodo findempresa: Diego Muñoz
     protected Optional<Empresa> findEmpresa(Rut rut){
         for (Empresa empresa:empresas){
             if (empresa.getRut().equals(rut)){
@@ -142,7 +145,7 @@ public class ControladorEmpresas {
         }
         return Optional.empty();
     }
-
+    //Metodo findTerminal: Diego Muñoz
     protected Optional<Terminal> findTerminal(String nombre){
         for (Terminal terminal:terminales){
             if (terminal.getNombre().equals(nombre)){
@@ -151,7 +154,7 @@ public class ControladorEmpresas {
         }
         return Optional.empty();
     }
-
+    //Metodo findTerminalPorComuna: Diego Muñoz
     protected Optional<Terminal> findTerminalPorComuna(String comuna){
         for (Terminal terminal:terminales){
             if (terminal.getDireccion().getComuna().equals(comuna)){
@@ -160,7 +163,7 @@ public class ControladorEmpresas {
         }
         return Optional.empty();
     }
-
+    //Metodo findBus: Diego Muñoz
     protected Optional<Bus> findBus(String patente){
         for (Bus bus:buses){
             if (bus.getPatente().equals(patente)){
@@ -169,7 +172,7 @@ public class ControladorEmpresas {
         }
         return Optional.empty();
     }
-
+    //Metodo findConductor: Diego Muñoz
     protected Optional<Conductor> findConductor(IdPersona idPersona, Rut rutEmpresa){
         for (Empresa empresa: empresas){
             if (empresa.getRut().equals(rutEmpresa)){
@@ -183,7 +186,7 @@ public class ControladorEmpresas {
         }
         return Optional.empty();
     }
-
+    //Metodo findAuxiliar: Diego Muñoz
     protected Optional<Auxiliar> findAuxliar(IdPersona idPersona, Rut rutEmpresa){
         for (Empresa empresa:empresas){
             if (empresa.getRut().equals(rutEmpresa)){

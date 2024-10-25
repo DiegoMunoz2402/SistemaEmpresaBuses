@@ -10,13 +10,16 @@ public class Bus {
     private String modelo;
     private int nroAsientos;
     private ArrayList<Viaje> listaViaje;
+    private Empresa empresa;
 
     //Constructor
-   public Bus(String patente, String marca, String modelo, int nroAsientos) {
+   public Bus(String patente, String marca, String modelo, int nroAsientos, Empresa empresa) {
         this.patente = patente;
         this.marca = marca;
         this.nroAsientos = nroAsientos;
         this.modelo = modelo;
+        this.empresa = empresa;
+        empresa.addBus(this);
         this.listaViaje = new ArrayList<>();
     }
 
@@ -45,8 +48,17 @@ public class Bus {
         return nroAsientos;
     }
 
+    public Empresa getEmpresa(){
+       return empresa;
+    }
+
     public void addViaje(Viaje viaje){
-        listaViaje.add(viaje);
-        System.out.println("Se agrego el viaje correctamente");
+        if (viaje!=null && !listaViaje.contains(viaje)){
+            listaViaje.add(viaje);
+        }
+    }
+
+    public Viaje[] getViajes(){
+       return listaViaje.toArray(new Viaje[0]);
     }
 }
