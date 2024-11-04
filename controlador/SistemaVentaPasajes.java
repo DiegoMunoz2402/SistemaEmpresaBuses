@@ -18,6 +18,19 @@ public class SistemaVentaPasajes  {
     private ArrayList<Viaje> viajes = new ArrayList<>();
     private ArrayList<Bus> buses = new ArrayList<>();
 
+    private static SistemaVentaPasajes instance;
+
+    private SistemaVentaPasajes(){
+
+    }
+
+    public static SistemaVentaPasajes getInstance(){
+        if (instance == null){
+            instance = new SistemaVentaPasajes();
+        }
+        return instance;
+    }
+
          // metodo createCliente: Rodolfo Salas
     public boolean createCliente(IdPersona id, Nombre nom, String fono, String email){
         if(findCliente(id)!=null){
