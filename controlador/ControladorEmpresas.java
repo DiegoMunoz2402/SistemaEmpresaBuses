@@ -81,6 +81,24 @@ public class ControladorEmpresas {
         }
     }
 
+    //Metodo listEmpresas: Rodolfo Salas
+    public String[][] listEmpresas(){
+         if(empresas.isEmpty()){
+             return new String[0][0];
+         }
+
+         String[][] listEmpresas= new String[empresas.size()][2];
+
+         for (int i = 0; i < listEmpresas.length; i++){
+             Empresa empresa = empresas.get(i);
+             listEmpresas[i][0] = String.valueOf(empresa.getRut());
+             listEmpresas[i][1] = String.valueOf(empresa.getNombre());
+
+         }
+         return listEmpresas;
+
+    }
+
     //Metodo listLlegadaSalidaTerminal: Diego Muñoz
     public String [][] listLlegadasSalidaTerminal(String nombre, LocalDate fecha){
         Optional<Terminal> terminal = findTerminal(nombre);
