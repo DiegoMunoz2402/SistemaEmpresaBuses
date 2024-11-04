@@ -44,6 +44,18 @@ public class ControladorEmpresas {
         }
     }
 
+    //Metodo createBus: Rodolfo Salas
+    public void createBus(String pat,String marca,String modelo,int nroAsientos,Rut rutEmp) throws Exception{
+        Empresa emp = findEmpresa(rutEmp).orElseThrow(() -> new SistemaVentaPasajesException("No existe empresa con el rut indicado "));
+
+        Optional<Bus> busExistente = findBus(pat);
+        if (busExistente.isPresent()) {
+            throw new SistemaVentaPasajesException("Ya existe bus con la patente indicada");
+        }
+        Bus nuevoBus = new Bus(pat, marca, modelo,nroAsientos, emp);
+    }
+}
+
     //Metodo createTerminal: Diego Muñoz
     public void createTerminal(String nombre, Direccion direccion){
         if (findTerminalPorComuna(direccion.getComuna()).isEmpty()){
