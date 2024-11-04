@@ -132,7 +132,7 @@ public class ControladorEmpresas {
                 return listLlegadasSalidaTerminal;
             }
         }else {
-            throw new SistemaVentaPasajesException("No existe terminal con el nombre indicado");
+            throw new SistemaVentaPasajesException("*** Error: No existe terminal con el nombre indicado ***");
         }
         return new String[0][0];
     }
