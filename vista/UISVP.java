@@ -103,7 +103,7 @@ public class UISVP {
         try {
             Direccion direccion = new Direccion(calle,numero,comuna);
             ControladorEmpresas.getInstance().createTerminal(nombre,direccion);
-            System.out.println("...:::: Terminal guardado exitosamente ::::..");
+            System.out.println("...:::: Terminal guardado exitosamente ::::...");
         }catch (SistemaVentaPasajesException e){
             System.out.println("\n" + e.getMessage());
         }
