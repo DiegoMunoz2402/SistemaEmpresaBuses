@@ -31,17 +31,16 @@ public class SistemaVentaPasajes  {
         return instance;
     }
 
-         // metodo createCliente: Rodolfo Salas
+   // metodo createCliente: Rodolfo Salas
     public boolean createCliente(IdPersona id, Nombre nom, String fono, String email){
         if(findCliente(id)!=null){
-            System.out.println("Ya existe la ID: "+ id);
-            return false;
+            throw  new SistemaVentaPasajesException("ya existe el cliente con el id indicado");
         }
 
         Cliente nuevoCliente= new Cliente(id,nom,email);
         nuevoCliente.setTelefono(fono);
         clientes.add(nuevoCliente);
-        System.out.println("modelo.Cliente agregado :D");
+        System.out.println("Cliente agregado :D");
         return true;
 
     }
