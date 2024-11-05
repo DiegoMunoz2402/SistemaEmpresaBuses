@@ -172,8 +172,56 @@ public class UISVP {
             System.out.println("\n" + e.getMessage());
         }
     }
-
+     //crearCliente: Rodolfo Salas
     private void crearCliente(){
+        IdPersona identificador = null;
+        Tratamiento tratamiento= null;
+        try {
+            System.out.println(":::: Crear un nuevo Cliente ::::");
+            System.out.println("utilidades.Rut[1] o Pasaporte[2] : ");
+            int tipo = sc.nextInt();
+            sc.nextLine();
+            if(tipo==1){
+                System.out.println("R.U.T: ");
+                String rut= sc.next();
+                identificador= Rut.of(rut);
+            }else if(tipo==2){
+                System.out.println("NUMERO DE PASAPORTE:");
+                String numero = sc.next();
+                System.out.println("NACIONALIDAD: ");
+                String nacionalidad = sc.next();
+                identificador= Pasaporte.of(numero,nacionalidad);
+
+            }else {
+                throw new SistemaVentaPasajesException("Tipo de documento no valido");
+            }
+            System.out.println("Sr.[1] o Sra. [2] : ");
+            int opcion= sc.nextInt();
+            sc.nextLine();
+            if(opcion==1){
+                tratamiento= tratamiento.SR;
+            } else if (opcion==2) {
+                tratamiento= tratamiento.SRA;
+            }else {
+                throw new SistemaVentaPasajesException("Tipo de documento no valido");
+            }
+            System.out.println("Nombres: ");
+            String nombres = sc.nextLine();
+            System.out.println("Apellido Paterno: ");
+            String apellidoPaterno = sc.nextLine();
+            System.out.println("Apellido Materno: ");
+            String apellidoMaterno = sc.nextLine();
+            System.out.println("Telefono Movil: ");
+            String telefono = sc.next();
+            System.out.println("Email: ");
+            String email = sc.next();
+            Nombre nombrecompleto= new Nombre(nombres,apellidoPaterno,apellidoMaterno,tratamiento);
+            SistemaVentaPasajes.getInstance().createCliente(identificador,nombrecompleto,telefono,email);
+            System.out.println("...:::: Cliente guardado exitosamente ::::...");
+
+        }catch (SistemaVentaPasajesException e){
+            System.out.println("\n" + e.getMessage());
+        }
 
     }
     //crearBus = Diego Muñoz
