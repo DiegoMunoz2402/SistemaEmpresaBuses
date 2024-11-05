@@ -92,7 +92,7 @@ public class SistemaVentaPasajes  {
         }
     }
 
-   //Metodo iniciaVenta: Javiera Duarte
+//   Metodo iniciaVenta: Javiera Duarte
     public void iniciaVenta(String idDoc, TipoDocumento tipo, LocalDate fechaViaje, String comSalida, String comLlegada, IdPersona idCliente, int nroPasajes) {
 
         Optional<Venta> ventaExistente = findVenta(idDoc, tipo);
@@ -108,8 +108,10 @@ public class SistemaVentaPasajes  {
         String[][] viajes = listViajes();
         boolean existeViajeDisponible = false;
 
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy");
+
         for (String[] viajeInfo : viajes) {
-            LocalDate fechaViajeActual = LocalDate.parse(viajeInfo[0]);
+            LocalDate fechaViajeActual = LocalDate.parse(viajeInfo[0],formatter);
             String comSalidaActual = viajeInfo[5];
             String comLlegadaActual = viajeInfo[6];
             int asientosDisponibles = Integer.parseInt(viajeInfo[4]);
@@ -117,7 +119,7 @@ public class SistemaVentaPasajes  {
             if (fechaViajeActual.equals(fechaViaje) &&
                     comSalidaActual.equals(comSalida) &&
                     comLlegadaActual.equals(comLlegada) &&
-                asientosDisponibles >= nroPasajes) {
+                asientosDisponibles <= nroPasajes) {
                 existeViajeDisponible = true;
                 break;
             }
