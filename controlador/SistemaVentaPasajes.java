@@ -55,19 +55,9 @@ public class SistemaVentaPasajes  {
             throw new SistemaVentaPasajesException("Ya existe un pasajero con el id dado");
         }
     }
-    //Método createBus : Sirel Henríquez
-    public boolean createBus(String patente, String marca, String modelo, int nroAsientos){
-        if (findBus(patente) == null){
-            Bus nuevoBus = new Bus(patente, marca, modelo, nroAsientos);
-            if (!buses.contains(nuevoBus)) {
-                buses.add(nuevoBus);
-                return true;
-            }
-        }
-        return false;
-    }
+
     //Método createViaje: Diego Muñoz
-    public boolean createViaje(LocalDate fecha, LocalTime hora, int precio, int duracion, String patBus, IdPersona[] idTripulantes, String[] nomComunas){
+    public void createViaje(LocalDate fecha, LocalTime hora, int precio, int duracion, String patBus, IdPersona[] idTripulantes, String[] nomComunas){
         Optional<Viaje> viaje = findViaje(fecha,hora,patBus);
         if (viaje.isEmpty()){
             Optional<Bus> bus = ControladorEmpresas.getInstance().findBus(patBus);
