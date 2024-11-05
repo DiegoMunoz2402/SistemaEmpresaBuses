@@ -344,7 +344,7 @@ public class UISVP {
             System.out.println("\n" + e.getMessage());
         }
     }
-
+    //vendePasaje : Diego Muñoz Y Javier Duarte
     private void vendePasaje(){
         System.out.println("\t\t...:::Venta de pasajes :::....");
         System.out.println();
