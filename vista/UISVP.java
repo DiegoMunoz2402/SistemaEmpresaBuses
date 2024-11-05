@@ -9,6 +9,7 @@ import modelo.TipoDocumento;
 import java.time.LocalDate;
 import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
+import java.util.Optional;
 import java.util.Scanner;
 
 public class UISVP {
@@ -385,8 +386,7 @@ public class UISVP {
             if (montoPagadoOptional.isPresent()) {
                 System.out.println("Monto pagado: $" + montoPagadoOptional.get());
             }
-
-        } catch (Exception e) {
+        } catch (SistemaVentaPasajesException e) {
             System.out.println("Error al procesar el pago: " + e.getMessage());
         }
     }
