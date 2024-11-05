@@ -69,7 +69,7 @@ public class Main {
     private void createCliente(){
         sc.useDelimiter("[ \\t\\r\\n]+");
 
-        System.out.println(":::: Crear un nuevo modelo.Cliente ::::");
+        System.out.println(":::: Crear un nuevo cliente ::::");
         System.out.println("utilidades.Rut[1] o utilidades.Pasaporte[2] : ");
         int tipo = sc.nextInt();
         sc.nextLine();

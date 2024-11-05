@@ -3,11 +3,8 @@ package vista;
 import controlador.ControladorEmpresas;
 import controlador.SistemaVentaPasajes;
 import excepciones.SistemaVentaPasajesException;
-import utilidades.Direccion;
+import utilidades.*;
 import modelo.TipoDocumento;
-import utilidades.IdPersona;
-import utilidades.Pasaporte;
-import utilidades.Rut;
 
 import java.time.LocalDate;
 import java.time.LocalTime;
@@ -93,7 +90,67 @@ public class UISVP {
     }
 
     private void contratarTripulante(){
-
+        System.out.println("...:::: Contratando un nuevo Tripulante ::::..");
+        System.out.println();
+        System.out.println();
+        System.out.println("::: Dato de la empresa");
+        System.out.printf("%21s","Rut : ");
+        String rutEmpresa = sc.next();
+        System.out.println();
+        System.out.println("::: Datos Tripulante");
+        System.out.print("Auxiliar[1] o Conductor[2] : ");
+        int op = sc.nextInt();
+        System.out.print("Rut[1] o Pasaporte[2] : ");
+        int op2 = sc.nextInt();
+        IdPersona id = null;
+        if(op2==1){
+            System.out.printf("%21s","R.U.T : ");
+            String rut= sc.next();
+            id= Rut.of(rut);
+        } else if (op2==2) {
+            System.out.printf("%21s","NUMERO DE PASAPORTE : ");
+            String numero= sc.next();
+            System.out.printf("%21s","NACIONALIDAD : ");
+            String nacionalidad= sc.next();
+            id = Pasaporte.of(numero,nacionalidad);
+        }
+        System.out.printf("%21s","Sr.[1] o Sra.[2] : ");
+        int tratamientoint = sc.nextInt();
+        Tratamiento tratamiento = null;
+        if (tratamientoint==1){
+            tratamiento = Tratamiento.SR;
+        }else if (tratamientoint==2){
+            tratamiento = Tratamiento.SRA;
+        }
+        System.out.printf("%21s","Nombres : ");
+        String nombre = sc.next();
+        System.out.printf("%21s","Apellido paterno : ");
+        String apellidoPaterno = sc.next();
+        System.out.printf("%21s","Apellido materno : ");
+        String apellidoMaterno = sc.next();
+        System.out.printf("%21s","Calle : ");
+        String calle = sc.next();
+        System.out.printf("%21s","Numero : ");
+        int numero = sc.nextInt();
+        System.out.printf("%21s","Comuna : ");
+        String comuna = sc.next();
+        Direccion direccion = new Direccion(calle,numero,comuna);
+        Nombre nombreTipo = new Nombre(nombre,apellidoPaterno,apellidoMaterno,tratamiento);
+        if (op==1){
+            try{
+                ControladorEmpresas.getInstance().hireAuxiliarForEmpresa(Rut.of(rutEmpresa),id,nombreTipo,direccion);
+                System.out.println("...::: Auxiliar contratado exitosamente :::....");
+            }catch (SistemaVentaPasajesException e){
+                System.out.println("\n" + e.getMessage());
+            }
+        }else if (op==2){
+            try{
+                ControladorEmpresas.getInstance().hireConductorForEmpresa(Rut.of(rutEmpresa),id,nombreTipo,direccion);
+                System.out.println("...::: Conductor contratado exitosamente :::....");
+            }catch (SistemaVentaPasajesException e){
+                System.out.println("\n" + e.getMessage());
+            }
+        }
     }
     //crearTerminal = Diego Muñoz
     private void crearTerminal(){
@@ -246,7 +303,7 @@ public class UISVP {
     private void pagaVentaPasajes(String idDoc, TipoDocumento tipo){
 
     }
-
+    //ListarVentas = Diego Muñoz
     private void listarVentas(){
         String[][] datos = SistemaVentaPasajes.getInstance().listVentas();
         if (datos.length>0){
