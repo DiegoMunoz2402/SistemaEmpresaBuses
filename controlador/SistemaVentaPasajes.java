@@ -32,17 +32,13 @@ public class SistemaVentaPasajes  {
     }
 
    // metodo createCliente: Rodolfo Salas
-    public boolean createCliente(IdPersona id, Nombre nom, String fono, String email){
-        if(findCliente(id)!=null){
-            throw  new SistemaVentaPasajesException("ya existe el cliente con el id indicado");
+    public void createCliente(IdPersona id, Nombre nom, String fono, String email){
+        if(findCliente(id).isPresent()){
+            throw new SistemaVentaPasajesException("Ya existe el cliente con el id indicado");
         }
-
         Cliente nuevoCliente= new Cliente(id,nom,email);
         nuevoCliente.setTelefono(fono);
         clientes.add(nuevoCliente);
-        System.out.println("Cliente agregado :D");
-        return true;
-
     }
     //Metodo createPasajero: Diego Muñoz
     public void createPasajero(IdPersona id, Nombre nom, String fono, Nombre nomContacto, String fonoContacto){
@@ -255,13 +251,13 @@ public class SistemaVentaPasajes  {
         return new String[0][0];
     }
        //metodo findCliente: Rodolfo Salas
-   private Cliente findCliente(IdPersona id){
+   private Optional<Cliente> findCliente(IdPersona id){
         for (Cliente cliente:clientes){
             if (cliente.getIdpersona().equals(id)){
-                return cliente;
+                return Optional.of(cliente);
             }
         }
-        return null;
+        return Optional.empty();
     }
 
     private Venta findVenta(String idDocumento, TipoDocumento tipoDocumento){

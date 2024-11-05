@@ -254,26 +254,22 @@ public class UISVP {
     private void listarViajes(){
         System.out.println("...:::: Listado de viajes ::::...");
         String[][] listViajes;
-        try {
-            listViajes = SistemaVentaPasajes.getInstance().listViajes();
-            System.out.println();
-            if (listViajes.length>0){
-                System.out.println("*--------------*-----------*------------*----------------*---------------*---------------------*---------------------*---------------------*");
-                System.out.printf("|%-13s |%10s |%10s |%-15s |%14s |%-20s |%-20s |%-20s |%n","FECHA","HORA SALE","HORA LLEGA","PRECIO","ASIENTOS DISP.","PATENTE","ORIGEN","DESTINO");
+        listViajes = SistemaVentaPasajes.getInstance().listViajes();
+        System.out.println();
+        if (listViajes.length>0){
+            System.out.println("*--------------*-----------*------------*----------------*---------------*---------------------*---------------------*---------------------*");
+            System.out.printf("|%-13s |%10s |%10s |%-15s |%14s |%-20s |%-20s |%-20s |%n","FECHA","HORA SALE","HORA LLEGA","PRECIO","ASIENTOS DISP.","PATENTE","ORIGEN","DESTINO");
+            System.out.println("|--------------+-----------+------------+----------------+---------------+---------------------+---------------------+---------------------|");
+            for (int i = 0; i < listViajes.length-1; i++) {
+                System.out.printf("|%-13s |%10s |%10s |$%-15s |%14s |%-20s |%-20s |%-20s|%n",listViajes[i][0],listViajes[i][1],listViajes[i][2],listViajes[i][3],listViajes[i][4],listViajes[i][5],listViajes[i][6],listViajes[i][7]);
                 System.out.println("|--------------+-----------+------------+----------------+---------------+---------------------+---------------------+---------------------|");
-                for (int i = 0; i < listViajes.length-1; i++) {
-                    System.out.printf("|%-13s |%10s |%10s |$%-15s |%14s |%-20s |%-20s |%-20s|%n",listViajes[i][0],listViajes[i][1],listViajes[i][2],listViajes[i][3],listViajes[i][4],listViajes[i][5],listViajes[i][6],listViajes[i][7]);
-                    System.out.println("|--------------+-----------+------------+----------------+---------------+---------------------+---------------------+---------------------|");
-                }
-                for (int i = listViajes.length-1; i < listViajes.length; i++) {
-                    System.out.printf("|%-13s |%10s |%10s |$%-15s |%14s |%-20s |%-20s |%-20s|%n",listViajes[i][0],listViajes[i][1],listViajes[i][2],listViajes[i][3],listViajes[i][4],listViajes[i][5],listViajes[i][6],listViajes[i][7]);
-                    System.out.println("*--------------*-----------*------------*----------------*---------------*---------------------*---------------------*---------------------*");
-                }
-            }else {
-                System.out.println("No existen viajes registrados...");
             }
-        }catch (SistemaVentaPasajesException e){
-            System.out.println("\n" + e.getMessage());
+            for (int i = listViajes.length-1; i < listViajes.length; i++) {
+            System.out.printf("|%-13s |%10s |%10s |$%-15s |%14s |%-20s |%-20s |%-20s|%n",listViajes[i][0],listViajes[i][1],listViajes[i][2],listViajes[i][3],listViajes[i][4],listViajes[i][5],listViajes[i][6],listViajes[i][7]);
+            System.out.println("*--------------*-----------*------------*----------------*---------------*---------------------*---------------------*---------------------*");
+            }
+        }else {
+            System.out.println("No existen viajes registrados...");
         }
     }
     //listarPasajeros = Diego Muñoz
@@ -316,25 +312,21 @@ public class UISVP {
         System.out.println("...:::: Listado de empresas ::::..");
         System.out.println();
         String[][] datos;
-        try {
-            datos = ControladorEmpresas.getInstance().listEmpresas();
-            if (datos.length>0){
-                System.out.println("*----------------*----------------*-------------------------------*------------------*-------------*----------------*");
-                System.out.printf("|%-15s |%-15s |%-30s |%-17s |%-12s |%-15s |%n","RUT EMPRESA","NOMBRE","URL","NRO. TRIPULANTES","NRO. BUSES","NRO.VENTAS");
-                System.out.println("|----------------+----------------+-------------------------------+------------------+-------------+----------------|");
-                for (int i = 0; i < datos.length-1; i++) {
-                    System.out.printf("|%-15s |%-15s |%-30s |%-17s |%-12s |%-15s |%n",datos[i][0],datos[i][1],datos[i][2],datos[i][3],datos[i][4],datos[i][5]);
-                    System.out.println("|--------------+-----------+------------+----------------+---------------+---------------------+---------------------+---------------------|");
-                }
-                for (int i = datos.length-1; i < datos.length; i++) {
-                    System.out.printf("|%-15s |%-15s |%-30s |%-17s |%-12s |%-15s |%n",datos[i][0],datos[i][1],datos[i][2],datos[i][3],datos[i][4],datos[i][5]);
-                    System.out.println("*----------------*----------------*-------------------------------*------------------*-------------*----------------*");
-                }
-            }else {
-                System.out.println("No hay empresas registradas...");
+        datos = ControladorEmpresas.getInstance().listEmpresas();
+        if (datos.length>0){
+            System.out.println("*----------------*----------------*-------------------------------*------------------*-------------*----------------*");
+            System.out.printf("|%-15s |%-15s |%-30s |%-17s |%-12s |%-15s |%n","RUT EMPRESA","NOMBRE","URL","NRO. TRIPULANTES","NRO. BUSES","NRO.VENTAS");
+            System.out.println("|----------------+----------------+-------------------------------+------------------+-------------+----------------|");
+            for (int i = 0; i < datos.length-1; i++) {
+                System.out.printf("|%-15s |%-15s |%-30s |%-17s |%-12s |%-15s |%n",datos[i][0],datos[i][1],datos[i][2],datos[i][3],datos[i][4],datos[i][5]);
+                System.out.println("|--------------+-----------+------------+----------------+---------------+---------------------+---------------------+---------------------|");
             }
-        }catch (SistemaVentaPasajesException e){
-            System.out.println("\n"+ e.getMessage());
+            for (int i = datos.length-1; i < datos.length; i++) {
+                System.out.printf("|%-15s |%-15s |%-30s |%-17s |%-12s |%-15s |%n",datos[i][0],datos[i][1],datos[i][2],datos[i][3],datos[i][4],datos[i][5]);
+                System.out.println("*----------------*----------------*-------------------------------*------------------*-------------*----------------*");
+            }
+        }else {
+            System.out.println("No hay empresas registradas...");
         }
     }
     //listarLlegadasSalidas = Diego Muñoz

@@ -54,6 +54,7 @@ public class ControladorEmpresas {
             throw new SistemaVentaPasajesException("Ya existe bus con la patente indicada");
         }
         Bus nuevoBus = new Bus(pat, marca, modelo, nroAsientos, emp);
+        buses.add(nuevoBus);
     }
 
 
@@ -100,13 +101,16 @@ public class ControladorEmpresas {
              return new String[0][0];
          }
 
-         String[][] listEmpresas= new String[empresas.size()][2];
+         String[][] listEmpresas= new String[empresas.size()][4];
 
          for (int i = 0; i < listEmpresas.length; i++){
              Empresa empresa = empresas.get(i);
              listEmpresas[i][0] = String.valueOf(empresa.getRut());
              listEmpresas[i][1] = String.valueOf(empresa.getNombre());
-
+             listEmpresas[i][2] = empresa.getUrl();
+             listEmpresas[i][3] = String.valueOf(empresa.getTripulantes().length);
+             listEmpresas[i][4] = String.valueOf(empresa.getBuses().length);
+             listEmpresas[i][5] = String.valueOf(empresa.getVentas().length);
          }
          return listEmpresas;
 
