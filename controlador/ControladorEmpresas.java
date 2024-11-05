@@ -46,7 +46,7 @@ public class ControladorEmpresas {
     }
 
     //Metodo createBus: Rodolfo Salas
-    public void createBus(String pat, String marca, String modelo, int nroAsientos, Rut rutEmp) throws Exception {
+    public void createBus(String pat, String marca, String modelo, int nroAsientos, Rut rutEmp) {
         Empresa emp = findEmpresa(rutEmp).orElseThrow(() -> new SistemaVentaPasajesException("No existe empresa con el rut indicado "));
 
         Optional<Bus> busExistente = findBus(pat);

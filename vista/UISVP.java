@@ -136,7 +136,7 @@ public class UISVP {
         System.out.printf("%21s","Rut : ");
         String rut = sc.next();
         try {
-            ControladorEmpresas.getInstance().createBus(patente,marca,modelo,numAsientos,rut);
+            ControladorEmpresas.getInstance().createBus(patente,marca,modelo,numAsientos, Rut.of(rut));
             System.out.println("...:::: Bus guardado exitosamente ::::..");
         }catch (SistemaVentaPasajesException e){
             System.out.println("\n"+e.getMessage());
