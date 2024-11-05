@@ -171,6 +171,37 @@ public class ControladorEmpresas {
         }
         return new String[0][0];
     }
+
+    public String[][] listVentasEmpresa(Rut rut) throws SistemaVentaPasajesException {
+
+        Optional<Empresa> empresaOpt = findEmpresa(rut);
+        if (empresaOpt.isPresent()) {
+            throw new SistemaVentaPasajesException("No existe empresa con el rut indicado");
+        }
+
+        Empresa empresa = empresaOpt.get();
+        List<Venta> ventas = List.of(empresa.getVentas());
+
+        if (ventas.isEmpty()) {
+            return new String[0][];
+        }
+
+        String[][] matrizVentas = new String[ventas.size()][3];
+
+        for (int i = 0; i < ventas.size(); i++) {
+            Venta venta = ventas.get(i);
+            listVentasTerminal[i][0] = venta.getIdDocumento();
+            listVentasTerminal[i][1] = venta.getTipo().toString();
+            listVentasTerminal[i][2] = venta.getFecha().toString();
+            listVentasTerminal[i][3] = venta.getCliente().toString();
+            listVentasTerminal[i][4] = String.valueOf(venta.getMonto());
+            listVentasTerminal[i][5] = venta.getTipoPago();
+        }
+
+        return listVentasTerminal;
+
+    }
+    
     //Metodo findempresa: Diego Muñoz
     protected Optional<Empresa> findEmpresa(Rut rut){
         for (Empresa empresa:empresas){
