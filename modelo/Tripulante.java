@@ -5,15 +5,14 @@ import utilidades.Direccion;
 import utilidades.IdPersona;
 import utilidades.Nombre;
 
-public class Tripulante extends Persona {
+public abstract class Tripulante extends Persona {
     Direccion direccion;
 
-    private ArrayList<Viaje> viajes;
     public Tripulante(IdPersona id, Nombre nom, Direccion dir) {
         super(id,nom);
         this.direccion = dir;
-        this.viajes= new ArrayList<>();
     }
+
     public Direccion getDireccion() {
         return direccion;
     }
@@ -21,9 +20,7 @@ public class Tripulante extends Persona {
         this.direccion = direccion;
     }
 
-    public void addViaje(Viaje viaje){}
+    public abstract void addViaje(Viaje viaje);
 
-    public int getNroViajes() {
-        return viajes.size();
-    }
+    public abstract int getNroViajes();
 }
