@@ -67,9 +67,11 @@ public class SistemaVentaPasajes  {
                             Optional<Terminal> llegada = ControladorEmpresas.getInstance().findTerminalPorComuna(nomComunas[1]);
                             if (llegada.isPresent()){
                                 Viaje viajeValido = new Viaje(fecha,hora,precio,duracion,bus.get(),auxiliar.get(),conductor.get(),salida.get(),llegada.get());
-                                if (idTripulantes.length>2){
+                                if (idTripulantes.length>=3){
                                     Optional<Conductor> conductor2 = ControladorEmpresas.getInstance().findConductor(idTripulantes[2],bus.get().getEmpresa().getRut());
-                                    viajeValido.addConductor(conductor2.get());
+                                    if (conductor2.isPresent()) {
+                                        viajeValido.addConductor(conductor2.get());
+                                    }
                                 }
                                 viajes.add(viajeValido);
                             }else {
@@ -108,10 +110,9 @@ public class SistemaVentaPasajes  {
         String[][] viajes = listViajes();
         boolean existeViajeDisponible = false;
 
-        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy");
 
         for (String[] viajeInfo : viajes) {
-            LocalDate fechaViajeActual = LocalDate.parse(viajeInfo[0],formatter);
+            LocalDate fechaViajeActual = LocalDate.parse(viajeInfo[0]);
             String comSalidaActual = viajeInfo[5];
             String comLlegadaActual = viajeInfo[6];
             int asientosDisponibles = Integer.parseInt(viajeInfo[4]);
@@ -126,7 +127,7 @@ public class SistemaVentaPasajes  {
         }
 
         if (!existeViajeDisponible) {
-            throw new SistemaVentaPasajesException("No existen viajes disponibles en la fecha y con terminales en las comunas de salida y llegada indicados o no hay suficientes asientos disponibles.\");");
+            throw new SistemaVentaPasajesException("No existen viajes disponibles en la fecha y con terminales en las comunas de salida y llegada indicados o no hay suficientes asientos disponibles");
         }
 
         Venta nuevaVenta = new Venta(idDoc, tipo, LocalDate.now(), clienteOptional.get());
@@ -261,20 +262,20 @@ public void pagaVenta(String idDocumento, TipoDocumento tipo, long nroTarjeta) {
     //Método listViajes : Diego Muñoz
     public String[][] listViajes(){
 
-        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy");
+
 
         String[][] listaViajes = new String[viajes.size()][8];
         for (int i = 0; i < viajes.size(); i++){
             Viaje viaje = viajes.get(i);
             LocalTime horaTermino = viaje.getFechaHoraTermino().toLocalTime();
-            listaViajes[i][0] = viaje.getFecha().format(formatter);
+            listaViajes[i][0] = String.valueOf(viaje.getFecha());
             listaViajes[i][1] = String.valueOf(viaje.getHora());
             listaViajes[i][2] = String.valueOf(horaTermino);
             listaViajes[i][3] = String.valueOf(viaje.getPrecio());
             listaViajes[i][4] = String.valueOf(viaje.getNroAsientosDisponibles());
             listaViajes[i][5] = viaje.getBus().getPatente();
-            listaViajes[i][6] = viaje.getTerminalSalida().getNombre();
-            listaViajes[i][7] = viaje.getTerminalLlegada().getNombre();
+            listaViajes[i][6] = viaje.getTerminalSalida().getDireccion().getComuna();
+            listaViajes[i][7] = viaje.getTerminalLlegada().getDireccion().getComuna();
         }
         return listaViajes;
     }
