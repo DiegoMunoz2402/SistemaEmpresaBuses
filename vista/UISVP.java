@@ -179,7 +179,7 @@ public class UISVP {
         Tratamiento tratamiento= null;
         try {
             System.out.println(":::: Crear un nuevo Cliente ::::");
-            System.out.println("utilidades.Rut[1] o Pasaporte[2] : ");
+            System.out.println("Rut[1] o Pasaporte[2] : ");
             int tipo = sc.nextInt();
             sc.nextLine();
             if(tipo==1){
@@ -219,7 +219,6 @@ public class UISVP {
             Nombre nombrecompleto= new Nombre(nombres,apellidoPaterno,apellidoMaterno,tratamiento);
             SistemaVentaPasajes.getInstance().createCliente(identificador,nombrecompleto,telefono,email);
             System.out.println("...:::: Cliente guardado exitosamente ::::...");
-
         }catch (SistemaVentaPasajesException e){
             System.out.println("\n" + e.getMessage());
         }
