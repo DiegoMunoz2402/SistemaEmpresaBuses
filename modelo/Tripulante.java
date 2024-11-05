@@ -1,6 +1,6 @@
+//Class tripulante: Rodolfo
 package modelo;
 
-import java.util.ArrayList;
 import utilidades.Direccion;
 import utilidades.IdPersona;
 import utilidades.Nombre;

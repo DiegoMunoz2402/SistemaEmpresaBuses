@@ -1,3 +1,4 @@
+//Class terminal : Diego Muñoz
 package modelo;
 
 import utilidades.Direccion;

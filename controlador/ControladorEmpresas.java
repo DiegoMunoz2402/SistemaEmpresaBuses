@@ -173,6 +173,7 @@ public class ControladorEmpresas {
         return new String[0][0];
     }
 
+    //listVentaEmpresa : Javiera Duarte
     public String[][] listVentasEmpresa(Rut rut) {
 
         Optional<Empresa> empresaOpt = findEmpresa(rut);

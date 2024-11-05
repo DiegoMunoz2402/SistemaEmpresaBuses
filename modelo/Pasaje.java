@@ -1,3 +1,4 @@
+//Class pasaje : Diego Muñoz
 package modelo;
 
 import java.security.SecureRandom;

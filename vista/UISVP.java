@@ -90,7 +90,7 @@ public class UISVP {
             System.out.println("\n" + e.getMessage());
         }
     }
-
+    //ContratarTripulante : Diego Muñoz
     private void contratarTripulante(){
         System.out.println("...:::: Contratando un nuevo Tripulante ::::..");
         System.out.println();
@@ -711,19 +711,6 @@ public class UISVP {
         }catch (SistemaVentaPasajesException e){
             System.out.println("\n" + e.getMessage());
         }
-    }
-
-    private IdPersona convertToIdPersona(String input) {
-        // Verificamos si es un RUT (contiene guion "-")
-        if (input.contains("-")) {
-            return (IdPersona) Rut.of(input);
-        } else {
-            String[] partes = input.split(" ");
-            if (partes.length == 2) {
-                return (IdPersona) Pasaporte.of(partes[0], partes[1]); // Número del pasaporte y nacionalidad
-            }
-        }
-        return null;
     }
 
 }

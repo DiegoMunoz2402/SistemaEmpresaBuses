@@ -1,3 +1,4 @@
+//Excepcion : Diego Muñoz
 package excepciones;
 
 public class SistemaVentaPasajesException extends RuntimeException{

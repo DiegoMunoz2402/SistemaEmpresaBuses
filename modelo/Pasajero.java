@@ -1,3 +1,4 @@
+//Class pasajero : Diego Muñoz
 package modelo;
 
 import utilidades.IdPersona;

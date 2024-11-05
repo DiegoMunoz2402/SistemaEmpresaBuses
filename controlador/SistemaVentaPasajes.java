@@ -166,7 +166,7 @@ public class SistemaVentaPasajes  {
         }
         return Optional.empty();
     }
-
+    //getMontoVenta: Javiera Duarte
     public Optional<Integer> getMontoVenta(String idDocumento, TipoDocumento tipo){
         Optional<Venta> venta = findVenta(idDocumento, tipo);
         if (venta.isPresent()){
@@ -199,39 +199,39 @@ public class SistemaVentaPasajes  {
               throw new SistemaVentaPasajesException("No existe una venta con el idDocumento y tipo dados");
           }
       }
-
+    //pagaVenta : Javiera Duarte
     public void pagaVenta(String idDocumento, TipoDocumento tipo) {
-    Optional<Venta> ventaOptional = findVenta(idDocumento, tipo);
+        Optional<Venta> ventaOptional = findVenta(idDocumento, tipo);
 
-    if (ventaOptional.isEmpty()) {
-        throw new SistemaVentaPasajesException("No existe venta con el id y tipo de documento indicados");
+        if (ventaOptional.isEmpty()) {
+            throw new SistemaVentaPasajesException("No existe venta con el id y tipo de documento indicados");
+        }
+
+        Venta venta = ventaOptional.get();
+
+        boolean pagado = venta.pagaMonto();
+
+        if (!pagado) {
+            throw new SistemaVentaPasajesException("El pago no se efectuó (porque el pago ya se hizo)");
+        }
     }
+    //pagaVenta : Javiera Duarte
+    public void pagaVenta(String idDocumento, TipoDocumento tipo, long nroTarjeta) {
+        Optional<Venta> ventaOptional = findVenta(idDocumento, tipo);
 
-    Venta venta = ventaOptional.get();
+        if (ventaOptional.isEmpty()) {
+            throw new SistemaVentaPasajesException("No existe venta con el id y tipo de documento indicados");
+        }
 
-    boolean pagado = venta.pagaMonto();
+        Venta venta = ventaOptional.get();
 
-    if (!pagado) {
-        throw new SistemaVentaPasajesException("El pago no se efectuó (porque el pago ya se hizo)");
+        boolean pagado = venta.pagaMonto(nroTarjeta);
+
+        if (!pagado) {
+            throw new SistemaVentaPasajesException("El pago no se efectuó (porque el pago ya se hizo)");
+        }
     }
-}
-
-public void pagaVenta(String idDocumento, TipoDocumento tipo, long nroTarjeta) {
-    Optional<Venta> ventaOptional = findVenta(idDocumento, tipo);
-
-    if (ventaOptional.isEmpty()) {
-        throw new SistemaVentaPasajesException("No existe venta con el id y tipo de documento indicados");
-    }
-
-    Venta venta = ventaOptional.get();
-
-    boolean pagado = venta.pagaMonto(nroTarjeta);
-
-    if (!pagado) {
-        throw new SistemaVentaPasajesException("El pago no se efectuó (porque el pago ya se hizo)");
-    }
-}
-
+    //listVenta : Javiera Duarte
      public String[][] listVentas(){
 
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy");
@@ -302,7 +302,7 @@ public void pagaVenta(String idDocumento, TipoDocumento tipo, long nroTarjeta) {
         }
         return Optional.empty();
     }
-
+    //findVenta : Javiera Duarte
    private Optional<Venta> findVenta(String idDocumento, TipoDocumento tipoDocumento){
         for(Venta venta: ventas){
             if(venta.getIdDocumento().equals(idDocumento) && venta.getTipo().equals(tipoDocumento)){

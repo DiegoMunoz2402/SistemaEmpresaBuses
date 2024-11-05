@@ -1,3 +1,5 @@
+//Class viaje : Diego Muñoz
+
 package modelo;
 
 import java.time.LocalDate;

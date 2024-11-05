@@ -1,3 +1,4 @@
+//Class bus : Diego Muñoz
 package modelo;
 
 import java.util.ArrayList;
