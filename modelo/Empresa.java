@@ -77,7 +77,7 @@ public class Empresa {
             tripulantesTotales[i] = auxiliares.get(i);
         }
         int j=0;
-        for (int i = conductores.size(); i < tripulantesTotales.length; i++){
+        for (int i = auxiliares.size(); i < tripulantesTotales.length; i++){
             tripulantesTotales[i] = conductores.get(j);
             j++;
         }
