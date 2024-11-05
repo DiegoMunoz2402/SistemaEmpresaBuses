@@ -4,7 +4,7 @@ import utilidades.IdPersona;
 import utilidades.Nombre;
 
 //Clase Completo modelo.Persona, Autor: Rodolfo Salas
-public class Persona {
+public abstract class Persona {
     //Atributos
 
     private IdPersona Idpersona;  //interfaz utilidades.IdPersona
