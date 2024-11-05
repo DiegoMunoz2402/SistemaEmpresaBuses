@@ -7,6 +7,7 @@ import utilidades.Nombre;
 
 import java.time.LocalDate;
 import java.time.LocalTime;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.Optional;
 
@@ -231,14 +232,21 @@ public void pagaVenta(String idDocumento, TipoDocumento tipo, long nroTarjeta) {
     }
     //Método listViajes : Diego Muñoz
     public String[][] listViajes(){
-        String[][] listaViajes = new String[viajes.size()][5];
+
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy");
+
+        String[][] listaViajes = new String[viajes.size()][8];
         for (int i = 0; i < viajes.size(); i++){
             Viaje viaje = viajes.get(i);
-            listaViajes[i][0] = String.valueOf(viaje.getFecha());
+            LocalTime horaTermino = viaje.getFechaHoraTermino().toLocalTime();
+            listaViajes[i][0] = viaje.getFecha().format(formatter);
             listaViajes[i][1] = String.valueOf(viaje.getHora());
-            listaViajes[i][2] = String.valueOf(viaje.getPrecio());
-            listaViajes[i][3] = String.valueOf(viaje.getNroAsientosDisponibles());
-            listaViajes[i][4] = viaje.getBus().getPatente();
+            listaViajes[i][2] = String.valueOf(horaTermino);
+            listaViajes[i][3] = String.valueOf(viaje.getPrecio());
+            listaViajes[i][4] = String.valueOf(viaje.getNroAsientosDisponibles());
+            listaViajes[i][5] = viaje.getBus().getPatente();
+            listaViajes[i][6] = viaje.getTerminalSalida().getNombre();
+            listaViajes[i][7] = viaje.getTerminalLlegada().getNombre();
         }
         return listaViajes;
     }
