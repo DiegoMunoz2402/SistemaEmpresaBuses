@@ -16,7 +16,6 @@ public class SistemaVentaPasajes  {
     private ArrayList<Pasajero> pasajeros = new ArrayList<>();
     private ArrayList<Venta> ventas = new ArrayList<>();
     private ArrayList<Viaje> viajes = new ArrayList<>();
-    private ArrayList<Bus> buses = new ArrayList<>();
 
     private static SistemaVentaPasajes instance;
 
@@ -117,7 +116,6 @@ public class SistemaVentaPasajes  {
                 String HoraDeSalida= String.valueOf(viaje.getHora());
                 String PrecioPasaje= String.valueOf(viaje.getPrecio());
                 ViajesDisponibles.add(new String[]{AsientosDisponibles, PatenteBus, HoraDeSalida, PrecioPasaje});
-
             }
         }
         if(ViajesDisponibles.isEmpty()){
@@ -159,45 +157,30 @@ public class SistemaVentaPasajes  {
         return Optional.empty();
     }
       // metodo vendePasaje: Rodolfo Salas
-    public boolean vendePasaje(String idDoc, LocalDate fecha, LocalTime hora, String patBus, int asiento, IdPersona idPasajero){
-           Venta venta = null;
-           Viaje viaje = null;
-           Pasajero pasajero = null;
-           for(int i=0;i<ventas.size();i++){
-               if(ventas.get(i).getIdDocumento().equals(idDoc)){
-                   venta = ventas.get(i);
-               }
-           }
-            if(venta==null){
-                return false;
-            }
-           for(int i=0;i<viajes.size();i++){
-               if (viajes.get(i).getFecha().equals(fecha) && viajes.get(i).getHora().equals(hora) && viajes.get(i).getBus().getPatente().equals(patBus)){
-                   viaje = viajes.get(i);
-
-               }
-           }
-           if(viaje==null){
-               return false;
-           }
-           if(asiento < 1||asiento > viaje.getBus().getNroAsientos()){
-               return false;
-           }
-           for(int i=0;i<pasajeros.size();i++){
-               if(pasajeros.get(i).getIdpersona().equals(idPasajero)){
-                   pasajero = pasajeros.get(i);
-                   break;
-               }
-           }
-           if(pasajero==null){
-               return false;
-           }
-
-           venta.createPasaje(asiento,viaje,pasajero);
-        return true;
-
-
-    }
+      //Metodo vendePasaje: Rodolfo Salas
+      public void vendePasaje(String idDoc, TipoDocumento tipo, LocalDate fechaViaje,LocalTime hora,String patBus,int asiento,IdPersona idPasajero){
+          Optional<Venta> venta = findVenta(idDoc,tipo);
+          Optional<Pasajero> pasajero= findPasajero(idPasajero);
+          Optional<Viaje> viaje = findViaje(fechaViaje,hora,patBus);
+          if (venta.isPresent()){
+              Optional<Bus> bus = ControladorEmpresas.getInstance().findBus(patBus);
+              if (bus.isPresent()) {
+                  if (viaje.isPresent()) {
+                      if (pasajero.isPresent()) {
+                          venta.get().createPasaje(asiento, viaje.get(), pasajero.get());
+                      } else {
+                          throw new SistemaVentaPasajesException("No existe un pasajero con el id dado");
+                      }
+                  } else {
+                      throw new SistemaVentaPasajesException("No existe un viaje con los datos dados");
+                  }
+              }else {
+                  throw new SistemaVentaPasajesException("No existe un bus con la patente indicada");
+              }
+          }else {
+              throw new SistemaVentaPasajesException("No existe una venta con el idDocumento y tipo dados");
+          }
+      }
 
      public String[][] listVentas(){
         String[][] listaVentas = new String[ventas.size()][6];
