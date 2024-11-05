@@ -17,7 +17,6 @@ public class Pasaje {
         this.pasajero=pasajero;
         this.venta=venta;
         this.viaje.addPasaje(this);
-
     }
     public long numeroAleatorio(){
         SecureRandom random=new SecureRandom();

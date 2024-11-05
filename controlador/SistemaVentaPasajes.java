@@ -140,14 +140,6 @@ public class SistemaVentaPasajes  {
         return new String[0];
     }
 
-     public int getMontoVenta(String idDocumento, TipoDocumento tipo){
-
-        Venta venta = findVenta(idDocumento, tipo);
-        if (venta!= null){
-            return venta.getMonto();
-        }
-        return 0;
-    }
     //Metodo getNombrePasajero: Diego Muñoz
     public Optional<String> getNombrePasajero(IdPersona idPasajero){
         Optional<Pasajero> pasajero = findPasajero(idPasajero);
@@ -160,9 +152,9 @@ public class SistemaVentaPasajes  {
     public Optional<Integer> getMontoVenta(String idDocumento, TipoDocumento tipo){
         Optional<Venta> venta = findVenta(idDocumento, tipo);
         if (venta.isPresent()){
-            return of(venta.get().getMonto());
+            return Optional.of(venta.get().getMonto());
         }
-        return of(0);
+        return Optional.empty();
     }
     
       //Metodo vendePasaje: Rodolfo Salas
@@ -223,15 +215,16 @@ public void pagaVenta(String idDocumento, TipoDocumento tipo, long nroTarjeta) {
 }
 
      public String[][] listVentas(){
-        String[][] listaVentas = new String[ventas.size()][6];
+        String[][] listaVentas = new String[ventas.size()][7];
         for(int i = 0; i < ventas.size(); i++) {
             Venta venta = ventas.get(i);
             listaVentas[i][0] = String.valueOf(venta.getIdDocumento());
             listaVentas[i][1] = String.valueOf(venta.getTipo());
             listaVentas[i][2] = String.valueOf(venta.getFecha());
-            listaVentas[i][3] = String.valueOf(venta.getCliente());
-            listaVentas[i][4] = String.valueOf(venta.getPasajes().length);
-            listaVentas[i][5] = String.valueOf(venta.getMonto());
+            listaVentas[i][3] = String.valueOf(venta.getCliente().getIdpersona().toString());
+            listaVentas[i][4] = String.valueOf(venta.getCliente().getNombrecompleto());
+            listaVentas[i][5] = String.valueOf(venta.getPasajes().length);
+            listaVentas[i][6] = String.valueOf(venta.getMonto());
         }
         return listaVentas;
 

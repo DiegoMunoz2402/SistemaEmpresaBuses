@@ -12,6 +12,7 @@ import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
+import java.util.List;
 import java.util.Optional;
 
 public class ControladorEmpresas {
@@ -175,7 +176,7 @@ public class ControladorEmpresas {
     public String[][] listVentasEmpresa(Rut rut) throws SistemaVentaPasajesException {
 
         Optional<Empresa> empresaOpt = findEmpresa(rut);
-        if (empresaOpt.isPresent()) {
+        if (empresaOpt.isEmpty()) {
             throw new SistemaVentaPasajesException("No existe empresa con el rut indicado");
         }
 
@@ -183,21 +184,20 @@ public class ControladorEmpresas {
         List<Venta> ventas = List.of(empresa.getVentas());
 
         if (ventas.isEmpty()) {
-            return new String[0][];
+            return new String[0][0];
         }
 
-        String[][] matrizVentas = new String[ventas.size()][3];
+        String[][] listVentasTerminal = new String[ventas.size()][4];
+
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy");
 
         for (int i = 0; i < ventas.size(); i++) {
             Venta venta = ventas.get(i);
-            listVentasTerminal[i][0] = venta.getIdDocumento();
-            listVentasTerminal[i][1] = venta.getTipo().toString();
-            listVentasTerminal[i][2] = venta.getFecha().toString();
-            listVentasTerminal[i][3] = venta.getCliente().toString();
-            listVentasTerminal[i][4] = String.valueOf(venta.getMonto());
-            listVentasTerminal[i][5] = venta.getTipoPago();
+            listVentasTerminal[i][0] = venta.getFecha().format(formatter);
+            listVentasTerminal[i][1] = venta.getTipo().toString().toLowerCase();
+            listVentasTerminal[i][2] = String.valueOf(venta.getMonto());
+            listVentasTerminal[i][3] = venta.getTipoPago();
         }
-
         return listVentasTerminal;
 
     }

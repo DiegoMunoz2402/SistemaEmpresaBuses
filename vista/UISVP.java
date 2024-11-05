@@ -442,7 +442,7 @@ public class UISVP {
         String rut = sc.next();
         String[][] datos;
         try {
-            datos = ControladorEmpresas.getInstance().listVentasEmpresas();
+            datos = ControladorEmpresas.getInstance().listVentasEmpresa(Rut.of(rut));
             if (datos.length>0){
                 System.out.println("*----------------*--------*--------------*----------------*");
                 System.out.printf("|%-15s |%-7s |%-13s |%15s |%n","FECHA","TIPO","MONTO PAGADO","TIPO PAGO");
