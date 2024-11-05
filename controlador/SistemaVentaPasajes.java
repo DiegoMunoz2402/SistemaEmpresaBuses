@@ -113,8 +113,8 @@ public class SistemaVentaPasajes  {
 
         for (String[] viajeInfo : viajes) {
             LocalDate fechaViajeActual = LocalDate.parse(viajeInfo[0]);
-            String comSalidaActual = viajeInfo[5];
-            String comLlegadaActual = viajeInfo[6];
+            String comSalidaActual = viajeInfo[6];
+            String comLlegadaActual = viajeInfo[7];
             int asientosDisponibles = Integer.parseInt(viajeInfo[4]);
 
             if (fechaViajeActual.equals(fechaViaje) &&
