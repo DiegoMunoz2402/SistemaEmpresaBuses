@@ -269,7 +269,7 @@ public void pagaVenta(String idDocumento, TipoDocumento tipo, long nroTarjeta) {
                     listPasajeros[i][3]=pasajeros[i][2];
                     listPasajeros[i][4]=pasajeros[i][3];
                 }
-                return pasajeros;
+                return listPasajeros;
             }
         }else {
             throw new SistemaVentaPasajesException("No existe viaje con la fecha, hora y patente de bus indicados");
