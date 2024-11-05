@@ -243,12 +243,12 @@ public class SistemaVentaPasajes  {
         return Optional.empty();
     }
 
-    private Venta findVenta(String idDocumento, TipoDocumento tipoDocumento){
+   private Optional<Venta> findVenta(String idDocumento, TipoDocumento tipoDocumento){
         for(Venta venta: ventas){
             if(venta.getIdDocumento().equals(idDocumento) && venta.getTipo().equals(tipoDocumento)){
-                return venta;
+                return Optional.of(venta);
             } }
-        return null;
+        return Optional.empty();
 
     }
 
