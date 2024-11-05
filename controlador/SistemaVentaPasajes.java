@@ -216,12 +216,14 @@ public void pagaVenta(String idDocumento, TipoDocumento tipo, long nroTarjeta) {
 }
 
      public String[][] listVentas(){
+
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy");
         String[][] listaVentas = new String[ventas.size()][7];
         for(int i = 0; i < ventas.size(); i++) {
             Venta venta = ventas.get(i);
             listaVentas[i][0] = String.valueOf(venta.getIdDocumento());
             listaVentas[i][1] = String.valueOf(venta.getTipo());
-            listaVentas[i][2] = String.valueOf(venta.getFecha());
+            listaVentas[i][2] = venta.getFecha().format(formatter);
             listaVentas[i][3] = String.valueOf(venta.getCliente().getIdpersona().toString());
             listaVentas[i][4] = String.valueOf(venta.getCliente().getNombrecompleto());
             listaVentas[i][5] = String.valueOf(venta.getPasajes().length);
