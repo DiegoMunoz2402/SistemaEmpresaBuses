@@ -37,6 +37,7 @@ public class Viaje {
         conductor.addViaje(this);
         salida.addSalida(this);
         llegada.addLlegada(this);
+        bus.addViaje(this);
         this.pasajes = new ArrayList<>();
     }
 

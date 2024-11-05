@@ -402,11 +402,11 @@ public class UISVP {
                 System.out.printf("  |%-13s |%-10s |%-8s |%-10s |%n","BUS","SALIDA","VALOR"," ASIENTOS");
                 System.out.println("  |--------------+-----------+---------+-----------|");
                 for (int i = 0; i < listHorariosDisponibles.length-1; i++) {
-                    System.out.printf("%1s |%-13s |%-10s |%-8s |%-10s |%n",i+1,listHorariosDisponibles[i][0],listHorariosDisponibles[i][1],listHorariosDisponibles[i][2],listHorariosDisponibles[i][3]);
+                    System.out.printf("%1s |%-13s |%-10s |%-8s |%-10s |%n",i+1,listHorariosDisponibles[i][1],listHorariosDisponibles[i][2],listHorariosDisponibles[i][3],listHorariosDisponibles[i][0]);
                     System.out.println(" |--------------+-----------+---------+-----------|");
                 }
                 for (int i = listHorariosDisponibles.length-1; i < listHorariosDisponibles.length; i++) {
-                    System.out.printf("%1s |%-13s |%-10s |%-8s |%-10s |%n",i+1,listHorariosDisponibles[i][0],listHorariosDisponibles[i][1],listHorariosDisponibles[i][2],listHorariosDisponibles[i][3]);
+                    System.out.printf("%1s |%-13s |%-10s |%-8s |%-10s |%n",i+1,listHorariosDisponibles[i][1],listHorariosDisponibles[i][2],listHorariosDisponibles[i][3],listHorariosDisponibles[i][0]);
                     System.out.println("  *--------------*-----------*---------*-----------*");
                 }
                 System.out.print("Seleccione viaje [1.."+listHorariosDisponibles.length+"] : ");
@@ -452,7 +452,6 @@ public class UISVP {
                             if (nombrePasajeroOp.isEmpty()){
                                 System.out.print("Sr.[1] o Sra.[2] :");
                                 int tratamientoPasajero = sc.nextInt();
-                                sc.next();
                                 Tratamiento tratamientoPas;
                                 if(tratamientoPasajero==1){
                                     tratamientoPas= Tratamiento.SR;
