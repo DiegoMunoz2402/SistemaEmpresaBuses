@@ -3,6 +3,7 @@ package vista;
 import controlador.ControladorEmpresas;
 import controlador.SistemaVentaPasajes;
 import excepciones.SistemaVentaPasajesException;
+import utilidades.Direccion;
 import utilidades.Rut;
 
 import java.util.Scanner;

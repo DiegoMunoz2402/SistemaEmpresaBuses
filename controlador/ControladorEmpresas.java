@@ -2,6 +2,7 @@ package controlador;
 
 import excepciones.SistemaVentaPasajesException;
 import modelo.*;
+import utilidades.Direccion;
 import utilidades.IdPersona;
 import utilidades.Nombre;
 import utilidades.Rut;
@@ -21,40 +22,40 @@ public class ControladorEmpresas {
     private ArrayList<Empresa> empresas;
 
     public static ControladorEmpresas getInstance() {
-        if (instance == null){
+        if (instance == null) {
             instance = new ControladorEmpresas();
         }
         return instance;
     }
 
-    private ControladorEmpresas(){
+    private ControladorEmpresas() {
         terminales = new ArrayList<>();
         buses = new ArrayList<>();
         empresas = new ArrayList<>();
     }
 
     //Metodo createEmpresa: Diego Muñoz
-    public void createEmpresa(Rut rut, String nombre, String url){
-        if (findEmpresa(rut).isEmpty()){
-            Empresa empresa = new Empresa(rut,nombre);
+    public void createEmpresa(Rut rut, String nombre, String url) {
+        if (findEmpresa(rut).isEmpty()) {
+            Empresa empresa = new Empresa(rut, nombre);
             empresa.setUrl(url);
             empresas.add(empresa);
-        }else {
+        } else {
             throw new SistemaVentaPasajesException("Ya existe una empresa con el rut indicado");
         }
     }
 
     //Metodo createBus: Rodolfo Salas
-    public void createBus(String pat,String marca,String modelo,int nroAsientos,Rut rutEmp) throws Exception{
+    public void createBus(String pat, String marca, String modelo, int nroAsientos, Rut rutEmp) throws Exception {
         Empresa emp = findEmpresa(rutEmp).orElseThrow(() -> new SistemaVentaPasajesException("No existe empresa con el rut indicado "));
 
         Optional<Bus> busExistente = findBus(pat);
         if (busExistente.isPresent()) {
             throw new SistemaVentaPasajesException("Ya existe bus con la patente indicada");
         }
-        Bus nuevoBus = new Bus(pat, marca, modelo,nroAsientos, emp);
+        Bus nuevoBus = new Bus(pat, marca, modelo, nroAsientos, emp);
     }
-}
+
 
     //Metodo createTerminal: Diego Muñoz
     public void createTerminal(String nombre, Direccion direccion){
@@ -209,7 +210,7 @@ public class ControladorEmpresas {
                 Tripulante[] conductors = empresa.getTripulantes();
                 for (int i = 0; i < conductors.length; i++) {
                     if (conductors[i].getIdpersona().equals(idPersona)){
-                        return Optional.of(conductors[i]);
+                        return Optional.of((Conductor) conductors[i]);
                     }
                 }
             }
@@ -220,10 +221,10 @@ public class ControladorEmpresas {
     protected Optional<Auxiliar> findAuxliar(IdPersona idPersona, Rut rutEmpresa){
         for (Empresa empresa:empresas){
             if (empresa.getRut().equals(rutEmpresa)){
-                Tripulantes[] auxiliares = empresa.getTripulantes();
+                Tripulante[] auxiliares = empresa.getTripulantes();
                 for (int i = 0; i < auxiliares.length; i++) {
                     if (auxiliares[i].getIdpersona().equals(idPersona)){
-                        return Optional.of(auxiliares[i]);
+                        return Optional.of((Auxiliar) auxiliares[i]);
                     }
                 }
             }
