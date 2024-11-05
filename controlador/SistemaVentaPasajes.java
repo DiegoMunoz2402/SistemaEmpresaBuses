@@ -156,7 +156,15 @@ public class SistemaVentaPasajes  {
         }
         return Optional.empty();
     }
-      // metodo vendePasaje: Rodolfo Salas
+
+    public Optional<Integer> getMontoVenta(String idDocumento, TipoDocumento tipo){
+        Optional<Venta> venta = findVenta(idDocumento, tipo);
+        if (venta.isPresent()){
+            return of(venta.get().getMonto());
+        }
+        return of(0);
+    }
+    
       //Metodo vendePasaje: Rodolfo Salas
       public void vendePasaje(String idDoc, TipoDocumento tipo, LocalDate fechaViaje,LocalTime hora,String patBus,int asiento,IdPersona idPasajero){
           Optional<Venta> venta = findVenta(idDoc,tipo);
