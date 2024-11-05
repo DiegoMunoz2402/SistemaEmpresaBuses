@@ -102,7 +102,7 @@ public class ControladorEmpresas {
              return new String[0][0];
          }
 
-         String[][] listEmpresas= new String[empresas.size()][4];
+         String[][] listEmpresas= new String[empresas.size()][6];
 
          for (int i = 0; i < listEmpresas.length; i++){
              Empresa empresa = empresas.get(i);
@@ -173,7 +173,7 @@ public class ControladorEmpresas {
         return new String[0][0];
     }
 
-    public String[][] listVentasEmpresa(Rut rut) throws SistemaVentaPasajesException {
+    public String[][] listVentasEmpresa(Rut rut) {
 
         Optional<Empresa> empresaOpt = findEmpresa(rut);
         if (empresaOpt.isEmpty()) {

@@ -9,6 +9,7 @@ import java.time.LocalDate;
 import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
+import java.util.List;
 import java.util.Optional;
 
 public class SistemaVentaPasajes  {
@@ -95,43 +96,62 @@ public class SistemaVentaPasajes  {
     }
 
 //   Metodo iniciaVenta: Javiera Duarte
-    public void iniciaVenta(String idDoc, TipoDocumento tipo, LocalDate fechaViaje, String comSalida, String comLlegada, IdPersona idCliente, int nroPasajes) {
+//    public void iniciaVenta(String idDoc, TipoDocumento tipo, LocalDate fechaViaje, String comSalida, String comLlegada, IdPersona idCliente, int nroPasajes) {
+//
+//        Optional<Venta> ventaExistente = findVenta(idDoc, tipo);
+//        if (ventaExistente.isPresent()) {
+//            throw new SistemaVentaPasajesException("Ya existe una venta con el mismo idDocumento y tipo.");
+//        }
+//
+//        Optional<Cliente> clienteOptional = findCliente(idCliente);
+//        if (clienteOptional.isEmpty()) {
+//            throw new SistemaVentaPasajesException("No existe un cliente con el id proporcionado.");
+//        }
+//
+//        String[][] viajes = listViajes();
+//        boolean existeViajeDisponible = false;
+//
+//
+//        for (String[] viajeInfo : viajes) {
+//            LocalDate fechaViajeActual = LocalDate.parse(viajeInfo[0]);
+//            String comSalidaActual = viajeInfo[6];
+//            String comLlegadaActual = viajeInfo[7];
+//            int asientosDisponibles = Integer.parseInt(viajeInfo[4]);
+//
+//            if (fechaViajeActual.equals(fechaViaje) &&
+//                    comSalidaActual.equals(comSalida) &&
+//                    comLlegadaActual.equals(comLlegada) &&
+//                asientosDisponibles <= nroPasajes) {
+//                existeViajeDisponible = true;
+//                break;
+//            }
+//        }
+//
+//        if (!existeViajeDisponible) {
+//            throw new SistemaVentaPasajesException("No existen viajes disponibles en la fecha y con terminales en las comunas de salida y llegada indicados o no hay suficientes asientos disponibles");
+//        }
+//
+//        Venta nuevaVenta = new Venta(idDoc, tipo, LocalDate.now(), clienteOptional.get());
+//        ventas.add(nuevaVenta);
+//    }
+    public void iniciaVenta(String idDoc, TipoDocumento tipo, LocalDate fechaViaje, String comSalida, String comLlegada, IdPersona idCliente, int nroPasajes) throws SistemaVentaPasajesException {
+        if (findVenta(idDoc, tipo).isPresent())
+            throw new SistemaVentaPasajesException("*** Error: Ya existe una venta con el id indicado ***");
+        if (findCliente(idCliente).isEmpty())
+            throw new SistemaVentaPasajesException("*** Error: No exste un cliente con el id indicado ***");
 
-        Optional<Venta> ventaExistente = findVenta(idDoc, tipo);
-        if (ventaExistente.isPresent()) {
-            throw new SistemaVentaPasajesException("Ya existe una venta con el mismo idDocumento y tipo.");
+        List<Viaje> viajesVenta = new ArrayList<>();
+        if (ControladorEmpresas.getInstance().findTerminalPorComuna(comSalida).isEmpty()) throw new SistemaVentaPasajesException("*** Error: No se encontro el terminal de salida ***");
+        if (ControladorEmpresas.getInstance().findTerminalPorComuna(comLlegada).isEmpty()) throw new SistemaVentaPasajesException("*** Error: No se encontro el terminal de llegada ***");
+        if (nroPasajes<=0) throw new SistemaVentaPasajesException("*** Error: La cantidad de pasajes a vender no puede ser '0' ***");
+        for (Viaje viaje : viajes) {
+            if (viaje.getFecha().equals(fechaViaje) && viaje.getTerminalSalida().equals(ControladorEmpresas.getInstance().findTerminalPorComuna(comSalida).get()) && viaje.existeDisponibilidad(nroPasajes) && viaje.getTerminalLlegada().equals(ControladorEmpresas.getInstance().findTerminalPorComuna(comLlegada).get()))
+                viajesVenta.add(viaje);
         }
+        if (viajesVenta.isEmpty())
+            throw new SistemaVentaPasajesException("*** Error: No existen viajes disponibles en la fecha y con terminales en las comunas de salida y llegada indicados ***");
 
-        Optional<Cliente> clienteOptional = findCliente(idCliente);
-        if (clienteOptional.isEmpty()) {
-            throw new SistemaVentaPasajesException("No existe un cliente con el id proporcionado.");
-        }
-
-        String[][] viajes = listViajes();
-        boolean existeViajeDisponible = false;
-
-
-        for (String[] viajeInfo : viajes) {
-            LocalDate fechaViajeActual = LocalDate.parse(viajeInfo[0]);
-            String comSalidaActual = viajeInfo[6];
-            String comLlegadaActual = viajeInfo[7];
-            int asientosDisponibles = Integer.parseInt(viajeInfo[4]);
-
-            if (fechaViajeActual.equals(fechaViaje) &&
-                    comSalidaActual.equals(comSalida) &&
-                    comLlegadaActual.equals(comLlegada) &&
-                asientosDisponibles <= nroPasajes) {
-                existeViajeDisponible = true;
-                break;
-            }
-        }
-
-        if (!existeViajeDisponible) {
-            throw new SistemaVentaPasajesException("No existen viajes disponibles en la fecha y con terminales en las comunas de salida y llegada indicados o no hay suficientes asientos disponibles");
-        }
-
-        Venta nuevaVenta = new Venta(idDoc, tipo, LocalDate.now(), clienteOptional.get());
-        ventas.add(nuevaVenta);
+        ventas.add(new Venta(idDoc, tipo, fechaViaje, findCliente(idCliente).get()));
     }
        //metodo getHorariosDisponibles: Rodolfo Salas
     public String[][] getHorariosDisponibles(LocalDate fechaViaje){

@@ -411,8 +411,8 @@ public class UISVP {
                 }
                 System.out.print("Seleccione viaje [1.."+listHorariosDisponibles.length+"] : ");
                 int nroViaje = sc.nextInt();
-                String patenteViaje = listHorariosDisponibles[nroViaje-1][0];
-                String horaViaje = listHorariosDisponibles[nroViaje-1][1];
+                String patenteViaje = listHorariosDisponibles[nroViaje-1][1];
+                String horaViaje = listHorariosDisponibles[nroViaje-1][2];
                 LocalTime horaFormato = LocalTime.parse(horaViaje);
                 String[] listAsientosDeViaje = SistemaVentaPasajes.getInstance().listAsientosDeViaje(fecha,horaFormato,patenteViaje);
                 if (listAsientosDeViaje.length>0){
@@ -498,9 +498,7 @@ public class UISVP {
 
                                 int asientoSeleccionado = Integer.parseInt(asientosArr[i]);
                                 SistemaVentaPasajes.getInstance().vendePasaje(idDocumento,tipoDocumento,fecha,horaFormato,patenteViaje,asientoSeleccionado,idPasajero);
-                            }else {
-
-                            }
+                            }//else para cuando se encuentra el Idpasajero
                         }
 
                         pagaVentaPasajes(idDocumento,tipoDocumento);
