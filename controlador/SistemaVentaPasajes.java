@@ -253,7 +253,7 @@ public void pagaVenta(String idDocumento, TipoDocumento tipo, long nroTarjeta) {
         return listaViajes;
     }
     //Metodo listPasajeros: Diego Muñoz
-    public String[][] listPasajeros(LocalDate fecha, LocalTime hora, String patBus){
+    public String[][] listPasajerosViaje(LocalDate fecha, LocalTime hora, String patBus){
 
         Optional<Bus> bus = ControladorEmpresas.getInstance().findBus(patBus);
         if (bus.isPresent()){

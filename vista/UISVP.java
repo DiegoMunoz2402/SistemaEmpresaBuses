@@ -359,7 +359,7 @@ public class UISVP {
         System.out.println();
         String[][]listaPasajeros;
         try {
-            listaPasajeros = SistemaVentaPasajes.getInstance().listPasajeros(fecha,hora,patenteBus);
+            listaPasajeros = SistemaVentaPasajes.getInstance().listPasajerosViaje(fecha,hora,patenteBus);
             if (listaPasajeros.length>0){
                 System.out.println("*-----------*---------------------*------------------------------------*-------------------------------*--------------------*");
                 System.out.printf("|%10s |%20s |%-35s |%-30s |%-20s|%n", "Asiento", "Rut/Pass", "Pasajero", "Contacto", "Telefono contacto");
