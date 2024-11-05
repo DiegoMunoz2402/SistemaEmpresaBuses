@@ -347,9 +347,48 @@ public class UISVP {
     private void vendePasaje(){
 
     }
+    //Metodo pagaVentaPasajes: Javiera Duarte
+    private void pagaVentaPasajes(String idDoc, TipoDocumento tipo) {
+        try {
+            Optional<Integer> montoOptional = SistemaVentaPasajes.getInstance().getMontoVenta(idDoc, tipo);
+            if (montoOptional.isEmpty()) {
+                System.out.println("No se encontró una venta con el ID de documento y tipo especificados.");
+                return;
+            }
+            int monto = montoOptional.get();
 
-    private void pagaVentaPasajes(String idDoc, TipoDocumento tipo){
+            System.out.println("El monto a pagar es: $" + monto);
+            System.out.println("Seleccione el método de pago:");
+            System.out.println("1. Efectivo");
+            System.out.println("2. Tarjeta");
+            System.out.println("Ingrese su opción: ");
+            int opcion = sc.nextInt();
 
+            switch (opcion) {
+                case 1:
+                    // Pago efectivo
+                    SistemaVentaPasajes.getInstance().pagaVenta(idDoc, tipo);
+                    System.out.println("Pago en efectivo realizado con éxito.");
+                    break;
+                case 2:
+                    // Pago tarjeta
+                    System.out.println("Ingrese el numero de tarjeta");
+                    String nroTarjeta = sc.next();
+                    SistemaVentaPasajes.getInstance().pagaVenta(idDoc, tipo, Long.parseLong(nroTarjeta));
+                    System.out.println("Pago con tarjeta realizado con éxito.");
+                    break;
+                default:
+                    System.out.println("Opción no válida. Pago cancelado.");
+                    return;
+            }
+            Optional<Integer> montoPagadoOptional =  SistemaVentaPasajes.getInstance().getMontoVenta(idDoc, tipo);
+            if (montoPagadoOptional.isPresent()) {
+                System.out.println("Monto pagado: $" + montoPagadoOptional.get());
+            }
+
+        } catch (Exception e) {
+            System.out.println("Error al procesar el pago: " + e.getMessage());
+        }
     }
     //ListarVentas = Diego Muñoz
     private void listarVentas(){
