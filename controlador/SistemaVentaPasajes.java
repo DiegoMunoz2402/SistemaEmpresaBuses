@@ -190,6 +190,38 @@ public class SistemaVentaPasajes  {
           }
       }
 
+    public void pagaVenta(String idDocumento, TipoDocumento tipo) {
+    Optional<Venta> ventaOptional = findVenta(idDocumento, tipo);
+
+    if (ventaOptional.isEmpty()) {
+        throw new SistemaVentaPasajesException("No existe venta con el id y tipo de documento indicados");
+    }
+
+    Venta venta = ventaOptional.get();
+
+    boolean pagado = venta.pagaMonto();
+
+    if (!pagado) {
+        throw new SistemaVentaPasajesException("El pago no se efectuó (porque el pago ya se hizo)");
+    }
+}
+
+public void pagaVenta(String idDocumento, TipoDocumento tipo, long nroTarjeta) {
+    Optional<Venta> ventaOptional = findVenta(idDocumento, tipo);
+
+    if (ventaOptional.isEmpty()) {
+        throw new SistemaVentaPasajesException("No existe venta con el id y tipo de documento indicados");
+    }
+
+    Venta venta = ventaOptional.get();
+
+    boolean pagado = venta.pagaMonto(nroTarjeta);
+
+    if (!pagado) {
+        throw new SistemaVentaPasajesException("El pago no se efectuó (porque el pago ya se hizo)");
+    }
+}
+
      public String[][] listVentas(){
         String[][] listaVentas = new String[ventas.size()][6];
         for(int i = 0; i < ventas.size(); i++) {
