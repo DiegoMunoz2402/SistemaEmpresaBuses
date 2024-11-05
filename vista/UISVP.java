@@ -283,9 +283,9 @@ public class UISVP {
             }
             ids[2] = idConductortwo;
         }
-        System.out.println("Nombre comuna salida : ");
+        System.out.print("Nombre comuna salida : ");
         String salida = sc.next();
-        System.out.println("Nombre comuna llegada");
+        System.out.print("Nombre comuna llegada: ");
         String llegada = sc.next();
         String[] comunas = {salida,llegada};
         try {
