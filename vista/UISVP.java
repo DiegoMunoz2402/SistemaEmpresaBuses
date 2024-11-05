@@ -248,7 +248,22 @@ public class UISVP {
     }
 
     private void listarVentas(){
-
+        String[][] datos = SistemaVentaPasajes.getInstance().listVentas();
+        if (datos.length>0){
+            System.out.println("*--------------*----------------*----------------*----------------*-------------------------------*-------------*------------*");
+            System.out.printf("|%-13s |%-15s |%-15s |%-15s |%-30s |%-8s |%-10s |%n","ID DOCUMENTO","TIPO DOCUMENTO","FECHA","RUT/PASAPORTE","CLIENTE","CANT BOLETOS","TOTAL VENTA");
+            System.out.println("|--------------+----------------+----------------+----------------+-------------------------------+-------------+------------|");
+            for (int i = 0; i < datos.length-1; i++) {
+                System.out.printf("|%-13s |%-15s |%-15s |%-15s |%-30s |%-8s |%-10s |%n",datos[i][0],datos[i][1],datos[i][2],datos[i][3],datos[i][4],datos[i][5],datos[i][6]);
+                System.out.println("|--------------+----------------+----------------+----------------+-------------------------------+-------------+------------|");
+            }
+            for (int i = datos.length-1; i < datos.length; i++) {
+                System.out.printf("|%-13s |%-15s |%-15s |%-15s |%-30s |%-8s     |%-10s  |%n",datos[i][0],datos[i][1],datos[i][2],datos[i][3],datos[i][4],datos[i][5],datos[i][6]);
+                System.out.println("*--------------*----------------*----------------*----------------*-------------------------------*-------------*------------*");
+            }
+        }else {
+            System.out.println("No existen ventas...");
+        }
     }
     //listarViajes = Diego Muñoz
     private void listarViajes(){
