@@ -92,19 +92,43 @@ public class SistemaVentaPasajes  {
         }
     }
 
-    public boolean iniciaVenta(String idDoc, TipoDocumento tipo, LocalDate fechaVenta, IdPersona idCliente) {
+   //Metodo iniciaVenta: Javiera Duarte
+    public void iniciaVenta(String idDoc, TipoDocumento tipo, LocalDate fechaViaje, String comSalida, String comLlegada, IdPersona idCliente, int nroPasajes) {
 
-        Venta venta = findVenta(idDoc, tipo);
-        if (venta != null){
-            return false;	}
+        Optional<Venta> ventaExistente = findVenta(idDoc, tipo);
+        if (ventaExistente.isPresent()) {
+            throw new SistemaVentaPasajesException("Ya existe una venta con el mismo idDocumento y tipo.");
+        }
 
-        Cliente cliente = findCliente(idCliente);
-        if (cliente == null) {
-            return false;	}
+        Optional<Cliente> clienteOptional = findCliente(idCliente);
+        if (clienteOptional.isEmpty()) {
+            throw new SistemaVentaPasajesException("No existe un cliente con el id proporcionado.");
+        }
 
-        Venta newVenta = new Venta(idDoc, tipo, fechaVenta, cliente);
-        ventas.add(newVenta);
-        return true;
+        String[][] viajes = listViajes();
+        boolean existeViajeDisponible = false;
+
+        for (String[] viajeInfo : viajes) {
+            LocalDate fechaViajeActual = LocalDate.parse(viajeInfo[0]);
+            String comSalidaActual = viajeInfo[5];
+            String comLlegadaActual = viajeInfo[6];
+            int asientosDisponibles = Integer.parseInt(viajeInfo[4]);
+
+            if (fechaViajeActual.equals(fechaViaje) &&
+                    comSalidaActual.equals(comSalida) &&
+                    comLlegadaActual.equals(comLlegada) &&
+                asientosDisponibles >= nroPasajes) {
+                existeViajeDisponible = true;
+                break;
+            }
+        }
+
+        if (!existeViajeDisponible) {
+            throw new SistemaVentaPasajesException("No existen viajes disponibles en la fecha y con terminales en las comunas de salida y llegada indicados o no hay suficientes asientos disponibles.\");");
+        }
+
+        Venta nuevaVenta = new Venta(idDoc, tipo, LocalDate.now(), clienteOptional.get());
+        ventas.add(nuevaVenta);
     }
        //metodo getHorariosDisponibles: Rodolfo Salas
     public String[][] getHorariosDisponibles(LocalDate fechaViaje){
