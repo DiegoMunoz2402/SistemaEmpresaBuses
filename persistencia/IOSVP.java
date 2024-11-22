@@ -24,6 +24,7 @@ public class IOSVP {
     private IOSVP(){
     }
 
+    //Metodo readDatosIniciales: Diego Muñoz
     public Object[] readDatosIniciales()throws SistemaVentaPasajesException {
         try {
             Scanner archivo = new Scanner(new File("SVPDatosIniciales.txt"));
