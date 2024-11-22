@@ -296,6 +296,13 @@ public class SistemaVentaPasajes implements Serializable {
         return new String[0][0];
     }
 
+    public void readDatosSistema()throws SistemaVentaPasajesException{
+        Object[] datos = IOSVP.getInstance().readControladores();
+        ControladorEmpresas controladorEmpresas = (ControladorEmpresas) datos[1];
+        instance = (SistemaVentaPasajes) datos[0];
+        ControladorEmpresas.getInstance().setInstanciaPersistente(controladorEmpresas);
+    }
+
     public void saveDatosSistema()throws SistemaVentaPasajesException{
         Object[] datos = {this,ControladorEmpresas.getInstance()};
 //        List<Object> datos = new ArrayList<>();
@@ -308,6 +315,9 @@ public class SistemaVentaPasajes implements Serializable {
     public void readDatosIniciales()throws SistemaVentaPasajesException{
         Object[] datos = IOSVP.getInstance().readDatosIniciales();
         if (datos.length>0){
+            clientes.clear();
+            pasajeros.clear();
+            viajes.clear();
             for (Object object:datos){
                 switch (object.getClass().getSimpleName()){
                     case "Cliente" -> clientes.add((Cliente) object);

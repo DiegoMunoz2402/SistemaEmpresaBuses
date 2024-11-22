@@ -52,6 +52,8 @@ public class UISVP {
             System.out.println("  14) Generar pasajes venta");
             System.out.println("  15) Leer datos iniciales");
             System.out.println("  16) Guardar datos del sistema");
+            System.out.println("  17) Leer datos del sistema");
+            System.out.println("  18) Salir");
             System.out.println("----------------------");
             System.out.println();
             System.out.print("..:: Ingrese número de opcion: ");
@@ -73,6 +75,8 @@ public class UISVP {
                 case 14 -> System.out.println();
                 case 15 -> readDatosIniciales();
                 case 16 -> saveDatosSistema();
+                case 17 -> readDatosSistema();
+                case 18 -> System.out.println("Saliendo...");
                 default -> System.out.println("Opcion invalida");
             }
         } while (op!=18);
@@ -730,6 +734,15 @@ public class UISVP {
         try {
             SistemaVentaPasajes.getInstance().saveDatosSistema();
             System.out.println("\nDatos guardados exitosamente");
+        } catch (SistemaVentaPasajesException e) {
+            System.out.println("\n"+e.getMessage());
+        }
+    }
+
+    private void readDatosSistema(){
+        try {
+            SistemaVentaPasajes.getInstance().readDatosSistema();
+            System.out.println("\nDatos del sistema leidos exitosamente");
         } catch (SistemaVentaPasajesException e) {
             System.out.println("\n"+e.getMessage());
         }

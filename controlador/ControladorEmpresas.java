@@ -204,6 +204,10 @@ public class ControladorEmpresas implements Serializable {
 
     }
 
+    protected void setInstanciaPersistente(ControladorEmpresas instanciaPersistente){
+        instance = instanciaPersistente;
+    }
+
     protected void setDatosIniciales(Object[] objetos){
         for (Object object : objetos) {
             switch (object.getClass().getSimpleName()) {
