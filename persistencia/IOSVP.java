@@ -1,11 +1,12 @@
 package persistencia;
 
+import controlador.ControladorEmpresas;
+import controlador.SistemaVentaPasajes;
 import excepciones.SistemaVentaPasajesException;
 import modelo.*;
 import utilidades.*;
 
-import java.io.File;
-import java.io.FileNotFoundException;
+import java.io.*;
 import java.time.LocalDate;
 import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
@@ -189,6 +190,44 @@ public class IOSVP {
         }
     }
 
+    //Debo hacer una validacion para guardar, si es ControladorEmpresas o SVP??? o los guardo directamente
+    public void saveControladores(Object[] controladores)throws SistemaVentaPasajesException{
+        try {
+            ObjectOutputStream archivo = new ObjectOutputStream(new FileOutputStream("SVPObjetos.obj"));
+            for (Object object:controladores){
+                archivo.writeObject(object);
+            }
+            archivo.close();
+        }catch (FileNotFoundException e) {
+            throw new SistemaVentaPasajesException("No se puede abrir o crear el archivo SVPObjetos.obj");
+        }catch (IOException e) {
+            throw new SistemaVentaPasajesException("No se puede grabar en el archivo SVPObjetos.obj");
+        }
+    }
+
+    //Duda con la implementacion
+    public Object[] readControladores()throws SistemaVentaPasajesException{
+        ObjectInputStream archivo = null;
+        List<Object> datos = new ArrayList<>();
+        try {
+            archivo = new ObjectInputStream(new FileInputStream("SVPObjetos.obj"));
+            while (true){
+                datos.add(archivo.readObject());
+            }
+        }catch (EOFException e){
+            assert archivo!=null;
+            try {
+                archivo.close();
+            } catch (IOException ex) {
+                throw new SistemaVentaPasajesException("No se puede cerrar el archivo SVPObjetos.obj");
+            }
+            return datos.toArray(new Object[0]);
+        }catch (FileNotFoundException e){
+            throw new SistemaVentaPasajesException("No existe o no se puede abrir el archivo SVPObjetos.obj");
+        }catch (ClassNotFoundException | IOException e){
+            throw new SistemaVentaPasajesException("No se puede leer el archivo SVPObjetos.obj");
+        }
+    }
 
     private Optional<Empresa> findEmpresa(List<Empresa> empresa, Rut rut){
         return empresa.stream().filter(empresa1 -> empresa1.getRut().equals(rut)).findFirst();

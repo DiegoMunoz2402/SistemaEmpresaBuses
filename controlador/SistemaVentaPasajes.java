@@ -6,6 +6,7 @@ import persistencia.IOSVP;
 import utilidades.IdPersona;
 import utilidades.Nombre;
 
+import java.io.Serializable;
 import java.time.LocalDate;
 import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
@@ -13,7 +14,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
-public class SistemaVentaPasajes  {
+public class SistemaVentaPasajes implements Serializable {
 
     private ArrayList<Cliente> clientes = new ArrayList<>();
     private ArrayList<Pasajero> pasajeros = new ArrayList<>();
@@ -293,6 +294,13 @@ public class SistemaVentaPasajes  {
             throw new SistemaVentaPasajesException("No existe viaje con la fecha, hora y patente de bus indicados");
         }
         return new String[0][0];
+    }
+
+    public void saveDatosSistema()throws SistemaVentaPasajesException{
+        List<Object> datos = new ArrayList<>();
+        datos.add(this);
+        datos.add(ControladorEmpresas.getInstance());
+        IOSVP.getInstance().saveControladores(datos.toArray());
     }
 
     public void readDatosIniciales()throws SistemaVentaPasajesException{

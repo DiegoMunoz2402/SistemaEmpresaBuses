@@ -33,7 +33,7 @@ public class UISVP {
     public void menu() {
         int op;
         do {
-            System.out.println("======================");
+            System.out.println("\n======================");
             System.out.println("...::: Menú principal :::..");
             System.out.println();
             System.out.println("  1) Crear empresa");
@@ -49,8 +49,9 @@ public class UISVP {
             System.out.println("  11) Listar empresas");
             System.out.println("  12) Listar llegadas/salidas de terminal");
             System.out.println("  13) Listar ventas de empresa");
-            System.out.println("  14) Salir");
+            System.out.println("  14) Generar pasajes venta");
             System.out.println("  15) Leer datos iniciales");
+            System.out.println("  16) Guardar datos del sistema");
             System.out.println("----------------------");
             System.out.println();
             System.out.print("..:: Ingrese número de opcion: ");
@@ -69,11 +70,12 @@ public class UISVP {
                 case 11 -> listarEmpresas();
                 case 12 -> listarLlegadasSalidas();
                 case 13 -> listarVentasDeEmpresa();
-                case 14 -> System.out.println("Saliendo...");
+                case 14 -> System.out.println();
                 case 15 -> readDatosIniciales();
+                case 16 -> saveDatosSistema();
                 default -> System.out.println("Opcion invalida");
             }
-        } while (op!=14);
+        } while (op!=18);
     }
     //crearEmpresa = Diego Muñoz
     private void crearEmpresa(){
@@ -719,6 +721,15 @@ public class UISVP {
         try {
             SistemaVentaPasajes.getInstance().readDatosIniciales();
             System.out.println("\nDatos iniciales leidos exitosamente");
+        } catch (SistemaVentaPasajesException e) {
+            System.out.println("\n"+e.getMessage());
+        }
+    }
+
+    private void saveDatosSistema(){
+        try {
+            SistemaVentaPasajes.getInstance().saveDatosSistema();
+            System.out.println("\nDatos guardados exitosamente");
         } catch (SistemaVentaPasajesException e) {
             System.out.println("\n"+e.getMessage());
         }

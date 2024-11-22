@@ -7,6 +7,7 @@ import utilidades.IdPersona;
 import utilidades.Nombre;
 import utilidades.Rut;
 
+import java.io.Serializable;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
@@ -15,7 +16,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
-public class ControladorEmpresas {
+public class ControladorEmpresas implements Serializable {
     private static ControladorEmpresas instance;
 
     private ArrayList<Terminal> terminales;
