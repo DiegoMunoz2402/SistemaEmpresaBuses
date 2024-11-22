@@ -2,6 +2,7 @@ package controlador;
 
 import excepciones.SistemaVentaPasajesException;
 import modelo.*;
+import persistencia.IOSVP;
 import utilidades.IdPersona;
 import utilidades.Nombre;
 
@@ -293,6 +294,21 @@ public class SistemaVentaPasajes  {
         }
         return new String[0][0];
     }
+
+    public void readDatosIniciales()throws SistemaVentaPasajesException{
+        Object[] datos = IOSVP.getInstance().readDatosIniciales();
+        if (datos.length>0){
+            for (Object object:datos){
+                switch (object.getClass().getSimpleName()){
+                    case "Cliente" -> clientes.add((Cliente) object);
+                    case "Pasajero" -> pasajeros.add((Pasajero) object);
+                    case "Viaje" -> viajes.add((Viaje) object);
+                }
+            }
+            ControladorEmpresas.getInstance().setDatosIniciales(datos);
+        }
+    }
+
        //metodo findCliente: Rodolfo Salas
    private Optional<Cliente> findCliente(IdPersona id){
         for (Cliente cliente:clientes){

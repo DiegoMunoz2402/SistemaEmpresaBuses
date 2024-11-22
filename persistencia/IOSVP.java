@@ -80,6 +80,9 @@ public class IOSVP {
                 String nombreEmpresa = archivo.next();
                 String url = archivo.next();
                 Rut rutFormat = Rut.of(rut);
+//                if (rutFormat == null) {
+//                    throw new SistemaVentaPasajesException("El RUT de la empresa no es válido: " + rut);
+//                }
                 Empresa empresa = new Empresa(rutFormat,nombreEmpresa);
                 empresa.setUrl(url);
                 empresas.add(empresa);

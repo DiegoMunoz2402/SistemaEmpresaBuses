@@ -202,7 +202,17 @@ public class ControladorEmpresas {
         return listVentasTerminal;
 
     }
-    
+
+    protected void setDatosIniciales(Object[] objetos){
+        for (Object object : objetos) {
+            switch (object.getClass().getSimpleName()) {
+                case "Terminale" -> terminales.add((Terminal) object);
+                case "Bus" -> buses.add((Bus) object);
+                case "Empresa" -> empresas.add((Empresa) object);
+            }
+        }
+    }
+
     //Metodo findempresa: Diego Muñoz
     protected Optional<Empresa> findEmpresa(Rut rut){
         for (Empresa empresa:empresas){
