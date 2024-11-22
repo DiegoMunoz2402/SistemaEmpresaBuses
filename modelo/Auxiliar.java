@@ -5,6 +5,7 @@ import utilidades.Direccion;
 import utilidades.IdPersona;
 import utilidades.Nombre;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 
 public class Auxiliar extends Tripulante{

@@ -1,10 +1,11 @@
 //Class rut : Javiera Duarte
 package utilidades;
 
+import java.io.Serializable;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-public class Rut implements IdPersona {
+public class Rut implements IdPersona, Serializable {
 
     private final int numero;
     private final char dv;

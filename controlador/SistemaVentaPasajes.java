@@ -297,10 +297,12 @@ public class SistemaVentaPasajes implements Serializable {
     }
 
     public void saveDatosSistema()throws SistemaVentaPasajesException{
-        List<Object> datos = new ArrayList<>();
-        datos.add(this);
-        datos.add(ControladorEmpresas.getInstance());
-        IOSVP.getInstance().saveControladores(datos.toArray());
+        Object[] datos = {this,ControladorEmpresas.getInstance()};
+//        List<Object> datos = new ArrayList<>();
+//        datos.add(this);
+//        datos.add(ControladorEmpresas.getInstance());
+        IOSVP.getInstance().saveControladores(datos);
+        System.out.println("datos guardados exitosamente");
     }
 
     public void readDatosIniciales()throws SistemaVentaPasajesException{

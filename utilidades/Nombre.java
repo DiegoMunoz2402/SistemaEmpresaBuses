@@ -2,7 +2,9 @@
 
 package utilidades;
 
-public class Nombre {
+import java.io.Serializable;
+
+public class Nombre implements Serializable {
     private String nombres;
     private Tratamiento tratamiento;
     private String apellidoPaterno;

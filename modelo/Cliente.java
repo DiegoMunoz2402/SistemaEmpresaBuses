@@ -2,9 +2,10 @@ package modelo;//Clase Completa modelo.Cliente, Autor: Rodolfo Salas
  import utilidades.IdPersona;
  import utilidades.Nombre;
 
+ import java.io.Serializable;
  import java.util.List;
  import java.util.ArrayList;
- public class Cliente extends Persona {
+ public class Cliente extends Persona{
     //Atributos
     private String email;
     private List<Venta> ventas;

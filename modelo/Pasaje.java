@@ -1,9 +1,10 @@
 //Class pasaje : Diego Muñoz
 package modelo;
 
+import java.io.Serializable;
 import java.security.SecureRandom;
 
-public class Pasaje {
+public class Pasaje  implements Serializable {
     private long numero;
     private int asiento;
 

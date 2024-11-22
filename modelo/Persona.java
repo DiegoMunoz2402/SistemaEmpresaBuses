@@ -3,8 +3,10 @@ package modelo;
 import utilidades.IdPersona;
 import utilidades.Nombre;
 
+import java.io.Serializable;
+
 //Clase Completo modelo.Persona, Autor: Rodolfo Salas
-public abstract class Persona {
+public abstract class Persona implements Serializable {
     //Atributos
 
     private IdPersona Idpersona;  //interfaz utilidades.IdPersona

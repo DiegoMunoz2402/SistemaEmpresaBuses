@@ -1,9 +1,10 @@
 //Class bus : Diego Muñoz
 package modelo;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 
-public class Bus {
+public class Bus implements Serializable {
 
     //Atributos
     private String patente;
