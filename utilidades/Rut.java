@@ -25,8 +25,10 @@ public class Rut implements IdPersona {
     }
 
     public static Rut of(String rutConDv) {
+        String rutLimpio = rutConDv.replace(".", "");
+
         Pattern pattern = Pattern.compile("(\\d{1,8})-([\\dKk])");
-        Matcher matcher = pattern.matcher(rutConDv);
+        Matcher matcher = pattern.matcher(rutLimpio);
 
         if (matcher.matches()) {
             String numString = matcher.group(1);
@@ -34,13 +36,14 @@ public class Rut implements IdPersona {
 
             int num = Integer.parseInt(numString);
 
-            if (isDvValid(rutConDv)) {
+            if (isDvValid(rutLimpio)) {
                 return new Rut(num, dv);
             }
         }
 
-        return null;  // Si el formato o validación fallan
+        return null; // Si el formato o validación fallan
     }
+
 
     private static boolean isDvValid(String rut) {
 
