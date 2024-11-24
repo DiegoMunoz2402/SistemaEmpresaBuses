@@ -300,7 +300,8 @@ public class SistemaVentaPasajes implements Serializable {
         Optional<Venta> venta = findVenta(idDocumento,tipoDocumento);
             if (venta.isPresent()){
                 Pasaje[] pasajes = venta.get().getPasajes();
-                IOSVP.getInstance().savePasajesDeVenta(pasajes,);
+                String nombreArchivo = idDocumento + tipoDocumento.toString().toLowerCase()+".txt";
+                IOSVP.getInstance().savePasajesDeVenta(pasajes,nombreArchivo);
             }else {
                 throw new SistemaVentaPasajesException("No existe una venta con el id o tipo documento ingresado");
             }
