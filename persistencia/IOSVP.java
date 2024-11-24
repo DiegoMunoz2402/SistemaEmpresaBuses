@@ -229,6 +229,18 @@ public class IOSVP {
         }
     }
 
+    public void savePasajesDeVenta(Pasaje[] pasajes,String nombreArchivo)throws SistemaVentaPasajesException{
+        try {
+            PrintStream boletas = new PrintStream(new File(nombreArchivo));
+            for (int i = 0; i < pasajes.length; i++) {
+                boletas.println(pasajes[i].toString() + "\n");
+            }
+            boletas.close();
+        } catch (FileNotFoundException e) {
+            throw new SistemaVentaPasajesException("Error, no se puede abrir o crear el archivo "+nombreArchivo);
+        }
+    }
+
     private Optional<Empresa> findEmpresa(List<Empresa> empresa, Rut rut){
         return empresa.stream().filter(empresa1 -> empresa1.getRut().equals(rut)).findFirst();
     }

@@ -296,6 +296,16 @@ public class SistemaVentaPasajes implements Serializable {
         return new String[0][0];
     }
 
+    public void generatePasajesDeVenta(String idDocumento, TipoDocumento tipoDocumento)throws SistemaVentaPasajesException{
+        Optional<Venta> venta = findVenta(idDocumento,tipoDocumento);
+            if (venta.isPresent()){
+                Pasaje[] pasajes = venta.get().getPasajes();
+                IOSVP.getInstance().savePasajesDeVenta(pasajes,);
+            }else {
+                throw new SistemaVentaPasajesException("No existe una venta con el id o tipo documento ingresado");
+            }
+    }
+
     public void readDatosSistema()throws SistemaVentaPasajesException{
         Object[] datos = IOSVP.getInstance().readControladores();
         ControladorEmpresas controladorEmpresas = (ControladorEmpresas) datos[1];
