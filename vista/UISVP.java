@@ -72,7 +72,7 @@ public class UISVP {
                 case 11 -> listarEmpresas();
                 case 12 -> listarLlegadasSalidas();
                 case 13 -> listarVentasDeEmpresa();
-                case 14 -> System.out.println();
+                case 14 -> generarPasajesVenta();
                 case 15 -> readDatosIniciales();
                 case 16 -> saveDatosSistema();
                 case 17 -> readDatosSistema();
@@ -719,6 +719,20 @@ public class UISVP {
         }catch (SistemaVentaPasajesException e){
             System.out.println("\n" + e.getMessage());
         }
+    }
+
+    private void generarPasajesVenta(){
+        System.out.println("...:::: Pasajes de una ::::..");
+        System.out.printf("%21s","Ingrese id Documento: ");
+        String id = sc.next();
+        System.out.printf("%21s","Ingrese tipo documento: ");
+        TipoDocumento tipoDoc = TipoDocumento.valueOf(sc.next().toUpperCase());
+        try {
+            SistemaVentaPasajes.getInstance().generatePasajesDeVenta(id,tipoDoc);
+        } catch (SistemaVentaPasajesException e) {
+            System.out.println("\n" + e.getMessage());
+        }
+
     }
 
     private void readDatosIniciales(){
