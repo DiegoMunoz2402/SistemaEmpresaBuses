@@ -224,7 +224,7 @@ public class IOSVP {
             return datos.toArray(new Object[0]);
         }catch (FileNotFoundException e){
             throw new SistemaVentaPasajesException("No existe o no se puede abrir el archivo SVPObjetos.obj");
-        }catch (ClassNotFoundException | IOException e){
+        }catch (ClassNotFoundException|IOException e){
             throw new SistemaVentaPasajesException("No se puede leer el archivo SVPObjetos.obj");
         }
     }
