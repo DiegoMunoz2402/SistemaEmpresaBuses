@@ -52,7 +52,7 @@ public class IOSVP {
                     String apPaternoContacto = archivo.next();
                     String apMaternoContacto = archivo.next();
                     String telefonoContacto = archivo.next();
-                    Nombre nombreContacto = new Nombre(nombres,apPaternoContacto,apMaternoContacto,tratamientoContacto);
+                    Nombre nombreContacto = new Nombre(nombresContacto,apPaternoContacto,apMaternoContacto,tratamientoContacto);
                     Pasajero pasajero = new Pasajero(rut,nombre,nombreContacto,telefono);
                     pasajero.setFonoContacto(telefonoContacto);
                     pasajerosYClientes.add(pasajero);
@@ -66,7 +66,7 @@ public class IOSVP {
                     String apPaternoContacto = archivo.next();
                     String apMaternoContacto = archivo.next();
                     String telefonoContacto = archivo.next();
-                    Nombre nombreContacto = new Nombre(nombres,apPaternoContacto,apMaternoContacto,tratamientoContacto);
+                    Nombre nombreContacto = new Nombre(nombresContacto,apPaternoContacto,apMaternoContacto,tratamientoContacto);
                     Pasajero pasajero = new Pasajero(rut,nombre,nombreContacto,telefono);
                     pasajero.setFonoContacto(telefonoContacto);
                     pasajerosYClientes.add(pasajero);
