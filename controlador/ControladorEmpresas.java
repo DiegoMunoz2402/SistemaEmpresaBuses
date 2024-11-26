@@ -104,18 +104,29 @@ public class ControladorEmpresas implements Serializable {
              return new String[0][0];
          }
 
-         String[][] listEmpresas= new String[empresas.size()][6];
+        return empresas.stream()
+                .map(empresa -> new String[]{
+                        String.valueOf(empresa.getRut()),
+                        String.valueOf(empresa.getNombre()),
+                        empresa.getUrl(),
+                        String.valueOf(empresa.getTripulantes().length),
+                        String.valueOf(empresa.getBuses().length),
+                        String.valueOf(empresa.getVentas().length)
+                })
+                .toArray(String[][]::new);
 
-         for (int i = 0; i < listEmpresas.length; i++){
-             Empresa empresa = empresas.get(i);
-             listEmpresas[i][0] = String.valueOf(empresa.getRut());
-             listEmpresas[i][1] = String.valueOf(empresa.getNombre());
-             listEmpresas[i][2] = empresa.getUrl();
-             listEmpresas[i][3] = String.valueOf(empresa.getTripulantes().length);
-             listEmpresas[i][4] = String.valueOf(empresa.getBuses().length);
-             listEmpresas[i][5] = String.valueOf(empresa.getVentas().length);
-         }
-         return listEmpresas;
+//         String[][] listEmpresas= new String[empresas.size()][6];
+//
+//         for (int i = 0; i < listEmpresas.length; i++){
+//             Empresa empresa = empresas.get(i);
+//             listEmpresas[i][0] = String.valueOf(empresa.getRut());
+//             listEmpresas[i][1] = String.valueOf(empresa.getNombre());
+//             listEmpresas[i][2] = empresa.getUrl();
+//             listEmpresas[i][3] = String.valueOf(empresa.getTripulantes().length);
+//             listEmpresas[i][4] = String.valueOf(empresa.getBuses().length);
+//             listEmpresas[i][5] = String.valueOf(empresa.getVentas().length);
+//         }
+//         return listEmpresas;
 
     }
 
