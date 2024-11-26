@@ -201,18 +201,25 @@ public class ControladorEmpresas implements Serializable {
             return new String[0][0];
         }
 
-        String[][] listVentasTerminal = new String[ventas.size()][4];
+        //String[][] listVentasTerminal = new String[ventas.size()][4];
 
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy");
 
-        for (int i = 0; i < ventas.size(); i++) {
-            Venta venta = ventas.get(i);
-            listVentasTerminal[i][0] = venta.getFecha().format(formatter);
-            listVentasTerminal[i][1] = venta.getTipo().toString().toLowerCase();
-            listVentasTerminal[i][2] = String.valueOf(venta.getMonto());
-            listVentasTerminal[i][3] = venta.getTipoPago();
-        }
-        return listVentasTerminal;
+        return ventas.stream()
+                .map(venta -> new String[]{
+                        venta.getFecha().format(formatter),
+                        venta.getTipo().toString().toLowerCase(),
+                        String.valueOf(venta.getMonto()),
+                        venta.getTipoPago()
+        }).toArray(String[][]::new);
+//        for (int i = 0; i < ventas.size(); i++) {
+//            Venta venta = ventas.get(i);
+//            listVentasTerminal[i][0] = venta.getFecha().format(formatter);
+//            listVentasTerminal[i][1] = venta.getTipo().toString().toLowerCase();
+//            listVentasTerminal[i][2] = String.valueOf(venta.getMonto());
+//            listVentasTerminal[i][3] = venta.getTipoPago();
+//        }
+//        return listVentasTerminal;
 
     }
 
