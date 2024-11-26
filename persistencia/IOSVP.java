@@ -1,3 +1,4 @@
+//Class IOSVP: Diego Muñoz
 package persistencia;
 
 import controlador.ControladorEmpresas;

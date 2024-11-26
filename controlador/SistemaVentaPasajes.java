@@ -11,6 +11,7 @@ import java.time.LocalDate;
 import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
 
@@ -237,39 +238,54 @@ public class SistemaVentaPasajes implements Serializable {
      public String[][] listVentas(){
 
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy");
-        String[][] listaVentas = new String[ventas.size()][7];
-        for(int i = 0; i < ventas.size(); i++) {
-            Venta venta = ventas.get(i);
-            listaVentas[i][0] = String.valueOf(venta.getIdDocumento());
-            listaVentas[i][1] = String.valueOf(venta.getTipo());
-            listaVentas[i][2] = venta.getFecha().format(formatter);
-            listaVentas[i][3] = String.valueOf(venta.getCliente().getIdpersona().toString());
-            listaVentas[i][4] = String.valueOf(venta.getCliente().getNombrecompleto());
-            listaVentas[i][5] = String.valueOf(venta.getPasajes().length);
-            listaVentas[i][6] = String.valueOf(venta.getMonto());
-        }
-        return listaVentas;
-
+//        String[][] listaVentas = new String[ventas.size()][7];
+//        for(int i = 0; i < ventas.size(); i++) {
+//            Venta venta = ventas.get(i);
+//            listaVentas[i][0] = String.valueOf(venta.getIdDocumento());
+//            listaVentas[i][1] = String.valueOf(venta.getTipo());
+//            listaVentas[i][2] = venta.getFecha().format(formatter);
+//            listaVentas[i][3] = String.valueOf(venta.getCliente().getIdpersona().toString());
+//            listaVentas[i][4] = String.valueOf(venta.getCliente().getNombrecompleto());
+//            listaVentas[i][5] = String.valueOf(venta.getPasajes().length);
+//            listaVentas[i][6] = String.valueOf(venta.getMonto());
+//        }
+//        return listaVentas;
+         return ventas.stream().map(venta -> new String[]{
+                 String.valueOf(venta.getIdDocumento()),
+                 String.valueOf(venta.getTipo()),
+                 venta.getFecha().format(formatter),
+                 String.valueOf(venta.getCliente().getIdpersona().toString()),
+                 String.valueOf(venta.getCliente().getNombrecompleto()),
+                 String.valueOf(venta.getPasajes().length),
+                 String.valueOf(venta.getMonto())
+         }).toArray(String[][]::new);
     }
     //Método listViajes : Diego Muñoz
     public String[][] listViajes(){
-
-
-
-        String[][] listaViajes = new String[viajes.size()][8];
-        for (int i = 0; i < viajes.size(); i++){
-            Viaje viaje = viajes.get(i);
-            LocalTime horaTermino = viaje.getFechaHoraTermino().toLocalTime();
-            listaViajes[i][0] = String.valueOf(viaje.getFecha());
-            listaViajes[i][1] = String.valueOf(viaje.getHora());
-            listaViajes[i][2] = String.valueOf(horaTermino);
-            listaViajes[i][3] = String.valueOf(viaje.getPrecio());
-            listaViajes[i][4] = String.valueOf(viaje.getNroAsientosDisponibles());
-            listaViajes[i][5] = viaje.getBus().getPatente();
-            listaViajes[i][6] = viaje.getTerminalSalida().getDireccion().getComuna();
-            listaViajes[i][7] = viaje.getTerminalLlegada().getDireccion().getComuna();
-        }
-        return listaViajes;
+//        String[][] listaViajes = new String[viajes.size()][8];
+//        for (int i = 0; i < viajes.size(); i++){
+//            Viaje viaje = viajes.get(i);
+//            LocalTime horaTermino = viaje.getFechaHoraTermino().toLocalTime();
+//            listaViajes[i][0] = String.valueOf(viaje.getFecha());
+//            listaViajes[i][1] = String.valueOf(viaje.getHora());
+//            listaViajes[i][2] = String.valueOf(horaTermino);
+//            listaViajes[i][3] = String.valueOf(viaje.getPrecio());
+//            listaViajes[i][4] = String.valueOf(viaje.getNroAsientosDisponibles());
+//            listaViajes[i][5] = viaje.getBus().getPatente();
+//            listaViajes[i][6] = viaje.getTerminalSalida().getDireccion().getComuna();
+//            listaViajes[i][7] = viaje.getTerminalLlegada().getDireccion().getComuna();
+//        }
+//        return listaViajes;
+        return viajes.stream().map(viaje -> new String[]{
+                String.valueOf(viaje.getFecha()),
+                String.valueOf(viaje.getHora()),
+                viaje.getFechaHoraTermino().toLocalTime().format(DateTimeFormatter.ofPattern("HH:mm")),
+                String.valueOf(viaje.getPrecio()),
+                String.valueOf(viaje.getNroAsientosDisponibles()),
+                viaje.getBus().getPatente(),
+                viaje.getTerminalSalida().getDireccion().getComuna(),
+                viaje.getTerminalLlegada().getDireccion().getComuna()
+        }).toArray(String[][]::new);
     }
     //Metodo listPasajeros: Diego Muñoz
     public String[][] listPasajerosViaje(LocalDate fecha, LocalTime hora, String patBus){
@@ -279,16 +295,23 @@ public class SistemaVentaPasajes implements Serializable {
             Optional<Viaje> viaje = findViaje(fecha,hora,patBus);
             if (viaje.isPresent()){
                 String[][] pasajeros = viaje.get().getListaPasajeros();
-                String[][] listPasajeros = new String[pasajeros.length][5];
-                //iteracion con for para llenar matriz
-                for (int i = 0; i < listPasajeros.length; i++) {
-                    listPasajeros[i][0]=pasajeros[i][4];
-                    listPasajeros[i][1]=pasajeros[i][0];
-                    listPasajeros[i][2]=pasajeros[i][1];
-                    listPasajeros[i][3]=pasajeros[i][2];
-                    listPasajeros[i][4]=pasajeros[i][3];
-                }
-                return listPasajeros;
+                return Arrays.stream(pasajeros).map(pasajero -> new String[]{
+                        pasajero[4],
+                        pasajero[0],
+                        pasajero[1],
+                        pasajero[2],
+                        pasajero[3]
+                }).toArray(String[][]::new);
+//                String[][] listPasajeros = new String[pasajeros.length][5];
+//                //iteracion con for para llenar matriz
+//                for (int i = 0; i < listPasajeros.length; i++) {
+//                    listPasajeros[i][0]=pasajeros[i][4];
+//                    listPasajeros[i][1]=pasajeros[i][0];
+//                    listPasajeros[i][2]=pasajeros[i][1];
+//                    listPasajeros[i][3]=pasajeros[i][2];
+//                    listPasajeros[i][4]=pasajeros[i][3];
+//                }
+//                return listPasajeros;
             }
         }else {
             throw new SistemaVentaPasajesException("No existe viaje con la fecha, hora y patente de bus indicados");
@@ -316,9 +339,6 @@ public class SistemaVentaPasajes implements Serializable {
 
     public void saveDatosSistema()throws SistemaVentaPasajesException{
         Object[] datos = {this,ControladorEmpresas.getInstance()};
-//        List<Object> datos = new ArrayList<>();
-//        datos.add(this);
-//        datos.add(ControladorEmpresas.getInstance());
         IOSVP.getInstance().saveControladores(datos);
         System.out.println("datos guardados exitosamente");
     }
