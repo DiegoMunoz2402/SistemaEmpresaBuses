@@ -13,6 +13,7 @@ import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
 
@@ -220,66 +221,67 @@ public class ControladorEmpresas implements Serializable {
 
     //Metodo findempresa: Diego Muñoz
     protected Optional<Empresa> findEmpresa(Rut rut){
-        for (Empresa empresa:empresas){
-            if (empresa.getRut().equals(rut)){
-                return Optional.of(empresa);
-            }
-        }
-        return Optional.empty();
+        return empresas.stream()
+                .filter(empresa -> empresa.getRut().equals(rut))
+                .findFirst();
     }
     //Metodo findTerminal: Diego Muñoz
     protected Optional<Terminal> findTerminal(String nombre){
-        for (Terminal terminal:terminales){
-            if (terminal.getNombre().equals(nombre)){
-                return Optional.of(terminal);
-            }
-        }
-        return Optional.empty();
+        return terminales.stream()
+                .filter(terminal -> terminal.getNombre().equals(nombre))
+                .findFirst();
     }
     //Metodo findTerminalPorComuna: Diego Muñoz
     protected Optional<Terminal> findTerminalPorComuna(String comuna){
-        for (Terminal terminal:terminales){
-            if (terminal.getDireccion().getComuna().equals(comuna)){
-                return Optional.of(terminal);
-            }
-        }
-        return Optional.empty();
+        return terminales.stream()
+                .filter(terminal -> terminal.getDireccion().getComuna().equals(comuna))
+                .findFirst();
     }
     //Metodo findBus: Diego Muñoz
     protected Optional<Bus> findBus(String patente){
-        for (Bus bus:buses){
-            if (bus.getPatente().equals(patente)){
-                return Optional.of(bus);
-            }
-        }
-        return Optional.empty();
+        return buses.stream()
+                .filter(bus -> bus.getPatente().equals(patente))
+                .findFirst();
     }
     //Metodo findConductor: Diego Muñoz
     protected Optional<Conductor> findConductor(IdPersona idPersona, Rut rutEmpresa){
-        for (Empresa empresa: empresas){
-            if (empresa.getRut().equals(rutEmpresa)){
-                Tripulante[] conductors = empresa.getTripulantes();
-                for (int i = 0; i < conductors.length; i++) {
-                    if (conductors[i].getIdpersona().equals(idPersona)){
-                        return Optional.of((Conductor) conductors[i]);
-                    }
-                }
-            }
-        }
-        return Optional.empty();
+        return empresas.stream()
+                .filter(empresa -> empresa.getRut().equals(rutEmpresa))
+                .flatMap(empresa -> Arrays.stream(empresa.getTripulantes()))
+                .filter(tripulante -> tripulante.getIdpersona().equals(idPersona))
+                .map(tripulante -> (Conductor)tripulante)
+                .findFirst();
+//        for (Empresa empresa: empresas){
+//            if (empresa.getRut().equals(rutEmpresa)){
+//                Tripulante[] conductors = empresa.getTripulantes();
+//                for (int i = 0; i < conductors.length; i++) {
+//                    if (conductors[i].getIdpersona().equals(idPersona)){
+//                        return Optional.of((Conductor) conductors[i]);
+//                    }
+//                }
+//            }
+//        }
+//        return Optional.empty();
     }
     //Metodo findAuxiliar: Diego Muñoz
-    protected Optional<Auxiliar> findAuxliar(IdPersona idPersona, Rut rutEmpresa){
-        for (Empresa empresa:empresas){
-            if (empresa.getRut().equals(rutEmpresa)){
-                Tripulante[] auxiliares = empresa.getTripulantes();
-                for (int i = 0; i < auxiliares.length; i++) {
-                    if (auxiliares[i].getIdpersona().equals(idPersona)){
-                        return Optional.of((Auxiliar) auxiliares[i]);
-                    }
-                }
-            }
-        }
-        return Optional.empty();
+    protected Optional<Auxiliar> findAuxliar(IdPersona idPersona, Rut rutEmpresa) {
+        return empresas.stream()
+                .filter(empresa -> empresa.getRut().equals(rutEmpresa)) // Filtra por el RUT de la empresa
+                .flatMap(empresa -> Arrays.stream(empresa.getTripulantes())) // Convierte el arreglo de tripulantes en un Stream
+                .filter(tripulante -> tripulante.getIdpersona().equals(idPersona)) // Filtra por el ID de la persona
+                .map(tripulante -> (Auxiliar) tripulante) // Convierte el tripulante a Auxiliar
+                .findFirst(); // Encuentra el primero que coincida
+
+//        for (Empresa empresa:empresas){
+//            if (empresa.getRut().equals(rutEmpresa)){
+//                Tripulante[] auxiliares = empresa.getTripulantes();
+//                for (int i = 0; i < auxiliares.length; i++) {
+//                    if (auxiliares[i].getIdpersona().equals(idPersona)){
+//                        return Optional.of((Auxiliar) auxiliares[i]);
+//                    }
+//                }
+//            }
+//        }
+//        return Optional.empty();
     }
 }
