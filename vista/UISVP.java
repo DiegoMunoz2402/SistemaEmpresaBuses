@@ -585,18 +585,18 @@ public class UISVP {
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy");
         System.out.println();
         if (listViajes.length>0){
-            System.out.println("*--------------*-----------*------------*----------------*---------------*---------------------*---------------------*---------------------*");
+            System.out.println("*--------------*-----------*-----------*----------------*---------------*---------------------*---------------------*---------------------*");
             System.out.printf("|%-13s |%10s |%10s |%-15s |%14s |%-20s |%-20s |%-20s |%n","FECHA","HORA SALE","HORA LLEGA","PRECIO","ASIENTOS DISP.","PATENTE","ORIGEN","DESTINO");
-            System.out.println("|--------------+-----------+------------+----------------+---------------+---------------------+---------------------+---------------------|");
+            System.out.println("|--------------+-----------+-----------+----------------+---------------+---------------------+---------------------+---------------------|");
             for (int i = 0; i < listViajes.length-1; i++) {
                 LocalDate fecha = LocalDate.parse(listViajes[i][0]);
-                System.out.printf("|%-13s |%10s |%10s |$%-15s |%14s |%-20s |%-20s |%-20s|%n",fecha.format(formatter),listViajes[i][1],listViajes[i][2],listViajes[i][3],listViajes[i][4],listViajes[i][5],listViajes[i][6],listViajes[i][7]);
-                System.out.println("|--------------+-----------+------------+----------------+---------------+---------------------+---------------------+---------------------|");
+                System.out.printf("|%-13s |%10s |%10s |$%-15s|%14s |%-20s |%-20s |%-20s |%n",fecha.format(formatter),listViajes[i][1],listViajes[i][2],listViajes[i][3],listViajes[i][4],listViajes[i][5],listViajes[i][6],listViajes[i][7]);
+                System.out.println("|--------------+-----------+-----------+----------------+---------------+---------------------+---------------------+---------------------|");
             }
             for (int i = listViajes.length-1; i < listViajes.length; i++) {
                 LocalDate fecha = LocalDate.parse(listViajes[i][0]);
-                System.out.printf("|%-13s |%10s |%10s |$%-15s |%14s |%-20s |%-20s |%-20s|%n",fecha.format(formatter),listViajes[i][1],listViajes[i][2],listViajes[i][3],listViajes[i][4],listViajes[i][5],listViajes[i][6],listViajes[i][7]);
-                System.out.println("*--------------*-----------*------------*----------------*---------------*---------------------*---------------------*---------------------*");
+                System.out.printf("|%-13s |%10s |%10s |$%-15s|%14s |%-20s |%-20s |%-20s |%n",fecha.format(formatter),listViajes[i][1],listViajes[i][2],listViajes[i][3],listViajes[i][4],listViajes[i][5],listViajes[i][6],listViajes[i][7]);
+                System.out.println("*--------------*-----------*-----------*----------------*---------------*---------------------*---------------------*---------------------*");
             }
         }else {
             System.out.println("No existen viajes registrados...");
