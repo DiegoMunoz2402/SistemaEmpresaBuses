@@ -1,6 +1,6 @@
 package controlador;
 
-import excepciones.SistemaVentaPasajesException;
+import excepciones.SVPException;
 import modelo.*;
 import persistencia.IOSVP;
 import utilidades.IdPersona;
@@ -12,7 +12,6 @@ import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.List;
 import java.util.Optional;
 
 public class SistemaVentaPasajes implements Serializable {
@@ -38,7 +37,7 @@ public class SistemaVentaPasajes implements Serializable {
    // metodo createCliente: Rodolfo Salas
     public void createCliente(IdPersona id, Nombre nom, String fono, String email){
         if(findCliente(id).isPresent()){
-            throw new SistemaVentaPasajesException("Ya existe el cliente con el id indicado");
+            throw new SVPException("Ya existe el cliente con el id indicado");
         }
         Cliente nuevoCliente= new Cliente(id,nom,email);
         nuevoCliente.setTelefono(fono);
@@ -52,7 +51,7 @@ public class SistemaVentaPasajes implements Serializable {
             pasajeroNew.setTelefono(fono);
             pasajeros.add(pasajeroNew);
         }else {
-            throw new SistemaVentaPasajesException("Ya existe un pasajero con el id dado");
+            throw new SVPException("Ya existe un pasajero con el id dado");
         }
     }
 
@@ -79,50 +78,50 @@ public class SistemaVentaPasajes implements Serializable {
                                 }
                                 viajes.add(viajeValido);
                             }else {
-                                throw new SistemaVentaPasajesException("No existe terminal de llegada en la comuna indicada");
+                                throw new SVPException("No existe terminal de llegada en la comuna indicada");
                             }
                         }else {
-                            throw new SistemaVentaPasajesException("No existe terminal de salida en la comuna indicada");
+                            throw new SVPException("No existe terminal de salida en la comuna indicada");
                         }
                     }else {
-                        throw new SistemaVentaPasajesException("No existe conductor con el id indicado en la empresa con el rut indicado");
+                        throw new SVPException("No existe conductor con el id indicado en la empresa con el rut indicado");
                     }
                 }else {
-                    throw new SistemaVentaPasajesException("No existe auxiliar con el id indicado en la empresa con el rut indicado");
+                    throw new SVPException("No existe auxiliar con el id indicado en la empresa con el rut indicado");
                 }
             }else {
-                throw new SistemaVentaPasajesException("No existe bus con la patente indicada");
+                throw new SVPException("No existe bus con la patente indicada");
             }
         }else {
-            throw new SistemaVentaPasajesException("Ya existe viaje con fecha, hora y patente de bus indicados");
+            throw new SVPException("Ya existe viaje con fecha, hora y patente de bus indicados");
         }
     }
 
     //Iniciaventa : Javiera Duarte
-    public void iniciaVenta(String idDoc, TipoDocumento tipo, LocalDate fechaViaje, String comSalida, String comLlegada, IdPersona idCliente, int nroPasajes) throws SistemaVentaPasajesException {
+    public void iniciaVenta(String idDoc, TipoDocumento tipo, LocalDate fechaViaje, String comSalida, String comLlegada, IdPersona idCliente, int nroPasajes) throws SVPException {
         if (findVenta(idDoc, tipo).isPresent()) {
-            throw new SistemaVentaPasajesException("*** Error: Ya existe una venta con el id indicado ***");
+            throw new SVPException("*** Error: Ya existe una venta con el id indicado ***");
         }
         if (findCliente(idCliente).isEmpty()) {
-            throw new SistemaVentaPasajesException("*** Error: No exste un cliente con el id indicado ***");
+            throw new SVPException("*** Error: No exste un cliente con el id indicado ***");
         }
 
         ArrayList<Viaje> viajesVenta = new ArrayList<>();
         if (ControladorEmpresas.getInstance().findTerminalPorComuna(comSalida).isEmpty()){
-            throw new SistemaVentaPasajesException("* No se encontro el terminal de salida *");
+            throw new SVPException("* No se encontro el terminal de salida *");
         }
         if (ControladorEmpresas.getInstance().findTerminalPorComuna(comLlegada).isEmpty()){
-            throw new SistemaVentaPasajesException("* No se encontro el terminal de llegada *");
+            throw new SVPException("* No se encontro el terminal de llegada *");
         }
         if (nroPasajes<=0) {
-            throw new SistemaVentaPasajesException("* La cantidad de pasajes a vender no puede ser 0 *");
+            throw new SVPException("* La cantidad de pasajes a vender no puede ser 0 *");
         }
         for (Viaje viaje : viajes) {
             if (viaje.getFecha().equals(fechaViaje) && viaje.getTerminalSalida().equals(ControladorEmpresas.getInstance().findTerminalPorComuna(comSalida).get()) && viaje.existeDisponibilidad(nroPasajes) && viaje.getTerminalLlegada().equals(ControladorEmpresas.getInstance().findTerminalPorComuna(comLlegada).get()))
                 viajesVenta.add(viaje);
         }
         if (viajesVenta.isEmpty())
-            throw new SistemaVentaPasajesException("*No existen viajes disponibles en la fecha y con terminales en las comunas de salida y llegada indicados *");
+            throw new SVPException("*No existen viajes disponibles en la fecha y con terminales en las comunas de salida y llegada indicados *");
 
         ventas.add(new Venta(idDoc, tipo, fechaViaje, findCliente(idCliente).get()));
     }
@@ -190,16 +189,16 @@ public class SistemaVentaPasajes implements Serializable {
                       if (pasajero.isPresent()) {
                           venta.get().createPasaje(asiento, viaje.get(), pasajero.get());
                       } else {
-                          throw new SistemaVentaPasajesException("No existe un pasajero con el id dado");
+                          throw new SVPException("No existe un pasajero con el id dado");
                       }
                   } else {
-                      throw new SistemaVentaPasajesException("No existe un viaje con los datos dados");
+                      throw new SVPException("No existe un viaje con los datos dados");
                   }
               }else {
-                  throw new SistemaVentaPasajesException("No existe un bus con la patente indicada");
+                  throw new SVPException("No existe un bus con la patente indicada");
               }
           }else {
-              throw new SistemaVentaPasajesException("No existe una venta con el idDocumento y tipo dados");
+              throw new SVPException("No existe una venta con el idDocumento y tipo dados");
           }
       }
     //pagaVenta : Javiera Duarte
@@ -207,7 +206,7 @@ public class SistemaVentaPasajes implements Serializable {
         Optional<Venta> ventaOptional = findVenta(idDocumento, tipo);
 
         if (ventaOptional.isEmpty()) {
-            throw new SistemaVentaPasajesException("No existe venta con el id y tipo de documento indicados");
+            throw new SVPException("No existe venta con el id y tipo de documento indicados");
         }
 
         Venta venta = ventaOptional.get();
@@ -215,7 +214,7 @@ public class SistemaVentaPasajes implements Serializable {
         boolean pagado = venta.pagaMonto();
 
         if (!pagado) {
-            throw new SistemaVentaPasajesException("El pago no se efectuó (porque el pago ya se hizo)");
+            throw new SVPException("El pago no se efectuó (porque el pago ya se hizo)");
         }
     }
     //pagaVenta : Javiera Duarte
@@ -223,7 +222,7 @@ public class SistemaVentaPasajes implements Serializable {
         Optional<Venta> ventaOptional = findVenta(idDocumento, tipo);
 
         if (ventaOptional.isEmpty()) {
-            throw new SistemaVentaPasajesException("No existe venta con el id y tipo de documento indicados");
+            throw new SVPException("No existe venta con el id y tipo de documento indicados");
         }
 
         Venta venta = ventaOptional.get();
@@ -231,7 +230,7 @@ public class SistemaVentaPasajes implements Serializable {
         boolean pagado = venta.pagaMonto(nroTarjeta);
 
         if (!pagado) {
-            throw new SistemaVentaPasajesException("El pago no se efectuó (porque el pago ya se hizo)");
+            throw new SVPException("El pago no se efectuó (porque el pago ya se hizo)");
         }
     }
     //listVenta : Javiera Duarte
@@ -314,36 +313,36 @@ public class SistemaVentaPasajes implements Serializable {
 //                return listPasajeros;
             }
         }else {
-            throw new SistemaVentaPasajesException("No existe viaje con la fecha, hora y patente de bus indicados");
+            throw new SVPException("No existe viaje con la fecha, hora y patente de bus indicados");
         }
         return new String[0][0];
     }
 
-    public void generatePasajesDeVenta(String idDocumento, TipoDocumento tipoDocumento)throws SistemaVentaPasajesException{
+    public void generatePasajesDeVenta(String idDocumento, TipoDocumento tipoDocumento)throws SVPException {
         Optional<Venta> venta = findVenta(idDocumento,tipoDocumento);
             if (venta.isPresent()){
                 Pasaje[] pasajes = venta.get().getPasajes();
                 String nombreArchivo = idDocumento + tipoDocumento.toString().toLowerCase()+".txt";
                 IOSVP.getInstance().savePasajesDeVenta(pasajes,nombreArchivo);
             }else {
-                throw new SistemaVentaPasajesException("No existe una venta con el id o tipo documento ingresado");
+                throw new SVPException("No existe una venta con el id o tipo documento ingresado");
             }
     }
 
-    public void readDatosSistema()throws SistemaVentaPasajesException{
+    public void readDatosSistema()throws SVPException {
         Object[] datos = IOSVP.getInstance().readControladores();
         ControladorEmpresas controladorEmpresas = (ControladorEmpresas) datos[1];
         instance = (SistemaVentaPasajes) datos[0];
         ControladorEmpresas.getInstance().setInstanciaPersistente(controladorEmpresas);
     }
 
-    public void saveDatosSistema()throws SistemaVentaPasajesException{
+    public void saveDatosSistema()throws SVPException {
         Object[] datos = {this,ControladorEmpresas.getInstance()};
         IOSVP.getInstance().saveControladores(datos);
         System.out.println("datos guardados exitosamente");
     }
 
-    public void readDatosIniciales()throws SistemaVentaPasajesException{
+    public void readDatosIniciales()throws SVPException {
         Object[] datos = IOSVP.getInstance().readDatosIniciales();
         if (datos.length>0){
             clientes.clear();

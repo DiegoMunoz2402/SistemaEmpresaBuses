@@ -1,6 +1,6 @@
 package controlador;
 
-import excepciones.SistemaVentaPasajesException;
+import excepciones.SVPException;
 import modelo.*;
 import utilidades.Direccion;
 import utilidades.IdPersona;
@@ -44,17 +44,17 @@ public class ControladorEmpresas implements Serializable {
             empresa.setUrl(url);
             empresas.add(empresa);
         } else {
-            throw new SistemaVentaPasajesException("Ya existe una empresa con el rut indicado");
+            throw new SVPException("Ya existe una empresa con el rut indicado");
         }
     }
 
     //Metodo createBus: Rodolfo Salas
     public void createBus(String pat, String marca, String modelo, int nroAsientos, Rut rutEmp) {
-        Empresa emp = findEmpresa(rutEmp).orElseThrow(() -> new SistemaVentaPasajesException("No existe empresa con el rut indicado "));
+        Empresa emp = findEmpresa(rutEmp).orElseThrow(() -> new SVPException("No existe empresa con el rut indicado "));
 
         Optional<Bus> busExistente = findBus(pat);
         if (busExistente.isPresent()) {
-            throw new SistemaVentaPasajesException("Ya existe bus con la patente indicada");
+            throw new SVPException("Ya existe bus con la patente indicada");
         }
         Bus nuevoBus = new Bus(pat, marca, modelo, nroAsientos, emp);
         buses.add(nuevoBus);
@@ -67,10 +67,10 @@ public class ControladorEmpresas implements Serializable {
             if (findTerminal(nombre).isEmpty()){
                 terminales.add(new Terminal(nombre,direccion));
             }else {
-                throw new SistemaVentaPasajesException("Ya existe un terminar con el nombre dado");
+                throw new SVPException("Ya existe un terminar con el nombre dado");
             }
         }else {
-            throw new SistemaVentaPasajesException("Ya existe un terminal en la comuna indicada");
+            throw new SVPException("Ya existe un terminal en la comuna indicada");
         }
     }
 
@@ -79,10 +79,10 @@ public class ControladorEmpresas implements Serializable {
         if (findEmpresa(rutEmpresa).isPresent()){
             Optional<Empresa> empresa = findEmpresa(rutEmpresa);
             if (!empresa.get().addConductor(idPersona,nombre,direccion)){
-                throw new SistemaVentaPasajesException("Ya está contratado conductor con el id indicado en la empresa señalada");
+                throw new SVPException("Ya está contratado conductor con el id indicado en la empresa señalada");
             }
         }else {
-            throw new SistemaVentaPasajesException("No existe empresa con el rut indicado");
+            throw new SVPException("No existe empresa con el rut indicado");
         }
     }
 
@@ -91,10 +91,10 @@ public class ControladorEmpresas implements Serializable {
         if (findEmpresa(rutEmpresa).isPresent()){
             Optional<Empresa> empresa = findEmpresa(rutEmpresa);
             if (!empresa.get().addAuxiliar(idPersona, nombre, direccion)){
-                throw new SistemaVentaPasajesException("Ya está contratado auxiliar con el id indicado en la empresa señalada");
+                throw new SVPException("Ya está contratado auxiliar con el id indicado en la empresa señalada");
             }
         }else {
-            throw new SistemaVentaPasajesException("No existe empresa con el rut indicado");
+            throw new SVPException("No existe empresa con el rut indicado");
         }
     }
 
@@ -181,7 +181,7 @@ public class ControladorEmpresas implements Serializable {
                 return listLlegadasSalidaTerminal;
             }
         }else {
-            throw new SistemaVentaPasajesException("*** Error: No existe terminal con el nombre indicado ***");
+            throw new SVPException("*** Error: No existe terminal con el nombre indicado ***");
         }
         return new String[0][0];
     }
@@ -191,7 +191,7 @@ public class ControladorEmpresas implements Serializable {
 
         Optional<Empresa> empresaOpt = findEmpresa(rut);
         if (empresaOpt.isEmpty()) {
-            throw new SistemaVentaPasajesException("No existe empresa con el rut indicado");
+            throw new SVPException("No existe empresa con el rut indicado");
         }
 
         Empresa empresa = empresaOpt.get();

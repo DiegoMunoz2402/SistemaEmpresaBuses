@@ -1,9 +1,7 @@
 //Class IOSVP: Diego Muñoz
 package persistencia;
 
-import controlador.ControladorEmpresas;
-import controlador.SistemaVentaPasajes;
-import excepciones.SistemaVentaPasajesException;
+import excepciones.SVPException;
 import modelo.*;
 import utilidades.*;
 
@@ -27,7 +25,7 @@ public class IOSVP {
     }
 
     //Metodo readDatosIniciales: Diego Muñoz
-    public Object[] readDatosIniciales()throws SistemaVentaPasajesException {
+    public Object[] readDatosIniciales()throws SVPException {
         try {
             Scanner archivo = new Scanner(new File("SVPDatosIniciales.txt"));
             ArrayList<Persona> pasajerosYClientes = new ArrayList<>();
@@ -112,11 +110,11 @@ public class IOSVP {
                 if (empresa.isPresent()) {
                     if (tipoTripulante.equals("A")) {
                         if (!empresa.get().addAuxiliar(rutTripulanteFormat, nombre, direccion)) {
-                            throw new SistemaVentaPasajesException("No fue posible añadir el auxiliar");
+                            throw new SVPException("No fue posible añadir el auxiliar");
                         }
                     } else{
                         if (!empresa.get().addConductor(rutTripulanteFormat, nombre, direccion)) {
-                            throw new SistemaVentaPasajesException("No fue posible añadir el auxiliar");
+                            throw new SVPException("No fue posible añadir el auxiliar");
                         }
                     }
                 }
@@ -187,12 +185,12 @@ public class IOSVP {
             archivo.close();
             return datos.toArray(new Object[0]);
         } catch (FileNotFoundException e) {
-            throw new SistemaVentaPasajesException("No existe o no se puede abrir el archivo SVPDatosIniciales.txt");
+            throw new SVPException("No existe o no se puede abrir el archivo SVPDatosIniciales.txt");
         }
     }
 
     //Debo hacer una validacion para guardar, si es ControladorEmpresas o SVP??? o los guardo directamente
-    public void saveControladores(Object[] controladores)throws SistemaVentaPasajesException{
+    public void saveControladores(Object[] controladores)throws SVPException {
         try {
             ObjectOutputStream archivo = new ObjectOutputStream(new FileOutputStream("SVPObjetos.obj"));
             for (Object object:controladores){
@@ -200,14 +198,14 @@ public class IOSVP {
             }
             archivo.close();
         }catch (FileNotFoundException e) {
-            throw new SistemaVentaPasajesException("No se puede abrir o crear el archivo SVPObjetos.obj");
+            throw new SVPException("No se puede abrir o crear el archivo SVPObjetos.obj");
         }catch (IOException e) {
-            throw new SistemaVentaPasajesException("No se puede grabar en el archivo SVPObjetos.obj");
+            throw new SVPException("No se puede grabar en el archivo SVPObjetos.obj");
         }
     }
 
     //Duda con la implementacion
-    public Object[] readControladores()throws SistemaVentaPasajesException{
+    public Object[] readControladores()throws SVPException {
         ObjectInputStream archivo = null;
         List<Object> datos = new ArrayList<>();
         try {
@@ -220,17 +218,17 @@ public class IOSVP {
             try {
                 archivo.close();
             } catch (IOException ex) {
-                throw new SistemaVentaPasajesException("No se puede cerrar el archivo SVPObjetos.obj");
+                throw new SVPException("No se puede cerrar el archivo SVPObjetos.obj");
             }
             return datos.toArray(new Object[0]);
         }catch (FileNotFoundException e){
-            throw new SistemaVentaPasajesException("No existe o no se puede abrir el archivo SVPObjetos.obj");
+            throw new SVPException("No existe o no se puede abrir el archivo SVPObjetos.obj");
         }catch (ClassNotFoundException|IOException e){
-            throw new SistemaVentaPasajesException("No se puede leer el archivo SVPObjetos.obj");
+            throw new SVPException("No se puede leer el archivo SVPObjetos.obj");
         }
     }
 
-    public void savePasajesDeVenta(Pasaje[] pasajes,String nombreArchivo)throws SistemaVentaPasajesException{
+    public void savePasajesDeVenta(Pasaje[] pasajes,String nombreArchivo)throws SVPException {
         try {
             PrintStream boletas = new PrintStream(new File(nombreArchivo));
             for (int i = 0; i < pasajes.length; i++) {
@@ -238,7 +236,7 @@ public class IOSVP {
             }
             boletas.close();
         } catch (FileNotFoundException e) {
-            throw new SistemaVentaPasajesException("Error, no se puede abrir o crear el archivo "+nombreArchivo);
+            throw new SVPException("Error, no se puede abrir o crear el archivo "+nombreArchivo);
         }
     }
 

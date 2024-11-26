@@ -2,7 +2,7 @@ package vista;
 
 import controlador.ControladorEmpresas;
 import controlador.SistemaVentaPasajes;
-import excepciones.SistemaVentaPasajesException;
+import excepciones.SVPException;
 import modelo.Pasajero;
 import utilidades.*;
 import modelo.TipoDocumento;
@@ -95,7 +95,7 @@ public class UISVP {
             try {
                 ControladorEmpresas.getInstance().createEmpresa(Rut.of(rut), nombre, url);
                 System.out.println("...:::: Empresa guardada exitosamente ::::..");
-            } catch (SistemaVentaPasajesException e) {
+            } catch (SVPException e) {
                 System.out.println("\n" + e.getMessage());
             }
         }else {
@@ -172,14 +172,14 @@ public class UISVP {
                                     try {
                                         ControladorEmpresas.getInstance().hireAuxiliarForEmpresa(Rut.of(rutEmpresa), id, nombreTipo, direccion);
                                         System.out.println("...::: Auxiliar contratado exitosamente :::....");
-                                    } catch (SistemaVentaPasajesException e) {
+                                    } catch (SVPException e) {
                                         System.out.println("\n" + e.getMessage());
                                     }
                                 } else {
                                     try {
                                         ControladorEmpresas.getInstance().hireConductorForEmpresa(Rut.of(rutEmpresa), id, nombreTipo, direccion);
                                         System.out.println("...::: Conductor contratado exitosamente :::....");
-                                    } catch (SistemaVentaPasajesException e) {
+                                    } catch (SVPException e) {
                                         System.out.println("\n" + e.getMessage());
                                     }
                                 }
@@ -218,7 +218,7 @@ public class UISVP {
             Direccion direccion = new Direccion(calle,numero,comuna);
             ControladorEmpresas.getInstance().createTerminal(nombre,direccion);
             System.out.println("...:::: Terminal guardado exitosamente ::::...");
-        }catch (SistemaVentaPasajesException e){
+        }catch (SVPException e){
             System.out.println("\n" + e.getMessage());
         }
     }
@@ -243,7 +243,7 @@ public class UISVP {
                 identificador= Pasaporte.of(numero,nacionalidad);
 
             }else {
-                throw new SistemaVentaPasajesException("Tipo de documento no valido");
+                throw new SVPException("Tipo de documento no valido");
             }
             System.out.print("Sr.[1] o Sra. [2] : ");
             int opcion= sc.nextInt();
@@ -253,7 +253,7 @@ public class UISVP {
             } else if (opcion==2) {
                 tratamiento= tratamiento.SRA;
             }else {
-                throw new SistemaVentaPasajesException("Tipo de documento no valido");
+                throw new SVPException("Tipo de documento no valido");
             }
             System.out.println("Nombres: ");
             String nombres = sc.nextLine();
@@ -268,7 +268,7 @@ public class UISVP {
             Nombre nombrecompleto= new Nombre(nombres,apellidoPaterno,apellidoMaterno,tratamiento);
             SistemaVentaPasajes.getInstance().createCliente(identificador,nombrecompleto,telefono,email);
             System.out.println("...:::: Cliente guardado exitosamente ::::...");
-        }catch (SistemaVentaPasajesException e){
+        }catch (SVPException e){
             System.out.println("\n" + e.getMessage());
         }
 
@@ -292,7 +292,7 @@ public class UISVP {
         try {
             ControladorEmpresas.getInstance().createBus(patente,marca,modelo,numAsientos, Rut.of(rut));
             System.out.println("...:::: Bus guardado exitosamente ::::..");
-        }catch (SistemaVentaPasajesException e){
+        }catch (SVPException e){
             System.out.println("\n"+e.getMessage());
         }
     }
@@ -388,7 +388,7 @@ public class UISVP {
         try {
             SistemaVentaPasajes.getInstance().createViaje(fecha,hora,precio,duracion,patente,ids,comunas);
             System.out.println("...:::: Viaje guardado existosamente ::::....");
-        }catch (SistemaVentaPasajesException e){
+        }catch (SVPException e){
             System.out.println("\n" + e.getMessage());
         }
     }
@@ -559,7 +559,7 @@ public class UISVP {
             }else {
                 System.out.println("No hay viajes disponibles...");
             }
-        }catch (SistemaVentaPasajesException e){
+        }catch (SVPException e){
             System.out.println("\n" + e.getMessage());
         }
     }
@@ -594,7 +594,7 @@ public class UISVP {
                 default:
                     System.out.println("Opción no válida. Pago cancelado.");
             }
-        } catch (SistemaVentaPasajesException e) {
+        } catch (SVPException e) {
             System.out.println("Error al procesar el pago: " + e.getMessage());
         }
     }
@@ -673,7 +673,7 @@ public class UISVP {
             }else {
                 System.out.println("No existen pasajeros para el viaje indicado...");
             }
-        }catch (SistemaVentaPasajesException e){
+        }catch (SVPException e){
             System.out.println("\n"+ e.getMessage());
         }
     }
@@ -729,7 +729,7 @@ public class UISVP {
             }else {
                 System.out.println("No existen datos asignados a la fecha y/o terminal...");
             }
-        }catch (SistemaVentaPasajesException e){
+        }catch (SVPException e){
             System.out.println("\n" + e.getMessage());
         }
     }
@@ -756,7 +756,7 @@ public class UISVP {
             }else {
                 System.out.println("No hay datos asignados a la empresa...");
             }
-        }catch (SistemaVentaPasajesException e){
+        }catch (SVPException e){
             System.out.println("\n" + e.getMessage());
         }
     }
@@ -769,7 +769,7 @@ public class UISVP {
         TipoDocumento tipoDoc = TipoDocumento.valueOf(sc.next().toUpperCase());
         try {
             SistemaVentaPasajes.getInstance().generatePasajesDeVenta(id,tipoDoc);
-        } catch (SistemaVentaPasajesException e) {
+        } catch (SVPException e) {
             System.out.println("\n" + e.getMessage());
         }
 
@@ -779,7 +779,7 @@ public class UISVP {
         try {
             SistemaVentaPasajes.getInstance().readDatosIniciales();
             System.out.println("\nDatos iniciales leidos exitosamente");
-        } catch (SistemaVentaPasajesException e) {
+        } catch (SVPException e) {
             System.out.println("\n"+e.getMessage());
         }
     }
@@ -788,7 +788,7 @@ public class UISVP {
         try {
             SistemaVentaPasajes.getInstance().saveDatosSistema();
             System.out.println("\nDatos guardados exitosamente");
-        } catch (SistemaVentaPasajesException e) {
+        } catch (SVPException e) {
             System.out.println("\n"+e.getMessage());
         }
     }
@@ -797,7 +797,7 @@ public class UISVP {
         try {
             SistemaVentaPasajes.getInstance().readDatosSistema();
             System.out.println("\nDatos del sistema leidos exitosamente");
-        } catch (SistemaVentaPasajesException e) {
+        } catch (SVPException e) {
             System.out.println("\n"+e.getMessage());
         }
     }
