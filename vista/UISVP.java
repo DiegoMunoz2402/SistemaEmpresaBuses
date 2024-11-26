@@ -91,11 +91,15 @@ public class UISVP {
         String nombre = sc.next();
         System.out.printf("%21s","url : ");
         String url = sc.next();
-        try {
-            ControladorEmpresas.getInstance().createEmpresa(Rut.of(rut),nombre,url);
-            System.out.println("...:::: Empresa guardada exitosamente ::::..");
-        } catch (SistemaVentaPasajesException e) {
-            System.out.println("\n" + e.getMessage());
+        if (!rut.isBlank() && !nombre.isBlank() && !url.isBlank()) {
+            try {
+                ControladorEmpresas.getInstance().createEmpresa(Rut.of(rut), nombre, url);
+                System.out.println("...:::: Empresa guardada exitosamente ::::..");
+            } catch (SistemaVentaPasajesException e) {
+                System.out.println("\n" + e.getMessage());
+            }
+        }else {
+            System.out.println("\nUno o mas campos vacíos, volviendo...");
         }
     }
     //ContratarTripulante : Diego Muñoz
@@ -106,60 +110,96 @@ public class UISVP {
         System.out.println("::: Dato de la empresa");
         System.out.printf("%21s","Rut : ");
         String rutEmpresa = sc.next();
-        System.out.println();
-        System.out.println("::: Datos Tripulante");
-        System.out.print("Auxiliar[1] o Conductor[2] : ");
-        int op = sc.nextInt();
-        System.out.print("Rut[1] o Pasaporte[2] : ");
-        int op2 = sc.nextInt();
-        IdPersona id = null;
-        if(op2==1){
-            System.out.printf("%21s","R.U.T : ");
-            String rut= sc.next();
-            id= Rut.of(rut);
-        } else if (op2==2) {
-            System.out.printf("%21s","NUMERO DE PASAPORTE : ");
-            String numero= sc.next();
-            System.out.printf("%21s","NACIONALIDAD : ");
-            String nacionalidad= sc.next();
-            id = Pasaporte.of(numero,nacionalidad);
-        }
-        System.out.printf("%21s","Sr.[1] o Sra.[2] : ");
-        int tratamientoint = sc.nextInt();
-        Tratamiento tratamiento = null;
-        if (tratamientoint==1){
-            tratamiento = Tratamiento.SR;
-        }else if (tratamientoint==2){
-            tratamiento = Tratamiento.SRA;
-        }
-        System.out.printf("%21s","Nombres : ");
-        String nombre = sc.next();
-        System.out.printf("%21s","Apellido paterno : ");
-        String apellidoPaterno = sc.next();
-        System.out.printf("%21s","Apellido materno : ");
-        String apellidoMaterno = sc.next();
-        System.out.printf("%21s","Calle : ");
-        String calle = sc.next();
-        System.out.printf("%21s","Numero : ");
-        int numero = sc.nextInt();
-        System.out.printf("%21s","Comuna : ");
-        String comuna = sc.next();
-        Direccion direccion = new Direccion(calle,numero,comuna);
-        Nombre nombreTipo = new Nombre(nombre,apellidoPaterno,apellidoMaterno,tratamiento);
-        if (op==1){
-            try{
-                ControladorEmpresas.getInstance().hireAuxiliarForEmpresa(Rut.of(rutEmpresa),id,nombreTipo,direccion);
-                System.out.println("...::: Auxiliar contratado exitosamente :::....");
-            }catch (SistemaVentaPasajesException e){
-                System.out.println("\n" + e.getMessage());
+        if (!rutEmpresa.isBlank()) {
+            System.out.println();
+            System.out.println("::: Datos Tripulante");
+            System.out.print("Auxiliar[1] o Conductor[2] : ");
+            int op = sc.nextInt();
+            if (op > 0 && op < 3) {
+                System.out.print("Rut[1] o Pasaporte[2] : ");
+                int op2 = sc.nextInt();
+                if (op2 > 0 && op2 < 3) {
+                    IdPersona id = null;
+                    if (op2 == 1) {
+                        System.out.printf("%21s", "R.U.T : ");
+                        String rut = sc.next();
+                        if (rut.isBlank()) {
+                            System.out.println("Ingresó un rut vacío, volviendo...");
+                            return;
+                        }
+                        id = Rut.of(rut);
+                    } else {
+                        System.out.printf("%21s", "NUMERO DE PASAPORTE : ");
+                        String numero = sc.next();
+                        System.out.printf("%21s", "NACIONALIDAD : ");
+                        String nacionalidad = sc.next();
+                        if (nacionalidad.isBlank() && !numero.isBlank()) {
+                            System.out.println("\nNumero o Nacionalidad vacíos, volviendo...");
+                            return;
+                        }
+                        id = Pasaporte.of(numero, nacionalidad);
+                    }
+                    if (id == null){
+                        System.out.println("El Id es nulo, volviendo...");
+                        return;
+                    }
+                    System.out.printf("%21s", "Sr.[1] o Sra.[2] : ");
+                    int tratamientoint = sc.nextInt();
+                    Tratamiento tratamiento = null;
+                    if (tratamientoint > 0 && tratamientoint < 3) {
+                        if (tratamientoint == 1) {
+                            tratamiento = Tratamiento.SR;
+                        } else {
+                            tratamiento = Tratamiento.SRA;
+                        }
+                        System.out.printf("%21s", "Nombres : ");
+                        String nombre = sc.next();
+                        System.out.printf("%21s", "Apellido paterno : ");
+                        String apellidoPaterno = sc.next();
+                        System.out.printf("%21s", "Apellido materno : ");
+                        String apellidoMaterno = sc.next();
+                        System.out.printf("%21s", "Calle : ");
+                        String calle = sc.next();
+                        System.out.printf("%21s", "Numero : ");
+                        int numero = sc.nextInt();
+                        System.out.printf("%21s", "Comuna : ");
+                        String comuna = sc.next();
+                        if (!calle.isBlank() && numero < 0 && !comuna.isBlank()) {
+                            Direccion direccion = new Direccion(calle, numero, comuna);
+                            if (!nombre.isBlank() && !apellidoMaterno.isBlank() && !apellidoPaterno.isBlank()) {
+                                Nombre nombreTipo = new Nombre(nombre, apellidoPaterno, apellidoMaterno, tratamiento);
+                                if (op == 1) {
+                                    try {
+                                        ControladorEmpresas.getInstance().hireAuxiliarForEmpresa(Rut.of(rutEmpresa), id, nombreTipo, direccion);
+                                        System.out.println("...::: Auxiliar contratado exitosamente :::....");
+                                    } catch (SistemaVentaPasajesException e) {
+                                        System.out.println("\n" + e.getMessage());
+                                    }
+                                } else {
+                                    try {
+                                        ControladorEmpresas.getInstance().hireConductorForEmpresa(Rut.of(rutEmpresa), id, nombreTipo, direccion);
+                                        System.out.println("...::: Conductor contratado exitosamente :::....");
+                                    } catch (SistemaVentaPasajesException e) {
+                                        System.out.println("\n" + e.getMessage());
+                                    }
+                                }
+                            } else {
+                                System.out.println("\nUno o mas campos vacíos (Nombre, apPaterno, apMaterno), volviendo...");
+                            }
+                        } else {
+                            System.out.println("\nComuna o calle vacíos, o numero invalido, volviendo...");
+                        }
+                    } else {
+                        System.out.println("\nOpcion invalida, volviendo...");
+                    }
+                } else {
+                    System.out.println("\nOpcion invalida, volviendo...");
+                }
+            } else {
+                System.out.println("\nOpcion invalida, volviendo...");
             }
-        }else if (op==2){
-            try{
-                ControladorEmpresas.getInstance().hireConductorForEmpresa(Rut.of(rutEmpresa),id,nombreTipo,direccion);
-                System.out.println("...::: Conductor contratado exitosamente :::....");
-            }catch (SistemaVentaPasajesException e){
-                System.out.println("\n" + e.getMessage());
-            }
+        }else {
+            System.out.println("Campo empresa vacío, volviendo...");
         }
     }
     //crearTerminal = Diego Muñoz
