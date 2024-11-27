@@ -7,9 +7,11 @@ import modelo.Pasajero;
 import utilidades.*;
 import modelo.TipoDocumento;
 
+import java.time.DateTimeException;
 import java.time.LocalDate;
 import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
+import java.util.InputMismatchException;
 import java.util.Optional;
 import java.util.Scanner;
 
@@ -104,90 +106,94 @@ public class UISVP {
     }
     //ContratarTripulante : Diego Muñoz
     private void contratarTripulante(){
-        System.out.println("...:::: Contratando un nuevo Tripulante ::::..");
-        System.out.println();
-        System.out.println();
-        System.out.println("::: Dato de la empresa");
-        System.out.printf("%21s","Rut : ");
-        String rutEmpresa = sc.next();
-        if (!rutEmpresa.isBlank()) {
+        try {
+            System.out.println("...:::: Contratando un nuevo Tripulante ::::..");
             System.out.println();
-            System.out.println("::: Datos Tripulante");
-            System.out.print("Auxiliar[1] o Conductor[2] : ");
-            int op = sc.nextInt();
-            if (op > 0 && op < 3) {
-                System.out.print("Rut[1] o Pasaporte[2] : ");
-                int op2 = sc.nextInt();
-                if (op2 > 0 && op2 < 3) {
-                    IdPersona id = null;
-                    if (op2 == 1) {
-                        System.out.printf("%21s", "R.U.T : ");
-                        String rut = sc.next();
-                        if (rut.isBlank()) {
-                            System.out.println("Ingresó un rut vacío, volviendo...");
-                            return;
-                        }
-                        id = Rut.of(rut);
-                    } else {
-                        System.out.printf("%21s", "NUMERO DE PASAPORTE : ");
-                        String numero = sc.next();
-                        System.out.printf("%21s", "NACIONALIDAD : ");
-                        String nacionalidad = sc.next();
-                        if (nacionalidad.isBlank() && !numero.isBlank()) {
-                            System.out.println("\nNumero o Nacionalidad vacíos, volviendo...");
-                            return;
-                        }
-                        id = Pasaporte.of(numero, nacionalidad);
-                    }
-                    if (id == null){
-                        System.out.println("El Id es nulo, volviendo...");
-                        return;
-                    }
-                    System.out.printf("%21s", "Sr.[1] o Sra.[2] : ");
-                    int tratamientoint = sc.nextInt();
-                    Tratamiento tratamiento = null;
-                    if (tratamientoint > 0 && tratamientoint < 3) {
-                        if (tratamientoint == 1) {
-                            tratamiento = Tratamiento.SR;
+            System.out.println();
+            System.out.println("::: Dato de la empresa");
+            System.out.printf("%21s", "Rut : ");
+            String rutEmpresa = sc.next();
+            if (!rutEmpresa.isBlank()) {
+                System.out.println();
+                System.out.println("::: Datos Tripulante");
+                System.out.print("Auxiliar[1] o Conductor[2] : ");
+                int op = sc.nextInt();
+                if (op > 0 && op < 3) {
+                    System.out.print("Rut[1] o Pasaporte[2] : ");
+                    int op2 = sc.nextInt();
+                    if (op2 > 0 && op2 < 3) {
+                        IdPersona id = null;
+                        if (op2 == 1) {
+                            System.out.printf("%21s", "R.U.T : ");
+                            String rut = sc.next();
+                            if (rut.isBlank()) {
+                                System.out.println("Ingresó un rut vacío, volviendo...");
+                                return;
+                            }
+                            id = Rut.of(rut);
                         } else {
-                            tratamiento = Tratamiento.SRA;
+                            System.out.printf("%21s", "NUMERO DE PASAPORTE : ");
+                            String numero = sc.next();
+                            System.out.printf("%21s", "NACIONALIDAD : ");
+                            String nacionalidad = sc.next();
+                            if (nacionalidad.isBlank() || !numero.isBlank()) {
+                                System.out.println("\nNumero o Nacionalidad vacíos, volviendo...");
+                                return;
+                            }
+                            id = Pasaporte.of(numero, nacionalidad);
                         }
-                        System.out.printf("%21s", "Nombres : ");
-                        String nombre = sc.next();
-                        System.out.printf("%21s", "Apellido paterno : ");
-                        String apellidoPaterno = sc.next();
-                        System.out.printf("%21s", "Apellido materno : ");
-                        String apellidoMaterno = sc.next();
-                        System.out.printf("%21s", "Calle : ");
-                        String calle = sc.next();
-                        System.out.printf("%21s", "Numero : ");
-                        int numero = sc.nextInt();
-                        System.out.printf("%21s", "Comuna : ");
-                        String comuna = sc.next();
-                        if (!calle.isBlank() && numero < 0 && !comuna.isBlank()) {
-                            Direccion direccion = new Direccion(calle, numero, comuna);
-                            if (!nombre.isBlank() && !apellidoMaterno.isBlank() && !apellidoPaterno.isBlank()) {
-                                Nombre nombreTipo = new Nombre(nombre, apellidoPaterno, apellidoMaterno, tratamiento);
-                                if (op == 1) {
-                                    try {
-                                        ControladorEmpresas.getInstance().hireAuxiliarForEmpresa(Rut.of(rutEmpresa), id, nombreTipo, direccion);
-                                        System.out.println("...::: Auxiliar contratado exitosamente :::....");
-                                    } catch (SVPException e) {
-                                        System.out.println("\n" + e.getMessage());
+                        if (id == null) {
+                            System.out.println("El Id es nulo, volviendo...");
+                            return;
+                        }
+                        System.out.printf("%21s", "Sr.[1] o Sra.[2] : ");
+                        int tratamientoint = sc.nextInt();
+                        Tratamiento tratamiento = null;
+                        if (tratamientoint > 0 && tratamientoint < 3) {
+                            if (tratamientoint == 1) {
+                                tratamiento = Tratamiento.SR;
+                            } else {
+                                tratamiento = Tratamiento.SRA;
+                            }
+                            System.out.printf("%21s", "Nombres : ");
+                            String nombre = sc.next();
+                            System.out.printf("%21s", "Apellido paterno : ");
+                            String apellidoPaterno = sc.next();
+                            System.out.printf("%21s", "Apellido materno : ");
+                            String apellidoMaterno = sc.next();
+                            System.out.printf("%21s", "Calle : ");
+                            String calle = sc.next();
+                            System.out.printf("%21s", "Numero : ");
+                            int numero = sc.nextInt();
+                            System.out.printf("%21s", "Comuna : ");
+                            String comuna = sc.next();
+                            if (!calle.isBlank() && numero > 0 && !comuna.isBlank()) {
+                                Direccion direccion = new Direccion(calle, numero, comuna);
+                                if (!nombre.isBlank() && !apellidoMaterno.isBlank() && !apellidoPaterno.isBlank()) {
+                                    Nombre nombreTipo = new Nombre(nombre, apellidoPaterno, apellidoMaterno, tratamiento);
+                                    if (op == 1) {
+                                        try {
+                                            ControladorEmpresas.getInstance().hireAuxiliarForEmpresa(Rut.of(rutEmpresa), id, nombreTipo, direccion);
+                                            System.out.println("...::: Auxiliar contratado exitosamente :::....");
+                                        } catch (SVPException e) {
+                                            System.out.println("\n" + e.getMessage());
+                                        }
+                                    } else {
+                                        try {
+                                            ControladorEmpresas.getInstance().hireConductorForEmpresa(Rut.of(rutEmpresa), id, nombreTipo, direccion);
+                                            System.out.println("...::: Conductor contratado exitosamente :::....");
+                                        } catch (SVPException e) {
+                                            System.out.println("\n" + e.getMessage());
+                                        }
                                     }
                                 } else {
-                                    try {
-                                        ControladorEmpresas.getInstance().hireConductorForEmpresa(Rut.of(rutEmpresa), id, nombreTipo, direccion);
-                                        System.out.println("...::: Conductor contratado exitosamente :::....");
-                                    } catch (SVPException e) {
-                                        System.out.println("\n" + e.getMessage());
-                                    }
+                                    System.out.println("\nUno o mas campos vacíos (Nombre, apPaterno, apMaterno), volviendo...");
                                 }
                             } else {
-                                System.out.println("\nUno o mas campos vacíos (Nombre, apPaterno, apMaterno), volviendo...");
+                                System.out.println("\nComuna o calle vacíos, o numero invalido, volviendo...");
                             }
                         } else {
-                            System.out.println("\nComuna o calle vacíos, o numero invalido, volviendo...");
+                            System.out.println("\nOpcion invalida, volviendo...");
                         }
                     } else {
                         System.out.println("\nOpcion invalida, volviendo...");
@@ -196,30 +202,42 @@ public class UISVP {
                     System.out.println("\nOpcion invalida, volviendo...");
                 }
             } else {
-                System.out.println("\nOpcion invalida, volviendo...");
+                System.out.println("Campo empresa vacío, volviendo...");
             }
-        }else {
-            System.out.println("Campo empresa vacío, volviendo...");
+        }catch (InputMismatchException e){
+            System.out.println("\nError, numero invalido, volviendo...");
         }
     }
     //crearTerminal = Diego Muñoz
     private void crearTerminal(){
-        System.out.println("...:::: Creando un nuevo TERMINAL ::::..");
-        System.out.println();
-        System.out.printf("%21s","Nombre : ");
-        String nombre = sc.next();
-        System.out.printf("%21s","Calle : ");
-        String calle = sc.next();
-        System.out.printf("%21s","Numero : ");
-        int numero = sc.nextInt();
-        System.out.printf("%21s","Comuna : ");
-        String comuna = sc.next();
         try {
-            Direccion direccion = new Direccion(calle,numero,comuna);
-            ControladorEmpresas.getInstance().createTerminal(nombre,direccion);
-            System.out.println("...:::: Terminal guardado exitosamente ::::...");
-        }catch (SVPException e){
-            System.out.println("\n" + e.getMessage());
+            System.out.println("...:::: Creando un nuevo TERMINAL ::::..");
+            System.out.println();
+            System.out.printf("%21s", "Nombre : ");
+            String nombre = sc.next();
+            System.out.printf("%21s", "Calle : ");
+            String calle = sc.next();
+            System.out.printf("%21s", "Numero : ");
+            int numero = sc.nextInt();
+            System.out.printf("%21s", "Comuna : ");
+            String comuna = sc.next();
+            if (!nombre.isBlank() && !calle.isBlank() && !comuna.isBlank()) {
+                if (numero > 0) {
+                    try {
+                        Direccion direccion = new Direccion(calle, numero, comuna);
+                        ControladorEmpresas.getInstance().createTerminal(nombre, direccion);
+                        System.out.println("...:::: Terminal guardado exitosamente ::::...");
+                    } catch (SVPException e) {
+                        System.out.println("\n" + e.getMessage());
+                    }
+                } else {
+                    System.out.println("\nNumero invalido, volviendo...");
+                }
+            } else {
+                System.out.println("\nUno o mas campos vacios, volviendo...");
+            }
+        }catch (InputMismatchException e){
+            System.out.println("\nNumero invalido, volviendo...");
         }
     }
      //crearCliente: Rodolfo Salas
@@ -231,45 +249,64 @@ public class UISVP {
             System.out.print("Rut[1] o Pasaporte[2] : ");
             int tipo = sc.nextInt();
             sc.nextLine();
-            if(tipo==1){
-                System.out.println("R.U.T: ");
-                String rut= sc.next();
-                identificador= Rut.of(rut);
-            }else if(tipo==2){
-                System.out.print("NUMERO DE PASAPORTE: ");
-                String numero = sc.next();
-                System.out.print("NACIONALIDAD: ");
-                String nacionalidad = sc.next();
-                identificador= Pasaporte.of(numero,nacionalidad);
+            if (tipo>0 && tipo<3) {
+                if (tipo == 1) {
+                    System.out.println("R.U.T: ");
+                    String rut = sc.next();
+                    if (rut.isBlank()){
+                        System.out.println("\nRut vacío, volviendo...");
+                        return;
+                    }
+                    identificador = Rut.of(rut);
+                } else {
+                    System.out.print("NUMERO DE PASAPORTE: ");
+                    String numero = sc.next();
+                    System.out.print("NACIONALIDAD: ");
+                    String nacionalidad = sc.next();
+                    if (numero.isBlank() || nacionalidad.isBlank()){
+                        System.out.println("\nUno o los dos campos vacíos, volviendo...");
+                    }
+                    identificador = Pasaporte.of(numero, nacionalidad);
 
+                }
+                if (identificador==null){
+                    System.out.println("\nIdentificador nunlo, volviendo...");
+                    return;
+                }
+                System.out.print("Sr.[1] o Sra. [2] : ");
+                int opcion = sc.nextInt();
+                sc.nextLine();
+                if (opcion>0 && opcion<3) {
+                    if (opcion == 1) {
+                        tratamiento = Tratamiento.SR;
+                    } else {
+                        tratamiento = Tratamiento.SRA;
+                    }
+                    System.out.println("Nombres: ");
+                    String nombres = sc.nextLine();
+                    System.out.println("Apellido Paterno: ");
+                    String apellidoPaterno = sc.nextLine();
+                    System.out.println("Apellido Materno: ");
+                    String apellidoMaterno = sc.nextLine();
+                    System.out.println("Telefono Movil: ");
+                    String telefono = sc.next();
+                    System.out.println("Email: ");
+                    String email = sc.next();
+                    if (!nombres.isBlank() && !apellidoMaterno.isBlank() && !apellidoPaterno.isBlank() && !telefono.isBlank() && !email.isBlank()) {
+                        Nombre nombrecompleto = new Nombre(nombres, apellidoPaterno, apellidoMaterno, tratamiento);
+                        SistemaVentaPasajes.getInstance().createCliente(identificador, nombrecompleto, telefono, email);
+                    }
+                }else {
+                    System.out.println("\nUno o mas campos vacíos, volviendo...");
+                }
             }else {
-                throw new SVPException("Tipo de documento no valido");
+                System.out.println("\nOpcion invalida, volviendo...");
             }
-            System.out.print("Sr.[1] o Sra. [2] : ");
-            int opcion= sc.nextInt();
-            sc.nextLine();
-            if(opcion==1){
-                tratamiento= tratamiento.SR;
-            } else if (opcion==2) {
-                tratamiento= tratamiento.SRA;
-            }else {
-                throw new SVPException("Tipo de documento no valido");
-            }
-            System.out.println("Nombres: ");
-            String nombres = sc.nextLine();
-            System.out.println("Apellido Paterno: ");
-            String apellidoPaterno = sc.nextLine();
-            System.out.println("Apellido Materno: ");
-            String apellidoMaterno = sc.nextLine();
-            System.out.println("Telefono Movil: ");
-            String telefono = sc.next();
-            System.out.println("Email: ");
-            String email = sc.next();
-            Nombre nombrecompleto= new Nombre(nombres,apellidoPaterno,apellidoMaterno,tratamiento);
-            SistemaVentaPasajes.getInstance().createCliente(identificador,nombrecompleto,telefono,email);
             System.out.println("...:::: Cliente guardado exitosamente ::::...");
         }catch (SVPException e){
             System.out.println("\n" + e.getMessage());
+        }catch (InputMismatchException e){
+            System.out.println("\nNumero invalido, volviendo...");
         }
 
     }
@@ -298,269 +335,378 @@ public class UISVP {
     }
     //crearViaje = Diego Muñoz
     private void crearViaje(){
-
-        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy");
-
-        System.out.println("...:::: Creando un nuevo Viaje ::::...");
-        System.out.println();
-        System.out.printf("%21s","Fecha[dd/MM/yyyy] : ");
-        String fechastr = sc.next();
-        LocalDate fecha = LocalDate.parse(fechastr,formatter);
-        System.out.printf("%21s","Hora[hh:mm] : ");
-        LocalTime hora = LocalTime.parse(sc.next());
-        System.out.printf("%21s","Precio : ");
-        int precio = sc.nextInt();
-        System.out.printf("%21s","Duracion (minutos) : ");
-        int duracion = sc.nextInt();
-        System.out.printf("%21s","Patente : ");
-        String patente = sc.next();
-        System.out.printf("%21s","Nro. de conductores : ");
-        int nroDeConductores = sc.nextInt();
-        System.out.println("\t:: Id Auxiliar ::");
-        System.out.println("Rut[1] o Pasaporte[2] : ");
-        int op = sc.nextInt();
-        IdPersona idAuxiliar = null, idConductor = null, idConductortwo = null;
-        IdPersona[] ids = new IdPersona[3];
-        if(op==1){
-            System.out.printf("%21s","R.U.T : ");
-            String rut= sc.next();
-            idAuxiliar= Rut.of(rut);
-        } else if (op==2) {
-            System.out.printf("%21s","NUMERO DE PASAPORTE : ");
-            String numero= sc.next();
-            System.out.printf("%21s","NACIONALIDAD : ");
-            String nacionalidad= sc.next();
-            idAuxiliar = Pasaporte.of(numero,nacionalidad);
-        }
-        ids[0] = idAuxiliar;
-        System.out.println("\t:: Id Conductor ::");
-        if (nroDeConductores==1){
-            System.out.println("Rut[1] o Pasaporte[2] : ");
-            op = sc.nextInt();
-            if(op==1){
-                System.out.printf("%21s","R.U.T : ");
-                String rut= sc.next();
-                idConductor= Rut.of(rut);
-            } else if (op==2) {
-                System.out.printf("%21s","NUMERO DE PASAPORTE : ");
-                String numero= sc.next();
-                System.out.printf("%21s","NACIONALIDAD : ");
-                String nacionalidad= sc.next();
-                idConductor = Pasaporte.of(numero,nacionalidad);
-            }
-            ids[1] =idConductor;
-        }else if (nroDeConductores==2){
-            System.out.println("Rut[1] o Pasaporte[2] : ");
-            op = sc.nextInt();
-            if(op==1){
-                System.out.printf("%21s","R.U.T : ");
-                String rut= sc.next();
-                idConductor= Rut.of(rut);
-            } else if (op==2) {
-                System.out.printf("%21s","NUMERO DE PASAPORTE : ");
-                String numero= sc.next();
-                System.out.printf("%21s","NACIONALIDAD : ");
-                String nacionalidad= sc.next();
-                idConductor = Pasaporte.of(numero,nacionalidad);
-            }
-            ids[1] = idConductor;
-            System.out.println("\t:: Id Conductor 2::");
-            System.out.println("Rut[1] o Pasaporte[2] : ");
-            op = sc.nextInt();
-            if(op==1){
-                System.out.printf("%21s","R.U.T : ");
-                String rut= sc.next();
-                idConductortwo= Rut.of(rut);
-            } else if (op==2) {
-                System.out.printf("%21s","NUMERO DE PASAPORTE : ");
-                String numero= sc.next();
-                System.out.printf("%21s","NACIONALIDAD : ");
-                String nacionalidad= sc.next();
-                idConductortwo = Pasaporte.of(numero,nacionalidad);
-            }
-            ids[2] = idConductortwo;
-        }
-        System.out.print("Nombre comuna salida : ");
-        String salida = sc.next();
-        System.out.print("Nombre comuna llegada: ");
-        String llegada = sc.next();
-        String[] comunas = {salida,llegada};
         try {
-            SistemaVentaPasajes.getInstance().createViaje(fecha,hora,precio,duracion,patente,ids,comunas);
-            System.out.println("...:::: Viaje guardado existosamente ::::....");
-        }catch (SVPException e){
-            System.out.println("\n" + e.getMessage());
-        }
-    }
-    //vendePasaje : Diego Muñoz Y Javier Duarte
-    private void vendePasaje(){
-        System.out.println("\t\t...:::Venta de pasajes :::....");
-        System.out.println();
-        System.out.println();
-        System.out.println(":::: Datos de la venta");
-        System.out.printf("%21s", "ID Documento : ");
-        String idDocumento = sc.next();
-        System.out.print("Tipo Documento: [1] Boleta [2] Factura : ");
-        int tipoDoc = sc.nextInt();
-        TipoDocumento tipoDocumento;
-        if (tipoDoc == 1){
-            tipoDocumento = TipoDocumento.BOLETA;
-        }else {
-            tipoDocumento = TipoDocumento.FACTURA;
-        }
-        System.out.print("Fecha de viaje[dd/mm/yyyy] : ");
-        String fechaViaje = sc.next();
-        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy");
-        LocalDate fecha = LocalDate.parse(fechaViaje,formatter);
-        System.out.printf("%21s","Origen (comuna) : ");
-        String comunaOrigen = sc.next();
-        System.out.printf("%21s","Destino (comuna) : ");
-        String comunaDestino = sc.next();
-        System.out.println();
-        System.out.println();
-        System.out.println("::: Datos del cliente");
-        System.out.println();
-        System.out.printf("%21s","Rut[1] o Pasaporte[2] : ");
-        int opCliente = sc.nextInt();
-        IdPersona idCliente = null;
-        if(opCliente==1){
-            System.out.printf("%21s","R.U.T : ");
-            String rut= sc.next();
-            idCliente= Rut.of(rut);
-        } else if (opCliente==2) {
-            System.out.printf("%21s","NUMERO DE PASAPORTE : ");
-            String numero= sc.next();
-            System.out.printf("%21s","NACIONALIDAD : ");
-            String nacionalidad= sc.next();
-            idCliente = Pasaporte.of(numero,nacionalidad);
-        }
 
-        System.out.println("::: Pasajes a vender ");
-        System.out.printf("%21s","Cantidad de pasajes : ");
-        int cantidadPasajes = sc.nextInt();
-        String[][] listHorariosDisponibles;
-        try {
-            SistemaVentaPasajes.getInstance().iniciaVenta(idDocumento,tipoDocumento,fecha,comunaOrigen,comunaDestino,idCliente,cantidadPasajes);
-            listHorariosDisponibles = SistemaVentaPasajes.getInstance().getHorariosDisponibles(fecha);
-            if (listHorariosDisponibles.length>0){
-                System.out.println();
-                System.out.println("::: Lista de horarios disponibles");
-                System.out.println();
-                System.out.println("  *--------------*-----------*---------*-----------*");
-                System.out.printf("  |%-13s |%-10s |%-8s |%-10s |%n","BUS","SALIDA","VALOR"," ASIENTOS");
-                System.out.println("  |--------------+-----------+---------+-----------|");
-                for (int i = 0; i < listHorariosDisponibles.length-1; i++) {
-                    System.out.printf("%1s |%-13s |%-10s |%-8s |%-10s |%n",i+1,listHorariosDisponibles[i][1],listHorariosDisponibles[i][2],listHorariosDisponibles[i][3],listHorariosDisponibles[i][0]);
-                    System.out.println(" |--------------+-----------+---------+-----------|");
-                }
-                for (int i = listHorariosDisponibles.length-1; i < listHorariosDisponibles.length; i++) {
-                    System.out.printf("%1s |%-13s |%-10s |%-8s |%-10s |%n",i+1,listHorariosDisponibles[i][1],listHorariosDisponibles[i][2],listHorariosDisponibles[i][3],listHorariosDisponibles[i][0]);
-                    System.out.println("  *--------------*-----------*---------*-----------*");
-                }
-                System.out.print("Seleccione viaje [1.."+listHorariosDisponibles.length+"] : ");
-                int nroViaje = sc.nextInt();
-                String patenteViaje = listHorariosDisponibles[nroViaje-1][1];
-                String horaViaje = listHorariosDisponibles[nroViaje-1][2];
-                LocalTime horaFormato = LocalTime.parse(horaViaje);
-                String[] listAsientosDeViaje = SistemaVentaPasajes.getInstance().listAsientosDeViaje(fecha,horaFormato,patenteViaje);
-                if (listAsientosDeViaje.length>0){
-                    for (int i = 0; i < listAsientosDeViaje.length; i += 4) {
-                        System.out.print("| " + listAsientosDeViaje[i] + " | " + listAsientosDeViaje[i + 1] + " |");
-                        if (i % 8 == 0) {
-                            System.out.print(" " + listAsientosDeViaje[i + 3] + " | " + listAsientosDeViaje[i + 2] + " |");
-                        } else {
-                            System.out.print(" " + listAsientosDeViaje[i + 2] + " | " + listAsientosDeViaje[i + 3] + " |");
+            DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy");
+
+            System.out.println("...:::: Creando un nuevo Viaje ::::...");
+            System.out.println();
+            String fechastr = "", horastr = "";
+            LocalDate fecha = null;
+            LocalTime hora = null;
+            try {
+                System.out.printf("%21s", "Fecha[dd/MM/yyyy] : ");
+                fechastr = sc.next();
+                fecha = LocalDate.parse(fechastr, formatter);
+                System.out.printf("%21s", "Hora[hh:mm] : ");
+                horastr = sc.next();
+                hora = LocalTime.parse(horastr);
+            } catch (DateTimeException e) {
+                System.out.println("\nFecha u hora invalidas, volviendo...");
+                return;
+            }
+            System.out.printf("%21s", "Precio : ");
+            int precio = sc.nextInt();
+            System.out.printf("%21s", "Duracion (minutos) : ");
+            int duracion = sc.nextInt();
+            System.out.printf("%21s", "Patente : ");
+            String patente = sc.next();
+            System.out.printf("%21s", "Nro. de conductores : ");
+            int nroDeConductores = sc.nextInt();
+            if (!fechastr.isBlank() && !horastr.isBlank() && precio > 0 && duracion > 0 && !patente.isBlank() && nroDeConductores > 0) {
+                System.out.println("\t:: Id Auxiliar ::");
+                System.out.println("Rut[1] o Pasaporte[2] : ");
+                int op = sc.nextInt();
+                if (op > 0 && op < 3) {
+                    IdPersona idAuxiliar = null, idConductor = null, idConductortwo = null;
+                    IdPersona[] ids = new IdPersona[3];
+                    if (op == 1) {
+                        System.out.printf("%21s", "R.U.T : ");
+                        String rut = sc.next();
+                        if (rut.isBlank()) {
+                            System.out.println("\nRut vacío, volviendo...");
+                            return;
                         }
-                        System.out.println();
-                        System.out.println("|---------------|");
+                        idAuxiliar = Rut.of(rut);
+                    } else {
+                        System.out.printf("%21s", "NUMERO DE PASAPORTE : ");
+                        String numero = sc.next();
+                        System.out.printf("%21s", "NACIONALIDAD : ");
+                        String nacionalidad = sc.next();
+                        if (numero.isBlank() || nacionalidad.isBlank()) {
+                            System.out.println("\nUno o los dos campos vacíos, volviendo...");
+                            return;
+                        }
+                        idAuxiliar = Pasaporte.of(numero, nacionalidad);
                     }
-
-                    System.out.print("Seleccione sus asientos [separe por ,] : ");
-                    String asientos = sc.next();
-                    String[] asientosArr = asientos.split(",");
-                    if (cantidadPasajes == asientosArr.length){
-                        for (int i = 0; i < asientosArr.length; i++) {
-                            System.out.println("::: Datos pasajero " + (i + 1));
-                            System.out.print("Rut[1] o Pasaporte[2] : ");
-                            int opPasajero = sc.nextInt();
-                            IdPersona idPasajero = null;
-                            if (opPasajero == 1) {
+                    if (idAuxiliar == null) {
+                        System.out.println("\nId auxiliar nulo, volviendo...");
+                    }
+                    ids[0] = idAuxiliar;
+                    System.out.println("\t:: Id Conductor ::");
+                    if (nroDeConductores == 1) {
+                        System.out.println("Rut[1] o Pasaporte[2] : ");
+                        op = sc.nextInt();
+                        if (op > 0 && op < 3) {
+                            if (op == 1) {
                                 System.out.printf("%21s", "R.U.T : ");
                                 String rut = sc.next();
-                                idPasajero = Rut.of(rut);
-                            } else if (opPasajero == 2) {
+                                if (rut.isBlank()) {
+                                    System.out.println("\nRut vacío, volviendo...");
+                                    return;
+                                }
+                                idConductor = Rut.of(rut);
+                            } else {
                                 System.out.printf("%21s", "NUMERO DE PASAPORTE : ");
                                 String numero = sc.next();
                                 System.out.printf("%21s", "NACIONALIDAD : ");
                                 String nacionalidad = sc.next();
-                                idPasajero = Pasaporte.of(numero, nacionalidad);
+                                if (numero.isBlank() || nacionalidad.isBlank()) {
+                                    System.out.println("\nUno o los dos campos vacíos, volviendo...");
+                                    return;
+                                }
+                                idConductor = Pasaporte.of(numero, nacionalidad);
                             }
-                            Optional<String> nombrePasajeroOp = SistemaVentaPasajes.getInstance().getNombrePasajero(idPasajero);
-                            Pasajero pasajero = null;
-                            if (nombrePasajeroOp.isEmpty()){
-                                System.out.print("Sr.[1] o Sra.[2] :");
-                                int tratamientoPasajero = sc.nextInt();
-                                Tratamiento tratamientoPas;
-                                if(tratamientoPasajero==1){
-                                    tratamientoPas= Tratamiento.SR;
-                                }else{
-                                    tratamientoPas= Tratamiento.SRA;
+                            ids[1] = idConductor;
+                        } else {
+                            System.out.println("\nOpcion invalida, volviendo...");
+                        }
+                    } else if (nroDeConductores == 2) {
+                        System.out.println("Rut[1] o Pasaporte[2] : ");
+                        op = sc.nextInt();
+                        if (op > 0 && op < 3) {
+                            if (op == 1) {
+                                System.out.printf("%21s", "R.U.T : ");
+                                String rut = sc.next();
+                                if (rut.isBlank()) {
+                                    System.out.println("\nRut vacío, volviendo...");
+                                    return;
                                 }
-                                System.out.print("Nombres del pasajero : ");
-                                String nombrePasajero = sc.next();
-                                System.out.print("Ingrese el apellido Paterno del pasajero: ");
-                                String apellidoPaternoPasajero = sc.next();
-                                System.out.print("Ingrese el apellido Materno del pasajero: ");
-                                String apellidoMaternoPasajero = sc.next();
-                                System.out.print("Numero de telefono (pasajero) : ");
-                                String telefonoPasajero = sc.next();
-                                Nombre nombreCompletoPasajero = new Nombre(nombrePasajero,apellidoPaternoPasajero,apellidoMaternoPasajero,tratamientoPas);
-
-                                System.out.print("Ingrese el tratamiento del contacto Sr.[1] o Sra.[2] :");
-                                int opContacto = sc.nextInt();
-                                Tratamiento trataContacto = null;
-                                switch(opContacto) {
-                                    case 1:
-                                        trataContacto = Tratamiento.SR; break;
-                                    case 2:
-                                        trataContacto = Tratamiento.SRA; break;
+                                idConductor = Rut.of(rut);
+                            } else {
+                                System.out.printf("%21s", "NUMERO DE PASAPORTE : ");
+                                String numero = sc.next();
+                                System.out.printf("%21s", "NACIONALIDAD : ");
+                                String nacionalidad = sc.next();
+                                if (numero.isBlank() || nacionalidad.isBlank()) {
+                                    System.out.println("\nUno o los dos campos vacíos, volviendo...");
+                                    return;
                                 }
-                                System.out.print("Ingrese el nombres del Contacto : ");
-                                String nombresContacto = sc.next();
-                                System.out.print("Ingrese el apellido Paterno del Contacto : ");
-                                String apellidoPaternoContacto = sc.next();
-                                System.out.print("Ingrese el apellido Materno del Contacto : ");
-                                String apellidoMaternoContacto = sc.next();
-                                System.out.print("Ingrese el Fono del Contacto : ");
-                                String fonoContacto = sc.next();
+                                idConductor = Pasaporte.of(numero, nacionalidad);
+                            }
+                            ids[1] = idConductor;
+                            System.out.println("\t:: Id Conductor 2::");
+                            System.out.println("Rut[1] o Pasaporte[2] : ");
+                            op = sc.nextInt();
+                            if (op == 1) {
+                                System.out.printf("%21s", "R.U.T : ");
+                                String rut = sc.next();
+                                if (rut.isBlank()) {
+                                    System.out.println("\nRut vacío, volviendo...");
+                                    return;
+                                }
+                                idConductortwo = Rut.of(rut);
+                            } else if (op == 2) {
+                                System.out.printf("%21s", "NUMERO DE PASAPORTE : ");
+                                String numero = sc.next();
+                                System.out.printf("%21s", "NACIONALIDAD : ");
+                                String nacionalidad = sc.next();
+                                if (numero.isBlank() || nacionalidad.isBlank()) {
+                                    System.out.println("\nUno o los dos campos vacíos, volviendo...");
+                                    return;
+                                }
+                                idConductortwo = Pasaporte.of(numero, nacionalidad);
+                            }
+                            ids[2] = idConductortwo;
+                        }
+                    } else {
+                        System.out.println("\nOpcion invalida, volviendo...");
+                    }
+                    if (ids[0] == null || ids[1] == null || ids[2] == null) {
+                        System.out.println("\nUna o mas ids son nulas, volviendo...");
+                    }
+                    System.out.print("Nombre comuna salida : ");
+                    String salida = sc.next();
+                    System.out.print("Nombre comuna llegada: ");
+                    String llegada = sc.next();
+                    if (!salida.isBlank() && !llegada.isBlank()) {
+                        String[] comunas = {salida, llegada};
+                        try {
+                            SistemaVentaPasajes.getInstance().createViaje(fecha, hora, precio, duracion, patente, ids, comunas);
+                            System.out.println("...:::: Viaje guardado existosamente ::::....");
+                        } catch (SVPException e) {
+                            System.out.println("\n" + e.getMessage());
+                        }
+                    } else {
+                        System.out.println("\nUno o los dos campos vacíos, volviendo...");
+                    }
+                } else {
+                    System.out.println("\nOpcion invalida, volviendo...");
+                }
+            } else {
+                System.out.println("\nUno o mas campos invalidos, volviendo...");
+            }
+        }catch (InputMismatchException e){
+            System.out.println("\nNumero invalido, volviendo...");
+        }
+    }
+    //vendePasaje : Diego Muñoz Y Javier Duarte
+    private void vendePasaje(){
+        try {
+            System.out.println("\t\t...:::Venta de pasajes :::....");
+            System.out.println();
+            System.out.println();
+            System.out.println(":::: Datos de la venta");
+            System.out.printf("%21s", "ID Documento : ");
+            String idDocumento = sc.next();
+            if (idDocumento.isBlank()){
+                System.out.println("\nCampo vacío, volviendo...");
+                return;
+            }
+            System.out.print("Tipo Documento: [1] Boleta [2] Factura : ");
+            int tipoDoc = sc.nextInt();
+            TipoDocumento tipoDocumento = null;
+            if (tipoDoc == 1) {
+                tipoDocumento = TipoDocumento.BOLETA;
+            } else if (tipoDoc == 2){
+                tipoDocumento = TipoDocumento.FACTURA;
+            }else {
+                System.out.println("\nOpcion invalida, volviendo...");
+            }
+            System.out.print("Fecha de viaje[dd/mm/yyyy] : ");
+            String fechaViaje = sc.next();
+            if (fechaViaje.isBlank()){
+                System.out.println("\nCampo vacío, volviendo...");
+                return;
+            }
+            DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy");
+            LocalDate fecha = LocalDate.parse(fechaViaje, formatter);
+            System.out.printf("%21s", "Origen (comuna) : ");
+            String comunaOrigen = sc.next();
+            System.out.printf("%21s", "Destino (comuna) : ");
+            String comunaDestino = sc.next();
+            System.out.println();
+            System.out.println();
+            if (comunaOrigen.isBlank() || comunaDestino.isBlank()){
+                System.out.println("\nUno o dos campos vacíos, volviendo....");
+                return;
+            }
+            System.out.println("::: Datos del cliente");
+            System.out.println();
+            System.out.printf("%21s", "Rut[1] o Pasaporte[2] : ");
+            int opCliente = sc.nextInt();
+            if (opCliente<0 || opCliente>2){
+                System.out.println("\nOpcion invalida, volviendo...");
+                return;
+            }
+            IdPersona idCliente = null;
+            if (opCliente == 1) {
+                System.out.printf("%21s", "R.U.T : ");
+                String rut = sc.next();
+                if (rut.isBlank()){
+                    System.out.println("\nCampo vacío, volviendo...");
+                    return;
+                }
+                idCliente = Rut.of(rut);
+            } else if (opCliente == 2) {
+                System.out.printf("%21s", "NUMERO DE PASAPORTE : ");
+                String numero = sc.next();
+                System.out.printf("%21s", "NACIONALIDAD : ");
+                String nacionalidad = sc.next();
+                if (numero.isBlank() || nacionalidad.isBlank()){
+                    System.out.println("\nUno o dos campos vacíos, volviendo...");
+                }
+                idCliente = Pasaporte.of(numero, nacionalidad);
+            }
 
-                                Nombre nombreContacto = new Nombre(nombresContacto,apellidoPaternoContacto,apellidoMaternoContacto,trataContacto);
+            if (idCliente==null){
+                System.out.println("\nId cliente es nulo, volviendo...");
+                return;
+            }
 
-                                pasajero = new Pasajero(idPasajero,nombreCompletoPasajero,nombreContacto,fonoContacto);
-                                pasajero.setTelefono(telefonoPasajero);
-
-                                SistemaVentaPasajes.getInstance().createPasajero(idPasajero,nombreCompletoPasajero,telefonoPasajero,nombreContacto,fonoContacto);
-
-                                System.out.println("\n::: Pasaje agregado exitosamente");
-
-                                int asientoSeleccionado = Integer.parseInt(asientosArr[i]);
-                                SistemaVentaPasajes.getInstance().vendePasaje(idDocumento,tipoDocumento,fecha,horaFormato,patenteViaje,asientoSeleccionado,idPasajero);
-                            }//else para cuando se encuentra el Idpasajero
+            System.out.println("::: Pasajes a vender ");
+            System.out.printf("%21s", "Cantidad de pasajes : ");
+            int cantidadPasajes = sc.nextInt();
+            String[][] listHorariosDisponibles;
+            try {
+                SistemaVentaPasajes.getInstance().iniciaVenta(idDocumento, tipoDocumento, fecha, comunaOrigen, comunaDestino, idCliente, cantidadPasajes);
+                listHorariosDisponibles = SistemaVentaPasajes.getInstance().getHorariosDisponibles(fecha);
+                if (listHorariosDisponibles.length > 0) {
+                    System.out.println();
+                    System.out.println("::: Lista de horarios disponibles");
+                    System.out.println();
+                    System.out.println("  *--------------*-----------*---------*-----------*");
+                    System.out.printf("  |%-13s |%-10s |%-8s |%-10s |%n", "BUS", "SALIDA", "VALOR", " ASIENTOS");
+                    System.out.println("  |--------------+-----------+---------+-----------|");
+                    for (int i = 0; i < listHorariosDisponibles.length - 1; i++) {
+                        System.out.printf("%1s |%-13s |%-10s |%-8s |%-10s |%n", i + 1, listHorariosDisponibles[i][1], listHorariosDisponibles[i][2], listHorariosDisponibles[i][3], listHorariosDisponibles[i][0]);
+                        System.out.println(" |--------------+-----------+---------+-----------|");
+                    }
+                    for (int i = listHorariosDisponibles.length - 1; i < listHorariosDisponibles.length; i++) {
+                        System.out.printf("%1s |%-13s |%-10s |%-8s |%-10s |%n", i + 1, listHorariosDisponibles[i][1], listHorariosDisponibles[i][2], listHorariosDisponibles[i][3], listHorariosDisponibles[i][0]);
+                        System.out.println("  *--------------*-----------*---------*-----------*");
+                    }
+                    System.out.print("Seleccione viaje [1.." + listHorariosDisponibles.length + "] : ");
+                    int nroViaje = sc.nextInt();
+                    String patenteViaje = listHorariosDisponibles[nroViaje - 1][1];
+                    String horaViaje = listHorariosDisponibles[nroViaje - 1][2];
+                    LocalTime horaFormato = LocalTime.parse(horaViaje);
+                    String[] listAsientosDeViaje = SistemaVentaPasajes.getInstance().listAsientosDeViaje(fecha, horaFormato, patenteViaje);
+                    if (listAsientosDeViaje.length > 0) {
+                        for (int i = 0; i < listAsientosDeViaje.length; i += 4) {
+                            System.out.print("| " + listAsientosDeViaje[i] + " | " + listAsientosDeViaje[i + 1] + " |");
+                            if (i % 8 == 0) {
+                                System.out.print(" " + listAsientosDeViaje[i + 3] + " | " + listAsientosDeViaje[i + 2] + " |");
+                            } else {
+                                System.out.print(" " + listAsientosDeViaje[i + 2] + " | " + listAsientosDeViaje[i + 3] + " |");
+                            }
+                            System.out.println();
+                            System.out.println("|---------------|");
                         }
 
-                        pagaVentaPasajes(idDocumento,tipoDocumento);
+                        System.out.print("Seleccione sus asientos [separe por ,] : ");
+                        String asientos = sc.next();
+                        String[] asientosArr = asientos.split(",");
+                        if (cantidadPasajes == asientosArr.length) {
+                            for (int i = 0; i < asientosArr.length; i++) {
+                                System.out.println("::: Datos pasajero " + (i + 1));
+                                System.out.print("Rut[1] o Pasaporte[2] : ");
+                                int opPasajero = sc.nextInt();
+                                IdPersona idPasajero = null;
+                                if (opPasajero == 1) {
+                                    System.out.printf("%21s", "R.U.T : ");
+                                    String rut = sc.next();
+                                    idPasajero = Rut.of(rut);
+                                } else if (opPasajero == 2) {
+                                    System.out.printf("%21s", "NUMERO DE PASAPORTE : ");
+                                    String numero = sc.next();
+                                    System.out.printf("%21s", "NACIONALIDAD : ");
+                                    String nacionalidad = sc.next();
+                                    idPasajero = Pasaporte.of(numero, nacionalidad);
+                                }
+                                Optional<String> nombrePasajeroOp = SistemaVentaPasajes.getInstance().getNombrePasajero(idPasajero);
+                                Pasajero pasajero = null;
+                                if (nombrePasajeroOp.isEmpty()) {
+                                    System.out.print("Sr.[1] o Sra.[2] :");
+                                    int tratamientoPasajero = sc.nextInt();
+                                    Tratamiento tratamientoPas;
+                                    if (tratamientoPasajero == 1) {
+                                        tratamientoPas = Tratamiento.SR;
+                                    } else {
+                                        tratamientoPas = Tratamiento.SRA;
+                                    }
+                                    System.out.print("Nombres del pasajero : ");
+                                    String nombrePasajero = sc.next();
+                                    System.out.print("Ingrese el apellido Paterno del pasajero: ");
+                                    String apellidoPaternoPasajero = sc.next();
+                                    System.out.print("Ingrese el apellido Materno del pasajero: ");
+                                    String apellidoMaternoPasajero = sc.next();
+                                    System.out.print("Numero de telefono (pasajero) : ");
+                                    String telefonoPasajero = sc.next();
+                                    Nombre nombreCompletoPasajero = new Nombre(nombrePasajero, apellidoPaternoPasajero, apellidoMaternoPasajero, tratamientoPas);
 
-                    }else {
-                        System.out.println("La cantidad de pasajes no coincide con el numero de asientos seleccionado");
+                                    System.out.print("Ingrese el tratamiento del contacto Sr.[1] o Sra.[2] :");
+                                    int opContacto = sc.nextInt();
+                                    Tratamiento trataContacto = null;
+                                    switch (opContacto) {
+                                        case 1:
+                                            trataContacto = Tratamiento.SR;
+                                            break;
+                                        case 2:
+                                            trataContacto = Tratamiento.SRA;
+                                            break;
+                                    }
+                                    System.out.print("Ingrese el nombres del Contacto : ");
+                                    String nombresContacto = sc.next();
+                                    System.out.print("Ingrese el apellido Paterno del Contacto : ");
+                                    String apellidoPaternoContacto = sc.next();
+                                    System.out.print("Ingrese el apellido Materno del Contacto : ");
+                                    String apellidoMaternoContacto = sc.next();
+                                    System.out.print("Ingrese el Fono del Contacto : ");
+                                    String fonoContacto = sc.next();
+
+                                    Nombre nombreContacto = new Nombre(nombresContacto, apellidoPaternoContacto, apellidoMaternoContacto, trataContacto);
+
+                                    pasajero = new Pasajero(idPasajero, nombreCompletoPasajero, nombreContacto, fonoContacto);
+                                    pasajero.setTelefono(telefonoPasajero);
+
+                                    SistemaVentaPasajes.getInstance().createPasajero(idPasajero, nombreCompletoPasajero, telefonoPasajero, nombreContacto, fonoContacto);
+
+                                    System.out.println("\n::: Pasaje agregado exitosamente");
+
+                                    int asientoSeleccionado = Integer.parseInt(asientosArr[i]);
+                                    SistemaVentaPasajes.getInstance().vendePasaje(idDocumento, tipoDocumento, fecha, horaFormato, patenteViaje, asientoSeleccionado, idPasajero);
+                                }//else para cuando se encuentra el Idpasajero
+                            }
+
+                            pagaVentaPasajes(idDocumento, tipoDocumento);
+
+                        } else {
+                            System.out.println("La cantidad de pasajes no coincide con el numero de asientos seleccionado");
+                        }
+                    } else {
+                        System.out.println("No hay datos asignados...");
                     }
-                }else {
-                    System.out.println("No hay datos asignados...");
+                } else {
+                    System.out.println("No hay viajes disponibles...");
                 }
-            }else {
-                System.out.println("No hay viajes disponibles...");
+            } catch (SVPException e) {
+                System.out.println("\n" + e.getMessage());
             }
-        }catch (SVPException e){
-            System.out.println("\n" + e.getMessage());
+        }catch (InputMismatchException e){
+            System.out.println("\nNumero invalido, volviendo...");
+        }catch (DateTimeException e){
+            System.out.println("\nFecha u hora invalida, volviendo...");
         }
     }
     //Metodo pagaVentaPasajes: Javiera Duarte
