@@ -577,6 +577,10 @@ public class UISVP {
             System.out.println("::: Pasajes a vender ");
             System.out.printf("%21s", "Cantidad de pasajes : ");
             int cantidadPasajes = sc.nextInt();
+            if (cantidadPasajes<=0){
+                System.out.println("\n0 pasajes a vender, saliendo...");
+                return;
+            }
             String[][] listHorariosDisponibles;
             try {
                 SistemaVentaPasajes.getInstance().iniciaVenta(idDocumento, tipoDocumento, fecha, comunaOrigen, comunaDestino, idCliente, cantidadPasajes);
@@ -598,6 +602,10 @@ public class UISVP {
                     }
                     System.out.print("Seleccione viaje [1.." + listHorariosDisponibles.length + "] : ");
                     int nroViaje = sc.nextInt();
+                    while (nroViaje<=0){
+                        System.out.println("\n\tNumero de viaje invalido, vuelva a ingresar --> ");
+                        nroViaje = sc.nextInt();
+                    }
                     String patenteViaje = listHorariosDisponibles[nroViaje - 1][1];
                     String horaViaje = listHorariosDisponibles[nroViaje - 1][2];
                     LocalTime horaFormato = LocalTime.parse(horaViaje);
@@ -616,29 +624,52 @@ public class UISVP {
 
                         System.out.print("Seleccione sus asientos [separe por ,] : ");
                         String asientos = sc.next();
+                        if (asientos.isBlank()){
+                            System.out.println("\nAsientos vacíos, volviendo...");
+                            return;
+                        }
                         String[] asientosArr = asientos.split(",");
                         if (cantidadPasajes == asientosArr.length) {
                             for (int i = 0; i < asientosArr.length; i++) {
                                 System.out.println("::: Datos pasajero " + (i + 1));
                                 System.out.print("Rut[1] o Pasaporte[2] : ");
                                 int opPasajero = sc.nextInt();
+                                if (opPasajero<0 || opPasajero>2){
+                                    System.out.println("\nOpcion invalida, volviendo...");
+                                    return;
+                                }
                                 IdPersona idPasajero = null;
                                 if (opPasajero == 1) {
                                     System.out.printf("%21s", "R.U.T : ");
                                     String rut = sc.next();
+                                    if (rut.isBlank()){
+                                        System.out.println("\nCampo vacío, volviendo...");
+                                    }
                                     idPasajero = Rut.of(rut);
                                 } else if (opPasajero == 2) {
                                     System.out.printf("%21s", "NUMERO DE PASAPORTE : ");
                                     String numero = sc.next();
                                     System.out.printf("%21s", "NACIONALIDAD : ");
                                     String nacionalidad = sc.next();
+                                    if (numero.isBlank() || nacionalidad.isBlank()){
+                                        System.out.println("\nCampos vacíos, volviendo...");
+                                        return;
+                                    }
                                     idPasajero = Pasaporte.of(numero, nacionalidad);
+                                }
+                                if (idPasajero==null){
+                                    System.out.println("\nEl id pasajero es nulo, volviendo...");
+                                    return;
                                 }
                                 Optional<String> nombrePasajeroOp = SistemaVentaPasajes.getInstance().getNombrePasajero(idPasajero);
                                 Pasajero pasajero = null;
                                 if (nombrePasajeroOp.isEmpty()) {
                                     System.out.print("Sr.[1] o Sra.[2] :");
                                     int tratamientoPasajero = sc.nextInt();
+                                    if (tratamientoPasajero<0 || tratamientoPasajero>2){
+                                        System.out.println("\nOpcion invalida, volviendo...");
+                                        return;
+                                    }
                                     Tratamiento tratamientoPas;
                                     if (tratamientoPasajero == 1) {
                                         tratamientoPas = Tratamiento.SR;
@@ -653,10 +684,18 @@ public class UISVP {
                                     String apellidoMaternoPasajero = sc.next();
                                     System.out.print("Numero de telefono (pasajero) : ");
                                     String telefonoPasajero = sc.next();
+                                    if (nombrePasajero.isBlank() || apellidoMaternoPasajero.isBlank() || apellidoPaternoPasajero.isBlank() || telefonoPasajero.isBlank()){
+                                        System.out.println("\nUno o mas campos vacios, volviendo...");
+                                        return;
+                                    }
                                     Nombre nombreCompletoPasajero = new Nombre(nombrePasajero, apellidoPaternoPasajero, apellidoMaternoPasajero, tratamientoPas);
 
                                     System.out.print("Ingrese el tratamiento del contacto Sr.[1] o Sra.[2] :");
                                     int opContacto = sc.nextInt();
+                                    if (opContacto<0 || opContacto>2){
+                                        System.out.println("\nOpcion invalida, volviendo...");
+                                        return;
+                                    }
                                     Tratamiento trataContacto = null;
                                     switch (opContacto) {
                                         case 1:
@@ -675,6 +714,11 @@ public class UISVP {
                                     System.out.print("Ingrese el Fono del Contacto : ");
                                     String fonoContacto = sc.next();
 
+                                    if (nombresContacto.isBlank() || apellidoPaternoContacto.isBlank() || apellidoMaternoContacto.isBlank() ||  fonoContacto.isBlank()){
+                                        System.out.println("\nUno o mas campos vacíos, volviendo");
+                                        return;
+                                    }
+
                                     Nombre nombreContacto = new Nombre(nombresContacto, apellidoPaternoContacto, apellidoMaternoContacto, trataContacto);
 
                                     pasajero = new Pasajero(idPasajero, nombreCompletoPasajero, nombreContacto, fonoContacto);
@@ -686,7 +730,10 @@ public class UISVP {
 
                                     int asientoSeleccionado = Integer.parseInt(asientosArr[i]);
                                     SistemaVentaPasajes.getInstance().vendePasaje(idDocumento, tipoDocumento, fecha, horaFormato, patenteViaje, asientoSeleccionado, idPasajero);
-                                }//else para cuando se encuentra el Idpasajero
+                                }else {//else para cuando se encuentra el Idpasajero
+                                    int asientoSeleccionado = Integer.parseInt(asientosArr[i]);
+                                    SistemaVentaPasajes.getInstance().vendePasaje(idDocumento,tipoDocumento,fecha,horaFormato,patenteViaje,asientoSeleccionado,idPasajero);
+                                }
                             }
 
                             pagaVentaPasajes(idDocumento, tipoDocumento);
@@ -793,19 +840,42 @@ public class UISVP {
         System.out.println("...:::: Listado de pasajeros de un viaje ::::..");
         System.out.printf("%35s ","Fecha del viaje[dd/mm/yyyy] : ");
         String fechastr = sc.next();
+        if (fechastr.isBlank()){
+            System.out.println("\nFecha vacía, volviendo...");
+            return;
+        }
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy");
-        LocalDate fecha = LocalDate.parse(fechastr, formatter);
+        LocalDate fecha;
+        try {
+            fecha = LocalDate.parse(fechastr, formatter);
+        }catch (DateTimeException e){
+            System.out.println("\nError con parsear la fecha, volviendo...");
+            return;
+        }
         System.out.printf("%35s ","Hora del viaje[hh:mm] : ");
         String horastr = sc.next();
-        LocalTime hora = LocalTime.parse(horastr);
+        if (horastr.isBlank()){
+            System.out.println("\nHora vacía, volviendo...");
+            return;
+        }
+        LocalTime hora;
+        try {
+            hora = LocalTime.parse(horastr);
+        }catch (DateTimeException E){
+            System.out.println("\nError con parsear la hora, volviendo...");
+            return;
+        }
         System.out.printf("%35s ","Patente bus : ");
         String patenteBus = sc.next();
+        if (patenteBus.isBlank()){
+            System.out.println("\nBus invalido, volviendo");
+        }
         System.out.println();
         String[][]listaPasajeros;
         try {
             listaPasajeros = SistemaVentaPasajes.getInstance().listPasajerosViaje(fecha,hora,patenteBus);
             if (listaPasajeros.length>0){
-                System.out.println("*-----------*---------------------*------------------------------------*-------------------------------*--------------------*");
+                System.out.println("*-----------*---------------------*-----*-------------------------------*-------------------------------*--------------------*");
                 System.out.printf("|%10s |%20s |%-35s |%-30s |%-20s|%n", "Asiento", "Rut/Pass", "Pasajero", "Contacto", "Telefono contacto");
                 System.out.println("|-----------+---------------------+------------------------------------+-------------------------------+--------------------|");
                 for (int i = 0; i < listaPasajeros.length - 1; i++) {
@@ -853,9 +923,19 @@ public class UISVP {
         String nombre = sc.next();
         System.out.printf("%21s","Fecha[dd/MM/yyyy] : ");
         String fechastr = sc.next();
+        if (nombre.isBlank() || fechastr.isBlank()){
+            System.out.println("\nUno o mas campos vacíos, volviendo...");
+            return;
+        }
 
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy");
-        LocalDate fecha = LocalDate.parse(fechastr,formatter);
+        LocalDate fecha = null;
+        try {
+            fecha = LocalDate.parse(fechastr,formatter);
+        }catch (DateTimeException e){
+            System.out.println("\nError al parsear la fecha");
+            return;
+        }
 
         String[][] datos;
         try {
@@ -884,6 +964,10 @@ public class UISVP {
         System.out.println("...:::: Listado de ventas de una empresa ::::..");
         System.out.printf("%21s","R.U.T : ");
         String rut = sc.next();
+        if (rut.isBlank()){
+            System.out.println("\nRut vacío, volviendo...");
+            return;
+        }
         String[][] datos;
         try {
             datos = ControladorEmpresas.getInstance().listVentasEmpresa(Rut.of(rut));
@@ -912,7 +996,12 @@ public class UISVP {
         System.out.printf("%21s","Ingrese id Documento: ");
         String id = sc.next();
         System.out.printf("%21s","Ingrese tipo documento: ");
-        TipoDocumento tipoDoc = TipoDocumento.valueOf(sc.next().toUpperCase());
+        String tipo = sc.next();
+        if (id.isBlank() || tipo.isBlank()){
+            System.out.println("\nUno o mas campos vacíos, volviendo...");
+            return;
+        }
+        TipoDocumento tipoDoc = TipoDocumento.valueOf(tipo.toUpperCase());
         try {
             SistemaVentaPasajes.getInstance().generatePasajesDeVenta(id,tipoDoc);
         } catch (SVPException e) {
@@ -947,5 +1036,4 @@ public class UISVP {
             System.out.println("\n"+e.getMessage());
         }
     }
-
 }
