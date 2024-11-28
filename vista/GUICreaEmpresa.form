@@ -35,7 +35,7 @@
                 </constraints>
                 <properties>
                   <font style="1"/>
-                  <icon value="icons/32x32/aceptar.png"/>
+                  <icon value="vista/icons/32x32/aceptar.png"/>
                   <text value="OK"/>
                 </properties>
               </component>
@@ -45,7 +45,7 @@
                 </constraints>
                 <properties>
                   <font style="1"/>
-                  <icon value="icons/32x32/cancelar.png"/>
+                  <icon value=""vista/icons/32x32/cancelar.png"/>
                   <text value="Cancel"/>
                 </properties>
               </component>
@@ -67,7 +67,7 @@
             </constraints>
             <properties>
               <font size="18" style="1"/>
-              <icon value="icons/128x128/business-trip.png"/>
+              <icon value="vista/icons/128x128/business-trip.png"/>
               <text value="Creación de empresa de buses"/>
             </properties>
           </component>
