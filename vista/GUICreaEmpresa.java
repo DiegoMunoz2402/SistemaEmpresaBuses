@@ -45,7 +45,28 @@ public class GUICreaEmpresa extends javax.swing.JDialog {
     }
 
     private void onOK() {
-        // add your code here
+        String rut = textFieldRUT.getText();
+        String nombre = textFieldNOMBRE.getText();
+        String url = textFieldURL.getText();
+
+        if (rut.isEmpty() || nombre.isEmpty() || url.isEmpty()) {
+            JOptionPane.showMessageDialog(this, "Debes ingresar un valor valido");
+            return;
+        }
+        if (!rut.matches("\\d{2}\\.\\d{3}\\.\\d{3}-[\\dkK]")) {
+            JOptionPane.showMessageDialog(this, "El formato del R.U.T. es incorrecto");
+            return;
+        }
+        try {
+            ControladorEmpresas.getInstance().createEmpresa(Rut.of(rut), nombre, url);
+            JOptionPane.showMessageDialog(this, "Empresa guardada exitosamente");
+            dispose();
+        } catch (Exception e) {
+            JOptionPane.showMessageDialog(this, "ya existe un empresa con el mismo R.U.T" + e.getMessage());
+        }
+        textFieldNOMBRE.setText("");
+        textFieldRUT.setText("");
+        textFieldURL.setText("");
         dispose();
     }
 
