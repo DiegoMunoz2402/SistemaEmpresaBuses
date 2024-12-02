@@ -85,24 +85,25 @@ public class UISVP {
     }
     //crearEmpresa = Diego Muñoz
     private void crearEmpresa(){
-        System.out.println("...:::: Creando una nueva EMPRESA ::::..");
-        System.out.println();
-        System.out.printf("%21s","R.U.T : ");
-        String rut=sc.next();
-        System.out.printf("%21s","Nombre : ");
-        String nombre = sc.next();
-        System.out.printf("%21s","url : ");
-        String url = sc.next();
-        if (!rut.isBlank() && !nombre.isBlank() && !url.isBlank()) {
-            try {
-                ControladorEmpresas.getInstance().createEmpresa(Rut.of(rut), nombre, url);
-                System.out.println("...:::: Empresa guardada exitosamente ::::..");
-            } catch (SVPException e) {
-                System.out.println("\n" + e.getMessage());
-            }
-        }else {
-            System.out.println("\nUno o mas campos vacíos, volviendo...");
-        }
+        GUICreaEmpresa.display();
+//        System.out.println("...:::: Creando una nueva EMPRESA ::::..");
+//        System.out.println();
+//        System.out.printf("%21s","R.U.T : ");
+//        String rut=sc.next();
+//        System.out.printf("%21s","Nombre : ");
+//        String nombre = sc.next();
+//        System.out.printf("%21s","url : ");
+//        String url = sc.next();
+//        if (!rut.isBlank() && !nombre.isBlank() && !url.isBlank()) {
+//            try {
+//                ControladorEmpresas.getInstance().createEmpresa(Rut.of(rut), nombre, url);
+//                System.out.println("...:::: Empresa guardada exitosamente ::::..");
+//            } catch (SVPException e) {
+//                System.out.println("\n" + e.getMessage());
+//            }
+//        }else {
+//            System.out.println("\nUno o mas campos vacíos, volviendo...");
+//        }
     }
     //ContratarTripulante : Diego Muñoz
     private void contratarTripulante(){
@@ -312,26 +313,27 @@ public class UISVP {
     }
     //crearBus = Diego Muñoz
     private void crearBus(){
-        System.out.println("...:::: Creación de un nuevo BUS ::::...");
-        System.out.println();
-        System.out.printf("%21s","Patente : ");
-        String patente=sc.next();
-        System.out.printf("%21s","Marca : ");
-        String marca=sc.next();
-        System.out.printf("%21s","Modelo : ");
-        String modelo=sc.next();
-        System.out.printf("%21s","Numero de asientos : ");
-        int numAsientos= sc.nextInt();
-        System.out.println();
-        System.out.println(":::: Dato de la empresa");
-        System.out.printf("%21s","Rut : ");
-        String rut = sc.next();
-        try {
-            ControladorEmpresas.getInstance().createBus(patente,marca,modelo,numAsientos, Rut.of(rut));
-            System.out.println("...:::: Bus guardado exitosamente ::::..");
-        }catch (SVPException e){
-            System.out.println("\n"+e.getMessage());
-        }
+        GUICreaBus.display();
+//        System.out.println("...:::: Creación de un nuevo BUS ::::...");
+//        System.out.println();
+//        System.out.printf("%21s","Patente : ");
+//        String patente=sc.next();
+//        System.out.printf("%21s","Marca : ");
+//        String marca=sc.next();
+//        System.out.printf("%21s","Modelo : ");
+//        String modelo=sc.next();
+//        System.out.printf("%21s","Numero de asientos : ");
+//        int numAsientos= sc.nextInt();
+//        System.out.println();
+//        System.out.println(":::: Dato de la empresa");
+//        System.out.printf("%21s","Rut : ");
+//        String rut = sc.next();
+//        try {
+//            ControladorEmpresas.getInstance().createBus(patente,marca,modelo,numAsientos, Rut.of(rut));
+//            System.out.println("...:::: Bus guardado exitosamente ::::..");
+//        }catch (SVPException e){
+//            System.out.println("\n"+e.getMessage());
+//        }
     }
     //crearViaje = Diego Muñoz
     private void crearViaje(){

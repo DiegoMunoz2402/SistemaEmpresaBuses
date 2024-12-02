@@ -90,7 +90,7 @@ public class GUICreaBus extends JDialog {
         try {
             int nroAsientos = Integer.parseInt(nroAsientosstr);
             ControladorEmpresas.getInstance().createBus(patente,marca,modelo,nroAsientos, Rut.of((String)comboBoxRut.getItemAt(selectedIndexRut)));
-            JOptionPane.showMessageDialog(this,"Empresa creada exitosamente","Informacion",JOptionPane.INFORMATION_MESSAGE);
+            JOptionPane.showMessageDialog(this,"Bus creado exitosamente","Informacion",JOptionPane.INFORMATION_MESSAGE);
         }catch (SVPException e){
             JOptionPane.showMessageDialog(this,e.getMessage(),"",JOptionPane.ERROR_MESSAGE);
         }catch (NumberFormatException e){
@@ -106,6 +106,7 @@ public class GUICreaBus extends JDialog {
     public static void display() {
         GUICreaBus dialog = new GUICreaBus();
         dialog.pack();
+        dialog.setAlwaysOnTop(true);
         dialog.setVisible(true);
     }
 }

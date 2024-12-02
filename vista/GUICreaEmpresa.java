@@ -78,6 +78,7 @@ public class GUICreaEmpresa extends JDialog {
     public static void display() {
         GUICreaEmpresa dialog = new GUICreaEmpresa();
         dialog.pack();
+        dialog.setAlwaysOnTop(true);
         dialog.setVisible(true);
     }
 }
