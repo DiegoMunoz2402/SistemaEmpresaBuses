@@ -1,20 +1,32 @@
 package vista;
 
+import controlador.ControladorEmpresas;
+import utilidades.Rut;
+
 import javax.swing.*;
+import javax.swing.table.DefaultTableModel;
+import javax.swing.table.TableModel;
 import java.awt.event.*;
 
 public class GUIListaVentasEmpresas extends JDialog {
     private JPanel contentPane;
     private JButton buttonOK;
     private JButton buttonCancel;
-    private JComboBox comboBox1;
-    private JComboBox comboBox2;
+    private JComboBox comboBoxRut;
+    private JComboBox comboBoxNombre;
     private JTable JTableListarVentas;
 
     public GUIListaVentasEmpresas() {
         setContentPane(contentPane);
         setModal(true);
         getRootPane().setDefaultButton(buttonOK);
+
+        String[][] datos = ControladorEmpresas.getInstance().listEmpresas();
+
+        for (int i = 0; i < datos.length; i++) {
+            comboBoxRut.addItem(datos[i][0]);
+            comboBoxNombre.addItem(datos[i][1]);
+        }
 
         buttonOK.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
@@ -42,16 +54,52 @@ public class GUIListaVentasEmpresas extends JDialog {
                 onCancel();
             }
         }, KeyStroke.getKeyStroke(KeyEvent.VK_ESCAPE, 0), JComponent.WHEN_ANCESTOR_OF_FOCUSED_COMPONENT);
+        comboBoxRut.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                onComboBoxRut();
+            }
+        });
+        comboBoxNombre.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                onComboBoxNombre();
+            }
+        });
     }
 
-    private void JtableListarVentas(){
-        
+    private void onComboBoxNombre() {
+        int seleccion = comboBoxNombre.getSelectedIndex();
+        comboBoxRut.setSelectedIndex(seleccion);
+    }
+
+    private void onComboBoxRut() {
+        int selectedIndex = comboBoxRut.getSelectedIndex();
+        comboBoxNombre.setSelectedIndex(selectedIndex);
+    }
+
+    private void JtableListarVentas() {
+
     }
 
 
     private void onOK() {
         // add your code here
-        dispose();
+        int seleccion = comboBoxRut.getSelectedIndex();
+        String rut = String.valueOf(comboBoxRut.getItemAt(seleccion));
+        String[][] datos = ControladorEmpresas.getInstance().listVentasEmpresa(Rut.of(rut));
+        if (datos.length > 0) {
+            String[] columnas = {"Fecha", "Tipo", "Monto pagado", "Tipo pago"};
+            TableModel tableModel = new DefaultTableModel(datos, columnas) {
+                @Override
+                public boolean isCellEditable(int row, int column) {
+                    return false;
+                }
+            };
+            JTableListarVentas.setModel(tableModel);
+        } else {
+            JOptionPane.showMessageDialog(this, "No hay ventas registradas", "", JOptionPane.ERROR_MESSAGE);
+        }
     }
 
     private void onCancel() {
@@ -62,7 +110,7 @@ public class GUIListaVentasEmpresas extends JDialog {
     public static void main(String[] args) {
         GUIListaVentasEmpresas dialog = new GUIListaVentasEmpresas();
         dialog.pack();
+        dialog.setAlwaysOnTop(true);
         dialog.setVisible(true);
-        System.exit(0);
     }
 }
