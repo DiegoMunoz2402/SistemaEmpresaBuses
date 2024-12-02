@@ -96,6 +96,10 @@ public class GUICreaBus extends JDialog {
         }catch (NumberFormatException e){
             JOptionPane.showMessageDialog(this,"Nro asientos invalido","",JOptionPane.ERROR_MESSAGE);
         }
+        textFieldMARCA.setText("");
+        textFieldMODELO.setText("");
+        textFieldNASIENTOS.setText("");
+        textFieldPATENTE.setText("");
     }
 
     private void onCancel() {
