@@ -995,7 +995,7 @@ public class UISVP {
     }
 
     private void generarPasajesVenta(){
-        System.out.println("...:::: Pasajes de una ::::..");
+        System.out.println("...:::: Pasajes de una Venta::::..");
         System.out.printf("%21s","Ingrese id Documento: ");
         String id = sc.next();
         System.out.printf("%21s","Ingrese tipo documento: ");
