@@ -963,34 +963,35 @@ public class UISVP {
     }
     //listarVentasDeEmpresa: Diego Muñoz
     private void listarVentasDeEmpresa(){
-        System.out.println("...:::: Listado de ventas de una empresa ::::..");
-        System.out.printf("%21s","R.U.T : ");
-        String rut = sc.next();
-        if (rut.isBlank()){
-            System.out.println("\nRut vacío, volviendo...");
-            return;
-        }
-        String[][] datos;
-        try {
-            datos = ControladorEmpresas.getInstance().listVentasEmpresa(Rut.of(rut));
-            if (datos.length>0){
-                System.out.println("*----------------*--------*--------------*----------------*");
-                System.out.printf("|%-15s |%-7s |%-13s |%15s |%n","FECHA","TIPO","MONTO PAGADO","TIPO PAGO");
-                System.out.println("|----------------+--------+--------------+----------------|");
-                for (int i = 0; i < datos.length-1; i++) {
-                    System.out.printf("|%-15s |%-7s |$%-13s|%15s|%n",datos[i][0],datos[i][1],datos[i][2],datos[i][3]);
-                    System.out.println("|----------------+--------+--------------+----------------|");
-                }
-                for (int i = datos.length-1; i < datos.length; i++) {
-                    System.out.printf("|%-15s |%-7s |$%-13s|%15s |%n",datos[i][0],datos[i][1],datos[i][2],datos[i][3]);
-                    System.out.println("*----------------*--------*--------------*----------------*");
-                }
-            }else {
-                System.out.println("No hay datos asignados a la empresa...");
-            }
-        }catch (SVPException e){
-            System.out.println("\n" + e.getMessage());
-        }
+        GUIListaVentasEmpresas.display();
+//        System.out.println("...:::: Listado de ventas de una empresa ::::..");
+//        System.out.printf("%21s","R.U.T : ");
+//        String rut = sc.next();
+//        if (rut.isBlank()){
+//            System.out.println("\nRut vacío, volviendo...");
+//            return;
+//        }
+//        String[][] datos;
+//        try {
+//            datos = ControladorEmpresas.getInstance().listVentasEmpresa(Rut.of(rut));
+//            if (datos.length>0){
+//                System.out.println("*----------------*--------*--------------*----------------*");
+//                System.out.printf("|%-15s |%-7s |%-13s |%15s |%n","FECHA","TIPO","MONTO PAGADO","TIPO PAGO");
+//                System.out.println("|----------------+--------+--------------+----------------|");
+//                for (int i = 0; i < datos.length-1; i++) {
+//                    System.out.printf("|%-15s |%-7s |$%-13s|%15s|%n",datos[i][0],datos[i][1],datos[i][2],datos[i][3]);
+//                    System.out.println("|----------------+--------+--------------+----------------|");
+//                }
+//                for (int i = datos.length-1; i < datos.length; i++) {
+//                    System.out.printf("|%-15s |%-7s |$%-13s|%15s |%n",datos[i][0],datos[i][1],datos[i][2],datos[i][3]);
+//                    System.out.println("*----------------*--------*--------------*----------------*");
+//                }
+//            }else {
+//                System.out.println("No hay datos asignados a la empresa...");
+//            }
+//        }catch (SVPException e){
+//            System.out.println("\n" + e.getMessage());
+//        }
     }
 
     private void generarPasajesVenta(){

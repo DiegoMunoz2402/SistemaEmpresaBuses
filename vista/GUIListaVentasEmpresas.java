@@ -107,7 +107,7 @@ public class GUIListaVentasEmpresas extends JDialog {
         dispose();
     }
 
-    public static void main(String[] args) {
+    public static void display() {
         GUIListaVentasEmpresas dialog = new GUIListaVentasEmpresas();
         dialog.pack();
         dialog.setAlwaysOnTop(true);
