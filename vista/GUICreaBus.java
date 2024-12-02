@@ -1,5 +1,9 @@
 package vista;
 
+import controlador.ControladorEmpresas;
+import excepciones.SVPException;
+import utilidades.Rut;
+
 import javax.swing.*;
 import java.awt.event.*;
 
@@ -11,13 +15,20 @@ public class GUICreaBus extends JDialog {
     private JTextField textFieldMARCA;
     private JTextField textFieldMODELO;
     private JTextField textFieldNASIENTOS;
-    private JComboBox comboBox1;
-    private JComboBox comboBox2;
+    private JComboBox comboBoxRut;
+    private JComboBox comboBoxNombre;
 
     public GUICreaBus() {
         setContentPane(contentPane);
         setModal(true);
         getRootPane().setDefaultButton(buttonOK);
+
+        String[][] datos = ControladorEmpresas.getInstance().listEmpresas();
+
+        for (String[] dato:datos){
+            comboBoxRut.addItem(dato[0]);
+            comboBoxNombre.addItem(dato[1]);
+        }
 
         buttonOK.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
@@ -45,11 +56,46 @@ public class GUICreaBus extends JDialog {
                 onCancel();
             }
         }, KeyStroke.getKeyStroke(KeyEvent.VK_ESCAPE, 0), JComponent.WHEN_ANCESTOR_OF_FOCUSED_COMPONENT);
+
+        comboBoxRut.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                onComboBoxRut();
+            }
+        });
+        comboBoxNombre.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                onComboBoxNombre();
+            }
+        });
+    }
+
+    private void onComboBoxNombre() {
+        int selectedIndex = comboBoxNombre.getSelectedIndex();
+        comboBoxRut.setSelectedIndex(selectedIndex);
+    }
+
+    private void onComboBoxRut() {
+        int selectedIndex = comboBoxRut.getSelectedIndex();
+        comboBoxNombre.setSelectedIndex(selectedIndex);
     }
 
     private void onOK() {
-        // add your code here
-        dispose();
+        String patente = textFieldPATENTE.getText();
+        String marca = textFieldMARCA.getText();
+        String modelo = textFieldMODELO.getText();
+        String nroAsientosstr = textFieldNASIENTOS.getText();
+        int selectedIndexRut = comboBoxRut.getSelectedIndex();
+        try {
+            int nroAsientos = Integer.parseInt(nroAsientosstr);
+            ControladorEmpresas.getInstance().createBus(patente,marca,modelo,nroAsientos, Rut.of((String)comboBoxRut.getItemAt(selectedIndexRut)));
+            JOptionPane.showMessageDialog(this,"Empresa creada exitosamente","Informacion",JOptionPane.INFORMATION_MESSAGE);
+        }catch (SVPException e){
+            JOptionPane.showMessageDialog(this,e.getMessage(),"",JOptionPane.ERROR_MESSAGE);
+        }catch (NumberFormatException e){
+            JOptionPane.showMessageDialog(this,"Nro asientos invalido","",JOptionPane.ERROR_MESSAGE);
+        }
     }
 
     private void onCancel() {
@@ -57,10 +103,9 @@ public class GUICreaBus extends JDialog {
         dispose();
     }
 
-    public static void main(String[] args) {
+    public static void display() {
         GUICreaBus dialog = new GUICreaBus();
         dialog.pack();
         dialog.setVisible(true);
-        System.exit(0);
     }
 }
