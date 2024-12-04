@@ -16,16 +16,11 @@ public class Pasaje  implements Serializable {
 
     public Pasaje(int asiento, Viaje viaje, Pasajero pasajero, Venta venta){
         this.asiento=asiento;
-        this.numero=numeroAleatorio();
+        this.numero=System.currentTimeMillis();
         this.viaje=viaje;
         this.pasajero=pasajero;
         this.venta=venta;
         this.viaje.addPasaje(this);
-    }
-    public long numeroAleatorio(){
-        SecureRandom random=new SecureRandom();
-        long num=Math.abs(random.nextLong());
-        return num;
     }
     public long getNumero() {
         return (int)(numero & Integer.MAX_VALUE);
