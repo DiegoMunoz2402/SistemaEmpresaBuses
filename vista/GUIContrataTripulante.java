@@ -1,6 +1,9 @@
 package vista;
 
 import controlador.ControladorEmpresas;
+import excepciones.SVPException;
+import modelo.TipoDocumento;
+import utilidades.*;
 
 import javax.swing.*;
 import java.awt.event.*;
@@ -90,7 +93,63 @@ public class GUIContrataTripulante extends JDialog {
 
     private void onOK() {
         // add your code here
-
+        Tratamiento tratamiento;
+        int selectIndexNacionalidad = comboBoxNACIONALIDAD.getSelectedIndex();
+        String nacionalidad = String.valueOf(comboBoxNACIONALIDAD.getItemAt(selectIndexNacionalidad));
+        if (radioButtonTrataSR.isSelected()){
+            tratamiento = Tratamiento.SR;
+        }else {
+            tratamiento = Tratamiento.SRA;
+        }
+        String identificador = textFieldIDENTIFICADOR.getText();
+        String nombre = textFieldNOMBRE.getText();
+        String apPat = textFieldAPPATERNO.getText();
+        String apMat = textFieldAPMATERNO.getText();
+        String calle = textFieldCALLE.getText();
+        String nrostr = textFieldNUMEROCALLE.getText();
+        int selectedIndex = comboBoxRUTEMPRESA.getSelectedIndex();
+        String rutEmpresa = String.valueOf(comboBoxNOMBRE_EMPRESA.getItemAt(selectedIndex));
+        int selectIndexComuna = comboBoxCOMUNA.getSelectedIndex();
+        String comuna = String.valueOf(comboBoxCOMUNA.getItemAt(selectIndexComuna));
+        if (identificador.isBlank() || nombre.isBlank() || apMat.isBlank() || apPat.isBlank() || calle.isBlank() || nrostr.isBlank()){
+            JOptionPane.showMessageDialog(this,"Uno o mas campos invalidos","",JOptionPane.ERROR_MESSAGE);
+        }
+        try {
+            int nro = Integer.parseInt(nrostr);
+            Nombre nombreformat = new Nombre(nombre,apPat,apMat,tratamiento);
+            IdPersona idPersona = null;
+            if (radioButtonRUT.isSelected()){
+                if (!identificador.matches("\\d{2}\\.\\d{3}\\.\\d{3}-[\\dkK]")){
+                    JOptionPane.showMessageDialog(this, "El formato del R.U.T. es incorrecto","",JOptionPane.ERROR_MESSAGE);
+                }else {
+                    idPersona = Rut.of(identificador);
+                }
+            }else {
+                if (!identificador.matches("[A-Z]{2,3}\\d{3,4}")){
+                    JOptionPane.showMessageDialog(this, "El formato de la patente es incorrecto","",JOptionPane.ERROR_MESSAGE);
+                }else {
+                    idPersona = Pasaporte.of(identificador, nacionalidad);
+                }
+            }
+            Direccion direccion = new Direccion(calle,nro,comuna);
+            if (radioButtonTipoTriConductor.isSelected()){
+                ControladorEmpresas.getInstance().hireConductorForEmpresa(Rut.of(rutEmpresa),idPersona,nombreformat,direccion);
+                JOptionPane.showMessageDialog(this,"Conductor contratado exitosamente","Informacion",JOptionPane.INFORMATION_MESSAGE);
+            }else {
+                ControladorEmpresas.getInstance().hireAuxiliarForEmpresa(Rut.of(rutEmpresa),idPersona,nombreformat,direccion);
+                JOptionPane.showMessageDialog(this,"Auxiliar contratado exitosamente","Informacion",JOptionPane.INFORMATION_MESSAGE);
+            }
+        } catch (NumberFormatException e) {
+            JOptionPane.showMessageDialog(this,"Numero invalido","",JOptionPane.ERROR_MESSAGE);
+        } catch (SVPException e){
+            JOptionPane.showMessageDialog(this,e.getMessage(),"",JOptionPane.ERROR_MESSAGE);
+        }
+        textFieldAPMATERNO.setText("");
+        textFieldAPPATERNO.setText("");
+        textFieldNOMBRE.setText("");
+        textFieldCALLE.setText("");
+        textFieldIDENTIFICADOR.setText("");
+        textFieldNUMEROCALLE.setText("");
     }
 
     private void onCancel() {
@@ -105,10 +164,4 @@ public class GUIContrataTripulante extends JDialog {
         dialog.setVisible(true);
     }
 
-    private void createUIComponents() {
-        // TODO: place custom component creation code here
-    }
 }
-
-
-//FALTAN COSAS

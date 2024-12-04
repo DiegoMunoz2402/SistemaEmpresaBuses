@@ -872,4 +872,18 @@
       </grid>
     </children>
   </grid>
+  <buttonGroups>
+    <group name="buttonGroupTratamiento">
+      <member id="9e278"/>
+      <member id="6d11a"/>
+    </group>
+    <group name="buttonGroupTipo">
+      <member id="8f7cb"/>
+      <member id="913d9"/>
+    </group>
+    <group name="buttonGroupId">
+      <member id="ce8e5"/>
+      <member id="79ad2"/>
+    </group>
+  </buttonGroups>
 </form>
