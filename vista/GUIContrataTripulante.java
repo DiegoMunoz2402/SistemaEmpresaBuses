@@ -1,5 +1,7 @@
 package vista;
 
+import controlador.ControladorEmpresas;
+
 import javax.swing.*;
 import java.awt.event.*;
 
@@ -29,6 +31,13 @@ public class GUIContrataTripulante extends JDialog {
         setModal(true);
         getRootPane().setDefaultButton(buttonOK);
 
+        String[][] datos = ControladorEmpresas.getInstance().listEmpresas();
+
+        for (String[] string:datos){
+            comboBoxRUTEMPRESA.addItem(string[0]);
+            comboBoxNOMBRE_EMPRESA.addItem(string[1]);
+        }
+
         buttonOK.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
                 onOK();
@@ -55,11 +64,33 @@ public class GUIContrataTripulante extends JDialog {
                 onCancel();
             }
         }, KeyStroke.getKeyStroke(KeyEvent.VK_ESCAPE, 0), JComponent.WHEN_ANCESTOR_OF_FOCUSED_COMPONENT);
+        comboBoxRUTEMPRESA.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                onComboBoxRutEmpresa();
+            }
+        });
+        comboBoxNOMBRE_EMPRESA.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                onComboxNombreEmpresa();
+            }
+        });
+    }
+
+    private void onComboxNombreEmpresa() {
+        int selectedIndex = comboBoxNOMBRE_EMPRESA.getSelectedIndex();
+        comboBoxRUTEMPRESA.setSelectedIndex(selectedIndex);
+    }
+
+    private void onComboBoxRutEmpresa() {
+        int selectedIndex = comboBoxRUTEMPRESA.getSelectedIndex();
+        comboBoxNOMBRE_EMPRESA.setSelectedIndex(selectedIndex);
     }
 
     private void onOK() {
         // add your code here
-        dispose();
+
     }
 
     private void onCancel() {
@@ -67,11 +98,11 @@ public class GUIContrataTripulante extends JDialog {
         dispose();
     }
 
-    public static void main(String[] args) {
+    public static void display() {
         GUIContrataTripulante dialog = new GUIContrataTripulante();
         dialog.pack();
+        dialog.setAlwaysOnTop(true);
         dialog.setVisible(true);
-        System.exit(0);
     }
 
     private void createUIComponents() {

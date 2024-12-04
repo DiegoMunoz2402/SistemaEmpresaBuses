@@ -339,7 +339,6 @@ public class SistemaVentaPasajes implements Serializable {
     public void saveDatosSistema()throws SVPException {
         Object[] datos = {this,ControladorEmpresas.getInstance()};
         IOSVP.getInstance().saveControladores(datos);
-        System.out.println("datos guardados exitosamente");
     }
 
     public void readDatosIniciales()throws SVPException {

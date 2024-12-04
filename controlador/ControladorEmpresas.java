@@ -228,6 +228,9 @@ public class ControladorEmpresas implements Serializable {
     }
 
     protected void setDatosIniciales(Object[] objetos){
+        empresas.clear();
+        buses.clear();
+        terminales.clear();
         for (Object object : objetos) {
             switch (object.getClass().getSimpleName()) {
                 case "Terminal" -> terminales.add((Terminal) object);
