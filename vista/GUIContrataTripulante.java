@@ -79,6 +79,18 @@ public class GUIContrataTripulante extends JDialog {
                 onComboxNombreEmpresa();
             }
         });
+        radioButtonRUT.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                comboBoxNACIONALIDAD.setVisible(false);
+            }
+        });
+        radioButtonPASAPORTE.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                comboBoxNACIONALIDAD.setVisible(true);
+            }
+        });
     }
 
     private void onComboxNombreEmpresa() {
@@ -108,7 +120,7 @@ public class GUIContrataTripulante extends JDialog {
         String calle = textFieldCALLE.getText();
         String nrostr = textFieldNUMEROCALLE.getText();
         int selectedIndex = comboBoxRUTEMPRESA.getSelectedIndex();
-        String rutEmpresa = String.valueOf(comboBoxNOMBRE_EMPRESA.getItemAt(selectedIndex));
+        String rutEmpresa = String.valueOf(comboBoxRUTEMPRESA.getItemAt(selectedIndex));
         int selectIndexComuna = comboBoxCOMUNA.getSelectedIndex();
         String comuna = String.valueOf(comboBoxCOMUNA.getItemAt(selectIndexComuna));
         if (identificador.isBlank() || nombre.isBlank() || apMat.isBlank() || apPat.isBlank() || calle.isBlank() || nrostr.isBlank()){
