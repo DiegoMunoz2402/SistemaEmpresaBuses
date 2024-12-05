@@ -131,6 +131,9 @@ public class GUIContrataTripulante extends JDialog {
                     idPersona = Pasaporte.of(identificador, nacionalidad);
                 }
             }
+            if (idPersona == null){
+                JOptionPane.showMessageDialog(this,"Error al crear el identificador de persona","",JOptionPane.ERROR_MESSAGE);
+            }
             Direccion direccion = new Direccion(calle,nro,comuna);
             if (radioButtonTipoTriConductor.isSelected()){
                 ControladorEmpresas.getInstance().hireConductorForEmpresa(Rut.of(rutEmpresa),idPersona,nombreformat,direccion);
