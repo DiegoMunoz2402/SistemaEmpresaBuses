@@ -83,6 +83,10 @@ public class GUICreaBus extends JDialog {
 
     private void onOK() {
         String patente = textFieldPATENTE.getText();
+        if (!patente.matches("[A-Z]{2,3}\\d{3,4}")) {
+            JOptionPane.showMessageDialog(this, "El formato de la patente es incorrecto","",JOptionPane.ERROR_MESSAGE);
+            return;
+        }
         String marca = textFieldMARCA.getText();
         String modelo = textFieldMODELO.getText();
         String nroAsientosstr = textFieldNASIENTOS.getText();
