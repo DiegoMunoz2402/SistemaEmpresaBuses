@@ -1,6 +1,7 @@
 package vista;
 
 import controlador.ControladorEmpresas;
+import excepciones.SVPException;
 import utilidades.Rut;
 
 import javax.swing.*;
@@ -87,18 +88,23 @@ public class GUIListaVentasEmpresas extends JDialog {
         // add your code here
         int seleccion = comboBoxRut.getSelectedIndex();
         String rut = String.valueOf(comboBoxRut.getItemAt(seleccion));
-        String[][] datos = ControladorEmpresas.getInstance().listVentasEmpresa(Rut.of(rut));
-        if (datos.length > 0) {
-            String[] columnas = {"Fecha", "Tipo", "Monto pagado", "Tipo pago"};
-            TableModel tableModel = new DefaultTableModel(datos, columnas) {
-                @Override
-                public boolean isCellEditable(int row, int column) {
-                    return false;
-                }
-            };
-            JTableListarVentas.setModel(tableModel);
-        } else {
-            JOptionPane.showMessageDialog(this, "No hay ventas registradas", "", JOptionPane.ERROR_MESSAGE);
+        String[][] datos;
+        try {
+            datos = ControladorEmpresas.getInstance().listVentasEmpresa(Rut.of(rut));
+            if (datos.length > 0) {
+                String[] columnas = {"Fecha", "Tipo", "Monto pagado", "Tipo pago"};
+                TableModel tableModel = new DefaultTableModel(datos, columnas) {
+                    @Override
+                    public boolean isCellEditable(int row, int column) {
+                        return false;
+                    }
+                };
+                JTableListarVentas.setModel(tableModel);
+            } else {
+                JOptionPane.showMessageDialog(this, "No hay ventas registradas", "", JOptionPane.ERROR_MESSAGE);
+            }
+        }catch (SVPException e){
+            JOptionPane.showMessageDialog(this,e.getMessage(),"",JOptionPane.ERROR_MESSAGE);
         }
     }
 
