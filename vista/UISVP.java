@@ -22,7 +22,7 @@ public class UISVP {
 
     private UISVP(){
         sc = new Scanner(System.in);
-        sc.useDelimiter("[ \\t\\r\\n]+");
+        sc.useDelimiter("[\t\r\n]+");
     }
 
     public static UISVP getInstance(){
