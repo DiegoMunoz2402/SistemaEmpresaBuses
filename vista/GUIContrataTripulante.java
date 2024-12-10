@@ -137,14 +137,15 @@ public class GUIContrataTripulante extends JDialog {
                     idPersona = Rut.of(identificador);
                 }
             }else {
-                if (!identificador.matches("[A-Z]{2,3}\\d{3,4}")){
-                    JOptionPane.showMessageDialog(this, "El formato de la patente es incorrecto","",JOptionPane.ERROR_MESSAGE);
+                if (!identificador.matches("(?=.*[a-zA-Z])(?=.*[0-9])[a-zA-Z0-9]+")){
+                    JOptionPane.showMessageDialog(this, "El formato del pasaporte es incorrecto","",JOptionPane.ERROR_MESSAGE);
                 }else {
                     idPersona = Pasaporte.of(identificador, nacionalidad);
                 }
             }
             if (idPersona == null){
                 JOptionPane.showMessageDialog(this,"Error al crear el identificador de persona","",JOptionPane.ERROR_MESSAGE);
+                return;
             }
             Direccion direccion = new Direccion(calle,nro,comuna);
             if (radioButtonTipoTriConductor.isSelected()){
